@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.xablau</groupId>
+	<artifactId>multitagplayer</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>Multi Tag Player</name>
+	<modules>
+		<module>multitagplayer-app</module>
+	</modules>
+
+	<!-- Properties =========================================== -->
+	<properties>
+		<apache-commons-collection.version>3.2.1</apache-commons-collection.version>
+		<apache-commons-lang.version>2.6</apache-commons-lang.version>
+		<aspectj.version>1.7.4</aspectj.version>
+		<hibernate.version>4.3.0.Final</hibernate.version>
+		<hsqldb.version>1.8.0.10</hsqldb.version>
+		<junit.version>4.11</junit.version>
+		<log4j.version>1.2.17</log4j.version>
+		<spring.version>4.0.0.RELEASE</spring.version>
+		<vraptor.version>3.5.3</vraptor.version>
+	</properties>
+
+	<!-- Dependency Management ================================ -->
+	<dependencyManagement>
+		<dependencies>
+			<!-- CARDX -->
+			<dependency>
+				<groupId>com.xablau</groupId>
+				<artifactId>multitagplayer-app</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+			</dependency>
+			
+			<!-- Externas -->
+
+			<!-- Test -->
+		</dependencies>
+	</dependencyManagement>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
