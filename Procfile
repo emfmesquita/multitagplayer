@@ -1,1 +1,1 @@
-web:    java $JAVA_OPTS -cp ./multitagplayer-app/target/*.jar:./multitagplayer-app/target/dependency/* com.xablau.multitagplayer.HelloWorld
+web:    java $JAVA_OPTS -cp ./target/classes:./multitagplayer-app/target/dependency/* com.xablau.multitagplayer.HelloWorld
