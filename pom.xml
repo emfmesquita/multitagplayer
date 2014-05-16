@@ -9,35 +9,104 @@
 	<name>Multi Tag Player</name>
 	<modules>
 		<module>multitagplayer-app</module>
+		<module>multitagplayer-core</module>
 	</modules>
 
 	<!-- Properties =========================================== -->
 	<properties>
-		<apache-commons-collection.version>3.2.1</apache-commons-collection.version>
-		<apache-commons-lang.version>2.6</apache-commons-lang.version>
-		<aspectj.version>1.7.4</aspectj.version>
-		<hibernate.version>4.3.0.Final</hibernate.version>
-		<hsqldb.version>1.8.0.10</hsqldb.version>
+		<eclipse.jpa.version>2.5.1</eclipse.jpa.version>
+		<hsqldb.version>2.3.2</hsqldb.version>
+		<jsp.version>2.2.1</jsp.version>
+		<jstl.version>1.2</jstl.version>
 		<junit.version>4.11</junit.version>
 		<log4j.version>1.2.17</log4j.version>
-		<spring.version>4.0.0.RELEASE</spring.version>
-		<vraptor.version>3.5.3</vraptor.version>
+		<servlet.version>3.0.1</servlet.version>
+		<spring.version>4.0.3.RELEASE</spring.version>
+		<vraptor.version>4.0.0.Final</vraptor.version>
 	</properties>
 
 	<!-- Dependency Management ================================ -->
 	<dependencyManagement>
 		<dependencies>
-			<!-- CARDX -->
+			<!-- MultiTagPlayer -->
 			<dependency>
 				<groupId>com.xablau</groupId>
 				<artifactId>multitagplayer-app</artifactId>
 				<version>${project.version}</version>
 				<type>war</type>
 			</dependency>
+			<dependency>
+				<groupId>com.xablau</groupId>
+				<artifactId>multitagplayer-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			
 			<!-- Externas -->
-
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.persistence</groupId>
+				<artifactId>org.eclipse.persistence.jpa</artifactId>
+				<version>${eclipse.jpa.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context-support</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-orm</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>br.com.caelum</groupId>
+				<artifactId>vraptor</artifactId>
+				<version>${vraptor.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>jstl</groupId>
+				<artifactId>jstl</artifactId>
+				<version>${jstl.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet.jsp</groupId>
+				<artifactId>javax.servlet.jsp-api</artifactId>
+				<version>${jsp.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>${servlet.version}</version>
+			</dependency>
+		
 			<!-- Test -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.hsqldb</groupId>
+				<artifactId>hsqldb</artifactId>
+				<version>${hsqldb.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${spring.version}</version>
+				<scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
