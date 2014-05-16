@@ -10,6 +10,7 @@
 	<modules>
 		<module>multitagplayer-app</module>
 		<module>multitagplayer-core</module>
+		<module>multitagplayer-web</module>
 	</modules>
 
 	<!-- Properties =========================================== -->
@@ -22,6 +23,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<servlet.version>3.0.1</servlet.version>
 		<spring.version>4.0.3.RELEASE</spring.version>
+		<tomcat.version>7.0.53</tomcat.version>
 		<vraptor.version>4.0.0.Final</vraptor.version>
 	</properties>
 
@@ -38,6 +40,11 @@
 			<dependency>
 				<groupId>com.xablau</groupId>
 				<artifactId>multitagplayer-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.xablau</groupId>
+				<artifactId>multitagplayer-web</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			
@@ -86,6 +93,38 @@
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
 				<version>${servlet.version}</version>
+			</dependency>
+			
+			<!-- tomcat -->
+			<dependency>
+				<groupId>org.apache.tomcat.embed</groupId>
+				<artifactId>tomcat-embed-core</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat.embed</groupId>
+				<artifactId>tomcat-embed-logging-juli</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat.embed</groupId>
+				<artifactId>tomcat-embed-jasper</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat</groupId>
+				<artifactId>tomcat-jasper</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat</groupId>
+				<artifactId>tomcat-jasper-el</artifactId>
+				<version>${tomcat.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tomcat</groupId>
+				<artifactId>tomcat-jsp-api</artifactId>
+				<version>${tomcat.version}</version>
 			</dependency>
 		
 			<!-- Test -->
