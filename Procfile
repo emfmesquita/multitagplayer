@@ -1,1 +1,1 @@
-web:    java $JAVA_OPTS -cp ./multitagplayer-app/target/classes:./multitagplayer-app/target/dependency/* com.xablau.multitagplayer.HelloWorld
+web: sh multitagplayer-app/target/bin/webapp.sh
