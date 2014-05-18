@@ -10,7 +10,7 @@
 			<property name="eclipselink.ddl-generation.output-mode" value="database" />
 
 			<property name="javax.persistence.transactionType" value="RESOURCE_LOCAL" />
-			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver" />
+			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
 		</properties>
 	</persistence-unit>
 </persistence>

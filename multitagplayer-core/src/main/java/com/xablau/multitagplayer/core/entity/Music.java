@@ -3,8 +3,13 @@ package com.xablau.multitagplayer.core.entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.springframework.core.style.ToStringCreator;
 
 @Entity
 @Table(name = "MTP_Music")
@@ -16,6 +21,8 @@ public class Music implements Serializable {
 	private String name;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "multitagplayer")
+	@SequenceGenerator(name = "multitagplayer", sequenceName = "MTP_SEQUENCE")
 	public String getId() {
 		return id;
 	}
@@ -47,5 +54,10 @@ public class Music implements Serializable {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return new ToStringCreator(this).append("id", this.id).append("name", this.name).toString();
 	}
 }
