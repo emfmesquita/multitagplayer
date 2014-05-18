@@ -53,6 +53,7 @@
 					<binFileExtensions>
 						<unix>.sh</unix>
 					</binFileExtensions>
+					<extraJvmArguments>${extraJvmArguments}</extraJvmArguments>
 				</configuration>
 				<executions>
 					<execution>

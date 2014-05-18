@@ -22,7 +22,7 @@
 		<junit.version>4.11</junit.version>
 		<log4j.version>1.2.17</log4j.version>
 		<servlet.version>3.0.1</servlet.version>
-		<spring.version>4.0.3.RELEASE</spring.version>
+		<spring.version>4.0.4.RELEASE</spring.version>
 		<tomcat.version>7.0.53</tomcat.version>
 		<vraptor.version>4.0.0.Final</vraptor.version>
 	</properties>
@@ -75,9 +75,9 @@
 				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>br.com.caelum</groupId>
-				<artifactId>vraptor</artifactId>
-				<version>${vraptor.version}</version>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>jstl</groupId>
@@ -149,7 +149,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-
 	<build>
 		<plugins>
 			<plugin>
@@ -163,4 +162,13 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>debug</id>
+			<properties>
+				<extraJvmArguments>-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</extraJvmArguments>
+			</properties>
+		</profile>
+	</profiles>
 </project>
