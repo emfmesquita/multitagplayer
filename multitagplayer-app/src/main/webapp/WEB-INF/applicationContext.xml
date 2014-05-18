@@ -2,10 +2,33 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<context:annotation-config />
+	
+	<bean class="java.net.URI" id="dbUrl">
+		<constructor-arg value="#{systemEnvironment['DATABASE_URL']}" />
+	</bean>
+
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="multitagplayer-pu" />
+		<property name="jpaProperties">
+			<props>
+				<prop key="javax.persistence.jdbc.url">#{ 'jdbc:postgresql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }</prop>
+				<prop key="javax.persistence.jdbc.user">#{ @dbUrl.getUserInfo().split(':')[0] }</prop>
+				<prop key="javax.persistence.jdbc.password">#{ @dbUrl.getUserInfo().split(':')[1] }</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
 	<import resource="classpath*:META-INF/spring-beans.xml" />
 	
