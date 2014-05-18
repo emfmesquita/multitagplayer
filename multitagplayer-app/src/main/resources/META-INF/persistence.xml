@@ -2,8 +2,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
 	version="2.0">
-	<persistence-unit name="multitagplayer-test-pu"
-		transaction-type="RESOURCE_LOCAL">
+	<persistence-unit name="multitagplayer-pu" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<class>com.xablau.multitagplayer.core.entity.Music</class>
 		<properties>
@@ -12,9 +11,6 @@
 
 			<property name="javax.persistence.transactionType" value="RESOURCE_LOCAL" />
 			<property name="javax.persistence.jdbc.driver" value="org.hsqldb.jdbc.JDBCDriver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:hsqldb:mem:test" />
-			<property name="javax.persistence.jdbc.user" value="sa" />
-			<property name="javax.persistence.jdbc.password" value="" />
 		</properties>
 	</persistence-unit>
 </persistence>
