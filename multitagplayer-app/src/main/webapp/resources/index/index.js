@@ -1,34 +1,27 @@
-var multyTagSound = null;
+var player = null;
+var currentPath = null;
 
 var init = function(){
-	$('#musicSlider').slider();
-}
-
-var updateSlider = function(percent){
-	if(percent) $('#musicSlider').slider('setValue', percent);
-}
-
-var resetSlider = function(){
-	$('#musicSlider').slider('setValue', 0);
-}
+	$('#player').mediaelementplayer({
+		success: function(mediaElement, originalNode) {
+    		player = mediaElement;
+			player.setSrc("");
+		},
+		audioWidth : 500,
+		features: ['playpause','current','progress','duration','volume']
+	});
+};
 
 var play = function(item){
 	var path = $(item).find(".path").val();
-	if(!path){
+	if(!path || currentPath == path){
 		return;
 	}
-	if(multyTagSound){
-		multyTagSound.stop();
-	}
-	resetSlider();
-	console.log(path);
-	multyTagSound = new buzz.sound(path);
-	multyTagSound.bind("progress", function(e){
-		var percent = buzz.toPercent( this.getTime(), this.getDuration(), true );
-		updateSlider(percent);
-	});
-	multyTagSound.play();
-}
+	currentPath = path;
+	player.pause();
+	player.setSrc(path);
+	player.play();
+};
 
 var save = function(){
 	var name = $('#newMusicName').val();
@@ -39,4 +32,4 @@ var save = function(){
 			console.log('saved');
 		}
 	);
-}
+};

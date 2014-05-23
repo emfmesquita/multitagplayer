@@ -7,8 +7,7 @@
 		<title>MultiTagPlayer</title>
 
 		<!-- Bootstrap -->
-		<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-		<link href="resources/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+		<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -17,8 +16,8 @@
 		  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
 
-		<!-- Bootstrap Slider -->
-		<link href="resources/bootstrap-slider/css/bootstrap-slider.min.css" rel="stylesheet">
+		<!-- Mediaelement -->
+		<link href="resources/mediaelement/mediaelementplayer.css" rel="stylesheet" />
 
 		<link href="resources/index/index.css" rel="stylesheet">
 	</head>
@@ -46,20 +45,16 @@
 					</c:forEach>
 				</ul>
 			</p>
-			
-			<span class="label label-default">000:00</span>
-			<input id="musicSlider" style="margin-left:10px; margin-right:10px;" type="text" data-slider-id='musicSliderContainer' data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"></input>
-			<span class="label label-default">000:00</span>
+
+			<audio src="resources/blank.mp3" id="player"/>
 		</div>
 
 		<!-- jQuery -->
 		<script src="resources/jquery.min.js"></script>
 		<!-- Bootstrap -->
 		<script src="resources/bootstrap/js/bootstrap.min.js"></script>
-		<!-- Bootstrap Slider -->
-		<script src="resources/bootstrap-slider/bootstrap-slider.min.js"></script>
-		<!-- Buzz -->
-		<script src="resources/buzz.min.js"></script>
+		<!-- Mediaelement -->
+		<script src="resources/mediaelement/mediaelement-and-player.min.js"></script>
 
 		<script src="resources/index/index.js"></script>
 	</body>
