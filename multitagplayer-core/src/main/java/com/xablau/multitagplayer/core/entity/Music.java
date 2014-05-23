@@ -1,4 +1,6 @@
+
 package com.xablau.multitagplayer.core.entity;
+
 
 import java.io.Serializable;
 
@@ -11,6 +13,7 @@ import javax.persistence.Table;
 
 import org.springframework.core.style.ToStringCreator;
 
+
 @Entity
 @Table(name = "MTP_Music")
 public class Music implements Serializable {
@@ -19,12 +22,13 @@ public class Music implements Serializable {
 
 	private String id;
 	private String name;
+	private String path;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "multitagplayer")
 	@SequenceGenerator(name = "multitagplayer", sequenceName = "MTP_SEQUENCE")
 	public String getId() {
-		return id;
+		return this.id;
 	}
 
 	public void setId(String id) {
@@ -32,30 +36,43 @@ public class Music implements Serializable {
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	public String getPath() {
+		return this.path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (this.getClass() != obj.getClass()) {
 			return false;
+		}
 		Music other = (Music) obj;
-		if (name == null) {
-			if (other.name != null)
+		if (this.name == null) {
+			if (other.name != null) {
 				return false;
-		} else if (!name.equals(other.name))
+			}
+		} else if (!this.name.equals(other.name)) {
 			return false;
+		}
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return new ToStringCreator(this).append("id", this.id).append("name", this.name).toString();

@@ -3,6 +3,8 @@
 	<name>multitagplayer-app</name>
 	<comment></comment>
 	<projects>
+		<project>multitagplayer-core</project>
+		<project>multitagplayer-web</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -19,22 +19,61 @@
 	<body>
 		<h2>${message}</h2>
 
-		<div class="btn-group">
-			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-				Teste Bootstrap
-				<span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu">
+		
+
+		<div>
+			<ul class="list-group">
 				<c:forEach items="${musics}" var="music">
-					<li><a href="#">id: ${music.id} name: ${music.name}</a></li>
+					<li class="list-group-item music-item" onclick="play(this);">
+						${music.name} (${music.path})
+						<input type="hidden" class="path" style="display:none" value="${music.path}"/>
+					</li>
 				</c:forEach>
 			</ul>
 		</div>
 
+		<div>
+			<div class="form-inline navbar-left">
+				<div class="form-group">
+					<input id="newMusicName" type="text" class="form-control" placeholder="Name">
+					<input id="newMusicPath" type="text" class="form-control" placeholder="Path" style="width:450px">
+				</div>
+				<button class="btn btn-default" onclick="save();">Save</button>
+			</div>
+		</div>
 
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<!-- jQuery -->
 		<script src="resources/jquery.min.js"></script>
-		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<!-- Bootstrap -->
 		<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+		<!-- Buzz -->
+		<script src="resources/buzz.min.js"></script>
+
+		<script>
+			var multyTagSound = null;
+			var play = function(item){
+				var path = $(item).find(".path").val();
+				if(!path){
+					return;
+				}
+				if(multyTagSound){
+					multyTagSound.stop();
+				}
+				console.log(path);
+				multyTagSound = new buzz.sound(path);
+				multyTagSound.play();
+			}
+
+			var save = function(){
+				var name = $('#newMusicName').val();
+				var path = $('#newMusicPath').val();
+				$.post('music/save', 
+					{ name : name , path : path},
+					function(response) {
+						console.log('saved');
+					}
+				);
+			}
+		</script>
 	</body>
 </html>
