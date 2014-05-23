@@ -4,10 +4,10 @@
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-        <dependent-module archiveName="multitagplayer-core.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/multitagplayer-core/multitagplayer-core">
+        <dependent-module archiveName="multitagplayer-web-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/multitagplayer-web/multitagplayer-web">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="multitagplayer-web.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/multitagplayer-web/multitagplayer-web">
+        <dependent-module archiveName="multitagplayer-core-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/multitagplayer-core/multitagplayer-core">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/multitagplayer-app/src/main/webapp/WEB-INF/classes"/>
