@@ -8,6 +8,7 @@
 
 		<!-- Bootstrap -->
 		<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="resources/bootstrap/css/sticky-footer-navbar.css" rel="stylesheet" />
 
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -18,36 +19,64 @@
 
 		<!-- Mediaelement -->
 		<link href="resources/mediaelement/mediaelementplayer.css" rel="stylesheet" />
-
 		<link href="resources/index/index.css" rel="stylesheet">
 	</head>
 	<body onload="init();">
-		<h2>${message}</h2>
-
+		<!-- Fixed navbar -->
+	    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	      <div class="container">
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="#">MultiTagPlayer</a>
+	        </div>
+	        <!-- <div class="collapse navbar-collapse">
+	          <ul class="nav navbar-nav">
+	            <li class="active"><a href="#">Home</a></li>
+	            <li><a href="#about">About</a></li>
+	          </ul>
+	        </div>-->
+	        <!--/.nav-collapse -->
+	      </div>
+	    </div>
 		
-		<div class="container theme-showcase" role="main">
-			<p>
-				<div class="form-inline">
-					<div class="form-group">
-						<input id="newMusicName" type="text" class="form-control" placeholder="Name">
-						<input id="newMusicPath" type="text" class="form-control" placeholder="Path" style="width:450px">
+		<div clas="row">
+			<div class="col-xs-2 gray" style="height: 100%;">
+			</div>
+			<div class="container theme-showcase col-xs-10" role="main">
+				<p>
+					<div class="form-inline">
+						<div class="form-group">
+							<input id="newMusicName" type="text" class="form-control" placeholder="Name">
+							<input id="newMusicPath" type="text" class="form-control" placeholder="Path" style="width:450px">
+						</div>
+						<button class="btn btn-default" onclick="save();">Save</button>
 					</div>
-					<button class="btn btn-default" onclick="save();">Save</button>
-				</div>
-			</p>
-			<p>
-				<ul class="list-group">
-					<c:forEach items="${musics}" var="music">
-						<li class="list-group-item music-item" onclick="play(this);">
-							${music.name} (${music.path})
-							<input type="hidden" class="path" style="display:none" value="${music.path}"/>
-						</li>
-					</c:forEach>
-				</ul>
-			</p>
-
-			<audio src="resources/blank.mp3" id="player"/>
+				</p>
+				<p>
+					<ul class="list-group">
+						<c:forEach items="${musics}" var="music">
+							<li class="list-group-item music-item" onclick="play(this);">
+								${music.name} (${music.path})
+								<input type="hidden" class="path" style="display:none" value="${music.path}"/>
+							</li>
+						</c:forEach>
+					</ul>
+				</p>
+	
+				<audio src="resources/blank.mp3" id="player"/>
+			</div>
 		</div>
+
+		<div id="footer">
+	    	<div class="container">
+	        	<p class="text-muted"><strong>MultiTagPlayer&trade;</strong> <small><em>version ${version}</em></small></p>
+	    	</div>
+	    </div>
 
 		<!-- jQuery -->
 		<script src="resources/jquery.min.js"></script>
