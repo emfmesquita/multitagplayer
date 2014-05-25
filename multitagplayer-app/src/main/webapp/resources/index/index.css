@@ -4,5 +4,9 @@
 }
 
 .gray {
-	background-color: #333;
+	background-color: #CCC;
+}
+
+.musicTable tbody .tr {
+	cursor: pointer;
 }

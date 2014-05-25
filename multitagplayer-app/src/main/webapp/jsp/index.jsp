@@ -57,16 +57,27 @@
 						<button class="btn btn-default" onclick="save();">Save</button>
 					</div>
 				</p>
-				<p>
-					<ul class="list-group">
+				<table class="table table-hover musicTable">
+					<thead>
+						<tr class="row">
+							<th class="col-xs-1"></th>
+							<th class="col-xs-11">Name</th>
+						</tr>
+					</thead>
+					<tbody>
 						<c:forEach items="${musics}" var="music">
-							<li class="list-group-item music-item" onclick="play(this);">
-								${music.name} (${music.path})
-								<input type="hidden" class="path" style="display:none" value="${music.path}"/>
-							</li>
+							<tr onclick="play(this);">
+								<td>
+									<span class="glyphicon glyphicon-volume-up" style="display:none;"></span>
+								</td>
+								<td>
+									${music.name}
+									<input type="hidden" class="path" style="display:none" value="${music.path}"/>
+								</td>
+							</tr>
 						</c:forEach>
-					</ul>
-				</p>
+					</tbody>
+				</table>
 	
 				<audio src="resources/blank.mp3" id="player"/>
 			</div>

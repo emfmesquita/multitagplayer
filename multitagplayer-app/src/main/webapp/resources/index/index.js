@@ -13,6 +13,7 @@ var init = function(){
 };
 
 var play = function(item){
+	selectRow(item);
 	var path = $(item).find(".path").val();
 	if(!path || currentPath == path){
 		return;
@@ -22,6 +23,15 @@ var play = function(item){
 	player.setSrc(path);
 	player.play();
 };
+
+var selectRow = function(row){
+	var activeRows = $(row).parent("table").find("tr.active");
+	activeRows.find(".glyphicon.glyphicon-volume-up").hide();
+	activeRows.removeClass("active");
+	
+	$(row).addClass("active");
+	activeRows.find(".glyphicon.glyphicon-volume-up").show();
+}
 
 var save = function(){
 	var name = $('#newMusicName').val();

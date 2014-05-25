@@ -24,8 +24,15 @@ public class IndexController {
     
     @RequestMapping(method = { GET, POST })
     public String index(ModelMap model) {
-    	ResourceBundle rb = ResourceBundle.getBundle("application");
+    	// Pré-carrega as músicas
+    	if(this.dao.list().size() == 0){
+    		System.out.println("Creating sample musics...");
+    		this.dao.createMusic("Music 1", "resources/music.mp3");
+    		this.dao.createMusic("Music 2", "resources/music2.mp3");
+    		System.out.println("Sample musics created!");
+    	}
     	
+    	ResourceBundle rb = ResourceBundle.getBundle("application");
         model.addAttribute("version", rb.getString("application.version"));
         model.addAttribute("musics", this.dao.list());
         return "index";
