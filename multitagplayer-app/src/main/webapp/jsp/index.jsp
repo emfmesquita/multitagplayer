@@ -44,35 +44,35 @@
 	      </div>
 	    </div>
 		
-		<div clas="row">
+		<div style="margin-top:50px;">
 			<div class="col-xs-2 gray" style="height: 100%;">
-			</div>
-			<div class="container theme-showcase col-xs-10" role="main">
-				<p>
-					<div class="form-inline">
-						<div class="form-group">
-							<input id="newMusicName" type="text" class="form-control" placeholder="Name">
-							<input id="newMusicPath" type="text" class="form-control" placeholder="Path" style="width:450px">
-						</div>
-						<button class="btn btn-default" onclick="save();">Save</button>
+				<div style="margin-top:20px;">
+					<div id="tag-autocomplete" class="input-group">
+					  	<input type="text" class="form-control typeahead" placeholder="Filter by tag..." />
+					  	<span class="input-group-addon"><button type="button" class="close" aria-hidden="true" onclick="clearAutoComplete(this);">&times;</button></span>
 					</div>
-				</p>
+				</div>
+			</div>
+			<div class="container theme-showcase col-xs-10" role="main" style="margin-top:20px;">
 				<table class="table table-hover musicTable">
 					<thead>
 						<tr class="row">
 							<th class="col-xs-1"></th>
-							<th class="col-xs-11">Name</th>
+							<th class="col-xs-5">Name</th>
+							<th class="col-xs-6">Tags</th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${musics}" var="music">
-							<tr onclick="play(this);">
-								<td>
+							<tr class="row" onclick="play(this);">
+								<td class="col-xs-1">
 									<span class="glyphicon glyphicon-volume-up" style="display:none;"></span>
 								</td>
-								<td>
+								<td class="col-xs-5">
 									${music.name}
 									<input type="hidden" class="path" style="display:none" value="${music.path}"/>
+								</td>
+								<td class="col-xs-6">
 								</td>
 							</tr>
 						</c:forEach>
@@ -93,6 +93,8 @@
 		<script src="resources/jquery.min.js"></script>
 		<!-- Bootstrap -->
 		<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+		<!-- Typeahead -->
+		<script src="resources/bootstrap/js/typeahead.bundle.js"></script>
 		<!-- Mediaelement -->
 		<script src="resources/mediaelement/mediaelement-and-player.min.js"></script>
 

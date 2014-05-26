@@ -7,6 +7,11 @@
 	background-color: #CCC;
 }
 
-.musicTable tbody .tr {
+.musicTable tbody tr {
 	cursor: pointer;
+}
+
+#scrollable-dropdown-menu .tt-dropdown-menu {
+  max-height: 150px;
+  overflow-y: auto;
 }
