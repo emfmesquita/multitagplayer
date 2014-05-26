@@ -2,7 +2,8 @@
 var developerKey = 'AIzaSyB4OD8l3nKAOUlYX6mz8sisQTFKxLJfr0U';
 
 // The Client ID obtained from the Google Developers Console.
-var clientId = '1005266131738-tdv38pudoj50a5jgmbr6khoo3f9fj6pv.apps.googleusercontent.com';
+var clientId = '1005266131738-tdv38pudoj50a5jgmbr6khoo3f9fj6pv.apps.googleusercontent.com'; // heroko
+//var clientId = '1005266131738-3hcds8n24ubv16rmls7vlktd9q1hjj98.apps.googleusercontent.com'; // local
 
 // Scope to use to access user's photos.
 var scopes = ['https://www.googleapis.com/auth/photos', 'https://www.googleapis.com/auth/drive'].join(' ');
