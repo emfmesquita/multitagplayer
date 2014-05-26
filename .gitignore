@@ -1,9 +1,9 @@
 tomcat.8080
 
 # Directories #
-/build/
-/bin/
+build/
 target/
+bin/
  
 # OS Files #
 .DS_Store
