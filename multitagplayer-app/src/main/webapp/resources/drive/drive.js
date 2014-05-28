@@ -55,23 +55,35 @@ var authClientAPI = function(){
     gapi.auth.setToken(oauthTokenObject);
 }
 
-// List of supported MIME Types.
-var supportedMimeType = "audio/mpeg3,audio/x-mpeg-3,video/x-mpeg,audio/mp3,audio/mpeg,audio/mp4,audio/mpg,audio/mp4a-latm,audio/ogg,audio/webm,audio/wav,audio/x-wav,audio/wave";
-
 // Create and render a Picker object for picking user Photos.
 function createPicker() {
 	if (pickerApiLoaded && oauthToken) {
-		// Search Songs in Drive View.
-		var view = new google.picker.DocsView();
-		view.setMimeTypes(supportedMimeType);
+		var views = getPickerViews();
 
 		filePicker = new google.picker.PickerBuilder().
-			addView(view).
+			addView(views[0]).
+			addView(views[1]).
 			setOAuthToken(oauthToken).
 			setDeveloperKey(developerKey).
 			setCallback(pickerCallback).
+			enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
 			build();
 	}
+}
+
+// List of supported MIME Types.
+var supportedMimeType = "audio/mpeg3,audio/x-mpeg-3,video/x-mpeg,audio/mp3,audio/mpeg,audio/mp4,audio/mpg,audio/mp4a-latm,audio/ogg,audio/webm,audio/wav,audio/x-wav,audio/wave";
+
+var getPickerViews = function(){
+	var view1 = new google.picker.DocsView();
+	view1.setMimeTypes(supportedMimeType);
+
+	var view2 = new google.picker.DocsView();
+	view2.setMimeTypes(supportedMimeType);
+	view2.setIncludeFolders(true);
+	view2.setParent("root");
+
+	return [view1, view2];
 }
 
 function openPicker(){
