@@ -63,6 +63,8 @@ function createPicker() {
 		filePicker = new google.picker.PickerBuilder().
 			addView(views[0]).
 			addView(views[1]).
+			addView(views[2]).
+			addView(views[3]).
 			setOAuthToken(oauthToken).
 			setDeveloperKey(developerKey).
 			setCallback(pickerCallback).
@@ -77,13 +79,24 @@ var supportedMimeType = "audio/mpeg3,audio/x-mpeg-3,video/x-mpeg,audio/mp3,audio
 var getPickerViews = function(){
 	var view1 = new google.picker.DocsView();
 	view1.setMimeTypes(supportedMimeType);
+	view1.setLabel("All Songs");
 
 	var view2 = new google.picker.DocsView();
 	view2.setMimeTypes(supportedMimeType);
 	view2.setIncludeFolders(true);
 	view2.setParent("root");
+	view2.setLabel("My Drive");
 
-	return [view1, view2];
+	var view3 = new google.picker.DocsView();
+	view3.setMimeTypes(supportedMimeType);
+	view3.setIncludeFolders(true);
+	view3.setOwnedByMe(false);
+	view3.setLabel("Shared With Me");
+
+	var view4 = new google.picker.DocsView(google.picker.ViewId.RECENTLY_PICKED);
+	view4.setLabel("Recently Picked");
+
+	return [view1, view2, view3, view4];
 }
 
 function openPicker(){
