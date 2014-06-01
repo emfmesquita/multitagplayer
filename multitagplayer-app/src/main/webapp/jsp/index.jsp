@@ -51,7 +51,7 @@
 		<div style="margin-top:50px;">
 			<div class="col-xs-2 gray sidebar" >
 				<div id="tag-autocomplete" class="input-group">
-				  	<input type="text" class="form-control typeahead" placeholder="Filter by tag..." />
+				  	<input type="text" class="form-control typeahead" placeholder="Filter by tag..." onkeyup="filterTagList(this.value, $('#tagsList'))"/>
 				  	<span class="input-group-addon">
 				  		<button type="button" class="close" aria-hidden="true" onclick="clearAutoComplete(this);">&times;</button>
 				  	</span>

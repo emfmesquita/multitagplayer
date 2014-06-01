@@ -18,6 +18,7 @@ var init = function(){
 
 var clearAutoComplete = function(button){
 	$(button).parentsUntil('div').parent().children('input').val('');
+	$("#tagsList").find("li").show();
 }
 
 var play = function(item){
@@ -51,4 +52,17 @@ var save = function(){
 		}
 	);
 };
+
+var filterTagList = function(str, tagsList){
+	var strTrim = str.trim().toLowerCase();
+	var tagsLi = $(tagsList).find("li");
+	for (var i = 0; i < tagsLi.length; ++i) {
+		var tagEl = $(tagsLi[i]);
+		if(tagEl.text().toLowerCase().indexOf(strTrim) != -1){
+			tagEl.show();
+		} else {
+			tagEl.hide();
+		}
+	}
+}
 
