@@ -41,6 +41,7 @@ public class IndexController {
     		System.out.println("Sample musics created!");
     	}
     	
+    	this.tags = new ArrayList<String>();
     	this.tags.add("Dungeon");
     	this.tags.add("Happy");
     	this.tags.add("Dying");

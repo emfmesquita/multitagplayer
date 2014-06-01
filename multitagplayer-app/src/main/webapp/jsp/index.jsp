@@ -9,6 +9,10 @@
 		<!-- Bootstrap -->
 		<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="resources/bootstrap/css/sticky-footer-navbar.css" rel="stylesheet" />
+		<link href="resources/bootstrap/css/sidebar.css" rel="stylesheet" />
+		
+		<!-- Scrollbar -->
+		<link href="resources/scrollbar/jquery.mCustomScrollbar.css" rel="stylesheet" />
 
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,15 +49,24 @@
 	    </div>
 		
 		<div style="margin-top:50px;">
-			<div class="col-xs-2 gray" style="height: 100%;">
-				<div style="margin-top:20px;">
-					<div id="tag-autocomplete" class="input-group">
-					  	<input type="text" class="form-control typeahead" placeholder="Filter by tag..." />
-					  	<span class="input-group-addon"><button type="button" class="close" aria-hidden="true" onclick="clearAutoComplete(this);">&times;</button></span>
-					</div>
+			<div class="col-xs-2 gray sidebar" >
+				<div id="tag-autocomplete" class="input-group">
+				  	<input type="text" class="form-control typeahead" placeholder="Filter by tag..." />
+				  	<span class="input-group-addon">
+				  		<button type="button" class="close" aria-hidden="true" onclick="clearAutoComplete(this);">&times;</button>
+				  	</span>
+				</div>
+				<div id="tagsList" style="padding: 10px 8px 0 8px;">
+					<ul class="list-group">
+						<c:forEach items="${tags}" var="tag">
+							<li class="list-group-item"><strong>${tag}</strong></li>
+						</c:forEach>
+					</ul>
 				</div>
 			</div>
-			<div class="container theme-showcase col-xs-10" role="main" style="margin-top:20px;">
+			<div class="container theme-showcase col-xs-10 col-xs-offset-2" role="main" style="margin-top:20px; margin-bottom:60px;">
+				<div class="well well-lg">
+				</div>
 				<table class="table table-hover musicTable">
 					<thead>
 						<tr class="row">
@@ -93,8 +106,8 @@
 		<script src="resources/jquery.min.js"></script>
 		<!-- Bootstrap -->
 		<script src="resources/bootstrap/js/bootstrap.min.js"></script>
-		<!-- Typeahead -->
-		<script src="resources/bootstrap/js/typeahead.bundle.js"></script>
+		<!-- Scrollbar -->
+		<script src="resources/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
 		<!-- Mediaelement -->
 		<script src="resources/mediaelement/mediaelement-and-player.min.js"></script>
 

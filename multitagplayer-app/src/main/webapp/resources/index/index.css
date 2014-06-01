@@ -15,3 +15,14 @@
   max-height: 150px;
   overflow-y: auto;
 }
+
+.gray .list-group-item {
+	background-color: #CCC;
+	color: white;
+	border: 0px solid;
+	border-bottom: 3px solid #ddd;
+}
+
+#tagsList #mCSB_2_dragger_vertical {
+	left: 15px;
+}
