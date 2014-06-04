@@ -25,7 +25,8 @@
 		<link href="resources/mediaelement/mediaelementplayer.css" rel="stylesheet" />
 		<link href="resources/index/index.css" rel="stylesheet">
 	</head>
-	<body onload="init();">
+	
+	<body onload="init('${tags}'.replace('[', '').replace(']', '').split(/, /g));">
 		<!-- Fixed navbar -->
 	    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
 	      <div class="container">
@@ -59,14 +60,22 @@
 				<div id="tagsList" style="padding: 10px 8px 0 8px;">
 					<ul class="list-group">
 						<c:forEach items="${tags}" var="tag">
-							<li class="list-group-item"><strong>${tag}</strong></li>
+							<li class="list-group-item">
+								<strong>${tag}</strong>
+								<div class="pull-right" style="margin-top:3px;">
+									<!-- TODO: make green/red on mouseover -->
+									<span class="glyphicon glyphicon-remove" style="cursor:pointer" onclick="addUsedTag($(this).parentsUntil('li').parent('li'), true)" ></span>
+									<span class="glyphicon glyphicon-ok" style="cursor:pointer" onclick="addUsedTag($(this).parentsUntil('li').parent('li'), false)" ></span>
+								</div>
+							</li>
 						</c:forEach>
 					</ul>
 				</div>
 			</div>
 			<div class="container theme-showcase col-xs-10 col-xs-offset-2" role="main" style="margin-top:20px; margin-bottom:60px;">
-				<div class="well well-lg">
-				</div>
+				<!-- TODO: Choose better red/green -->
+				<!-- TODO: Change color on mouse over -->
+				<div id="usedTagsElement" class="well well-lg"></div>
 				<table class="table table-hover musicTable">
 					<thead>
 						<tr class="row">
@@ -106,6 +115,7 @@
 		<script src="resources/jquery.min.js"></script>
 		<!-- Bootstrap -->
 		<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+		<script src="resources/bootstrap/js/transition.js"></script>
 		<!-- Scrollbar -->
 		<script src="resources/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
 		<!-- Mediaelement -->

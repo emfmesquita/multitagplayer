@@ -26,3 +26,17 @@
 #tagsList #mCSB_2_dragger_vertical {
 	left: 15px;
 }
+
+#tagsList .used {
+	display:none;
+}
+
+#usedTagsElement {
+	word-break: break-word;
+	line-height: 30px;
+}
+
+#usedTagsElement span{
+	font-size: 90%;
+	margin: 5px;
+}

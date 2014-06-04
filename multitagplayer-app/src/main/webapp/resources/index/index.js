@@ -1,11 +1,24 @@
 var player = null;
 var currentPath = null;
+var tags= null;
+var usedTags = null;
+
+var tagTemplate = "<strong>&TAG&</strong><span class='glyphicon glyphicon-remove' onclick='addTag($(this).parent(), true)'/><span class='glyphicon glyphicon-ok' onclick='addTag($(this).parent(), false)'/>";
+var tagTemplVar1 = "&TAG&"; 
+
+var usedTagTemplate = "<span onclick='removeUsedTag(this);' style='cursor:pointer;' class='label label-&EXCLUSION&'>&TAG& | &times;</span>";
+var usedTagTemplVar1 = "&TAG&";
+var usedTagTemplVar2 = "&EXCLUSION&";
+ 
 
 $("#tagsList, body").mCustomScrollbar({
     theme: "minimal"
 });
 
-var init = function(){
+var init = function(tagsList){
+	tags = tagsList;
+	usedTags = [];
+	
 	$('#player').mediaelementplayer({
 		success: function(mediaElement, originalNode) {
     		player = mediaElement;
@@ -19,7 +32,7 @@ var init = function(){
 var clearAutoComplete = function(button){
 	$(button).parentsUntil('div').parent().children('input').val('');
 	$("#tagsList").find("li").show();
-}
+};
 
 var play = function(item){
 	selectRow(item);
@@ -40,7 +53,7 @@ var selectRow = function(row){
 	
 	$(row).addClass("active");
 	$(row).find(".glyphicon.glyphicon-volume-up").show();
-}
+};
 
 var save = function(){
 	var name = $('#newMusicName').val();
@@ -59,10 +72,47 @@ var filterTagList = function(str, tagsList){
 	for (var i = 0; i < tagsLi.length; ++i) {
 		var tagEl = $(tagsLi[i]);
 		if(tagEl.text().toLowerCase().indexOf(strTrim) != -1){
+			//TODO: highlight match
 			tagEl.show();
 		} else {
 			tagEl.hide();
 		}
 	}
-}
+};
 
+var fillUsedTagTemplate = function(tag, exclusion){
+	var filledUsedTagTempl = usedTagTemplate.replace(usedTagTemplVar1, tag);
+	return filledUsedTagTempl.replace(usedTagTemplVar2, exclusion? "danger" : "success");
+};
+
+var fillTagTemplate = function(tag){
+	return tagTemplate.replace(tagTemplVar1, tag);
+};
+
+var addUsedTag = function(tagElement, exclusion){
+	var tagText = $(tagElement).text().trim();
+	usedTags.push(tagText);
+	
+	//TODO: filter music list
+	
+	$("#usedTagsElement").append(fillUsedTagTemplate(tagText, exclusion)); //TODO: place in list ordered by name
+	$(tagElement).addClass("hidden");
+};
+
+
+var removeUsedTag = function(usedtagElement){
+	var tagText = $(usedtagElement).text().replace(/[|].*/g, "").trim();
+	usedTags.splice(usedTags.indexOf(tagText), 1);
+	
+	//TODO: filter music list
+	
+	var tagsLi = $("#tagsList").find("li.hidden");
+	for (var i = 0; i < tagsLi.length; ++i) {
+		var tagEl = $(tagsLi[i]);
+		if(tagEl.text().toLowerCase().trim() == tagText.toLowerCase()){
+			$(tagEl).removeClass("hidden");
+			break;
+		}
+	}
+	$(usedtagElement).remove();
+};
