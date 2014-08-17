@@ -3,10 +3,10 @@ var currentPath = null;
 var tags= null;
 var usedTags = null;
 
-var tagTemplate = "<strong>&TAG&</strong><span class='glyphicon glyphicon-remove' onclick='addTag($(this).parent(), true)'/><span class='glyphicon glyphicon-ok' onclick='addTag($(this).parent(), false)'/>";
+var tagTemplate = "<strong>&TAG&</strong><span class='glyphicon glyphicon-thumbs-down' onclick='addTag($(this).parent(), true)'/><span class='glyphicon glyphicon-thumbs-up' onclick='addTag($(this).parent(), false)'/>";
 var tagTemplVar1 = "&TAG&"; 
 
-var usedTagTemplate = "<span onclick='removeUsedTag(this);' style='cursor:pointer;' class='label label-&EXCLUSION&'>&TAG& | &times;</span>";
+var usedTagTemplate = "<div onclick='removeUsedTag(this);' class='label label-&EXCLUSION& usedTag'>&TAG& &times;</div>";
 var usedTagTemplVar1 = "&TAG&";
 var usedTagTemplVar2 = "&EXCLUSION&";
  
@@ -92,6 +92,9 @@ var fillTagTemplate = function(tag){
 var addUsedTag = function(tagElement, exclusion){
 	var tagText = $(tagElement).text().trim();
 	usedTags.push(tagText);
+	if(usedTags.length == 1){
+		$("#usedTagsElement").show();
+	}
 	
 	//TODO: filter music list
 	
@@ -101,8 +104,11 @@ var addUsedTag = function(tagElement, exclusion){
 
 
 var removeUsedTag = function(usedtagElement){
-	var tagText = $(usedtagElement).text().replace(/[|].*/g, "").trim();
+	var tagText = $(usedtagElement).text().replace(/.$/g, "").trim();
 	usedTags.splice(usedTags.indexOf(tagText), 1);
+	if(usedTags.length == 0){
+		$("#usedTagsElement").hide();
+	}
 	
 	//TODO: filter music list
 	

@@ -60,12 +60,11 @@
 				<div id="tagsList" style="padding: 10px 8px 0 8px;">
 					<ul class="list-group">
 						<c:forEach items="${tags}" var="tag">
-							<li class="list-group-item">
+							<li class="list-group-item" onmouseover="$(this).find('div.iconGroup').show()" onmouseout="$(this).find('div.iconGroup').hide()">
 								<strong>${tag}</strong>
-								<div class="pull-right" style="margin-top:3px;">
-									<!-- TODO: make green/red on mouseover -->
-									<span class="glyphicon glyphicon-remove" style="cursor:pointer" onclick="addUsedTag($(this).parentsUntil('li').parent('li'), true)" ></span>
-									<span class="glyphicon glyphicon-ok" style="cursor:pointer" onclick="addUsedTag($(this).parentsUntil('li').parent('li'), false)" ></span>
+								<div class="pull-right iconGroup" style="margin-top:3px; display:none;">
+									<span class="glyphicon glyphicon-thumbs-down" style="cursor:pointer" onclick="addUsedTag($(this).parentsUntil('li').parent('li'), true)" ></span>
+									<span class="glyphicon glyphicon-thumbs-up" style="cursor:pointer" onclick="addUsedTag($(this).parentsUntil('li').parent('li'), false)" ></span>
 								</div>
 							</li>
 						</c:forEach>
@@ -75,7 +74,9 @@
 			<div class="container theme-showcase col-xs-10 col-xs-offset-2" role="main" style="margin-top:20px; margin-bottom:60px;">
 				<!-- TODO: Choose better red/green -->
 				<!-- TODO: Change color on mouse over -->
-				<div id="usedTagsElement" class="well well-lg"></div>
+				<div id="usedTagsElement" style="display:none;" class="well well-lg">
+					<strong>Tags:</strong><br/>
+				</div>
 				<table class="table table-hover musicTable">
 					<thead>
 						<tr class="row">
