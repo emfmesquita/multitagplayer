@@ -69,7 +69,8 @@
 				  	</span>
 				</div>
 				<div id="tagsList" class="no_selection" style="padding: 10px 8px 0 8px;">
-					<ul class="list-group">
+					<%@include file="ajax/tagsList.jsp"  %>
+					<!-- <ul class="list-group">
 						<c:forEach items="${tags}" var="tag">
 							<li class="list-group-item" onmouseover="$(this).find('div.iconGroup').show()" onmouseout="$(this).find('div.iconGroup').hide()">
 								<strong>${tag}</strong>
@@ -79,17 +80,17 @@
 								</div>
 							</li>
 						</c:forEach>
-					</ul>
+					</ul>-->
 				</div>
 			</div>
 			<div class="container theme-showcase col-xs-10 col-xs-offset-2" role="main" style="margin-top:20px; margin-bottom:60px;">
-				<div id="playerContainer" style="margin-bottom:15px;">
-					<audio src="resources/blank.mp3" style="width: 100%" id="player"/>
-				</div>
-				
 				<div id="usedTagsElement" style="display:none;" class="well well-lg no_selection">
 				<!-- TODO: make collapsible -->
 					<strong>Tags:</strong><br/>
+				</div>
+				
+				<div id="playerContainer" style="margin-bottom:15px;">
+					<audio src="resources/blank.mp3" style="width: 100%" id="player"/>
 				</div>
 				<table class="table table-hover musicTable">
 					<thead>

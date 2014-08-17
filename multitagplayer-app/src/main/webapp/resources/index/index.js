@@ -66,6 +66,12 @@ var save = function(){
 	);
 };
 
+var refreshTagList = function(tagList) {
+	$('#tagsList').load('ajax/tagsList.jsp', {tags: tagList});
+}
+
+//TODO:Atualizar footer com nome do arquivo carregado
+
 var filterTagList = function(str, tagsList){
 	var strTrim = str.trim().toLowerCase();
 	var tagsLi = $(tagsList).find("li");
