@@ -67,7 +67,7 @@ var save = function(){
 };
 
 var refreshTagList = function(tagList) {
-	$('#tagsList').load('ajax/tagsList.jsp', {tags: tagList});
+	$('#tagsList').load('resources/ajax/tagsList.jsp', {tags: tagList});
 }
 
 //TODO:Atualizar footer com nome do arquivo carregado

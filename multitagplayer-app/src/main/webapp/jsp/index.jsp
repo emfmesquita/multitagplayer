@@ -24,9 +24,12 @@
 		<!-- Mediaelement -->
 		<link href="resources/mediaelement/mediaelementplayer.css" rel="stylesheet" />
 		<link href="resources/index/index.css" rel="stylesheet">
+		<script src="resources/mtp-gapi.js"></script>
+		<script src="resources/mtp-picker.js"></script>
+		<script src="resources/mtp-file.js"></script>
 	</head>
 	
-	<body onload="init('${tags}'.replace('[', '').replace(']', '').split(/, /g));">
+	<body onload="mtp.gapi.init(); init('${tags}'.replace('[', '').replace(']', '').split(/, /g));">
 		<!-- Fixed navbar -->
 	    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
 	      <div class="container">
@@ -39,14 +42,14 @@
 			    	<span class="glyphicon glyphicon-cog"></span> Settings <span class="caret"></span>
 			  	</button>
 			  	<ul class="dropdown-menu" role="menu">
-			    	<li><a href="#"><span class="glyphicon glyphicon-file"></span> Create Config File</a></li>
-			    	<li><a href="#"><span class="glyphicon glyphicon-folder-open"></span> Load Config File</a></li>
+			    	<li><a href="#" onclick="mtp.file.newFile()"><span class="glyphicon glyphicon-file"></span> Create Config File</a></li>
+			    	<li><a href="#" onclick="mtp.picker.openConfigPicker()"><span class="glyphicon glyphicon-folder-open"></span> Load Config File</a></li>
 			  	</ul>
 			</div>
-	        <button type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;">
+	        <button type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.file.saveFile()">
 	        	<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
 	        </button>
-	        <button type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;">
+	        <button type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.picker.openMusicPicker()">
 	        	<span class="glyphicon glyphicon-music"></span>	Add music
 	        </button>
 	        <!-- <div class="collapse navbar-collapse">
@@ -69,7 +72,7 @@
 				  	</span>
 				</div>
 				<div id="tagsList" class="no_selection" style="padding: 10px 8px 0 8px;">
-					<%@include file="ajax/tagsList.jsp"  %>
+					<%@include file="../resources/ajax/tagsList.jsp"  %>
 					<!-- <ul class="list-group">
 						<c:forEach items="${tags}" var="tag">
 							<li class="list-group-item" onmouseover="$(this).find('div.iconGroup').show()" onmouseout="$(this).find('div.iconGroup').hide()">
@@ -136,6 +139,9 @@
 		<script src="resources/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
 		<!-- Mediaelement -->
 		<script src="resources/mediaelement/mediaelement-and-player.min.js"></script>
+		<!-- The Google API Loader script. -->
+		<script type="text/javascript" src="https://apis.google.com/js/api.js?onload=mtpGapiOnApiLoad"></script>
+		<script type="text/javascript" src="https://apis.google.com/js/client.js?onload=mtpGapiOnClientApiLoad"></script>
 
 		<script src="resources/index/index.js"></script>
 	</body>
