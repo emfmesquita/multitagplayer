@@ -128,3 +128,11 @@ var removeUsedTag = function(usedtagElement){
 	}
 	$(usedtagElement).remove();
 };
+
+var enableSaveButton = function(){
+	jQuery("#saveButton").attr("disabled", false);
+}
+
+var enableAddMusicButton = function(){
+	jQuery("#addMusicButton").attr("disabled", false);
+}

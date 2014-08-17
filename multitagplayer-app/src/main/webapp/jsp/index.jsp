@@ -46,10 +46,10 @@
 			    	<li><a href="#" onclick="mtp.picker.openConfigPicker()"><span class="glyphicon glyphicon-folder-open"></span> Load Config File</a></li>
 			  	</ul>
 			</div>
-	        <button type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.file.saveFile()">
+	        <button id="saveButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.file.saveFile()" disabled="true">
 	        	<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
 	        </button>
-	        <button type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.picker.openMusicPicker()">
+	        <button id="addMusicButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.picker.openMusicPicker()" disabled="true">
 	        	<span class="glyphicon glyphicon-music"></span>	Add music
 	        </button>
 	        <!-- <div class="collapse navbar-collapse">

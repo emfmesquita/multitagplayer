@@ -100,14 +100,20 @@ if(typeof mtp == 'undefined') mtp = {};
 				var doc = data[google.picker.Response.DOCUMENTS][0];
 				id = doc[google.picker.Document.ID];
 			}
+			if(!id){
+				return;
+			}
 			//TODO
-			console.log("id")
+			console.log(id);
 		},
 		_configPickerCallback : function(data) {
 			var id = null;
 			if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
 				var doc = data[google.picker.Response.DOCUMENTS][0];
 				id = doc[google.picker.Document.ID];
+			}
+			if(!id){
+				return;
 			}
 			mtp.file.loadFile(id);
 		}
