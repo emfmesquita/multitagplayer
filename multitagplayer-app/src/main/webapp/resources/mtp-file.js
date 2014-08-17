@@ -43,19 +43,18 @@ if(typeof mtp == 'undefined') mtp = {};
 			}
 			mtp.file._innerInserFile(name, content, id, idCallback);
 		},
-		addMusic : function(id, name, tags){
+		addMusic : function(id, tags){
 			if(!id) return false;
 			var music = mtp.file._getMusic(id);
 			if(music) return false;
 
 			music = {};
 			music.id = id;
-			music.name = name;
 			music.tags = [];
 			if(tags && tags.length > 0){
 				jQuery.each(tags, function(index, tag){
-					mtp.file._addFileTag(cleanTag);
-					mtp.file._innerAddMusicTag(music, cleanTag);
+					mtp.file._addFileTag(tag);
+					mtp.file._innerAddMusicTag(music, tag);
 				});
 			}
 
@@ -105,6 +104,47 @@ if(typeof mtp == 'undefined') mtp = {};
 				return [];
 			}
 			return music.tags;
+		},
+		searchMusics : function(hasTags, hasNotTags){
+			var nullHas = !hasTags || hasTags.length <= 0;
+			var nullHasNot = !hasNotTags || hasNotTags.length <= 0;
+			if(nullHas && nullHasNot){
+				return mtp.file.loadedFile.musics;
+			}
+
+			var result = {};
+			var musics = mtp.file.loadedFile.musics;
+			jQuery.each(musics, function(index, music){
+				var hasFailure = false;
+				var hasNotFailure = false;
+
+				if(!nullHas){
+					jQuery.each(hasTags, function(index, tag){
+						if(!mtp.file._hasMusicTag(music, tag)){
+							hasFailure = true;
+							return false;
+						}
+					});
+				}
+				if(hasFailure){
+					return;
+				}
+
+				if(!nullHasNot){
+					jQuery.each(hasNotTags, function(index, tag){
+						if(mtp.file._hasMusicTag(music, tag)){
+							hasNotFailure = true;
+							return false;
+						}
+					});
+				}
+				if(hasNotFailure){
+					return;
+				}
+
+				result[music.id] = music;
+			});
+			return result;
 		},
 		_removeFileTag : function(tag){
 			var index = mtp.file._getFileTagIndex(tag);
@@ -190,4 +230,3 @@ if(typeof mtp == 'undefined') mtp = {};
 		}
 	}
 } ());
-
