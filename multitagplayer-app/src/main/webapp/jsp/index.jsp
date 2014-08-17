@@ -57,7 +57,7 @@
 				  		<button type="button" class="close" aria-hidden="true" onclick="clearAutoComplete(this);">&times;</button>
 				  	</span>
 				</div>
-				<div id="tagsList" style="padding: 10px 8px 0 8px;">
+				<div id="tagsList" class="no_selection" style="padding: 10px 8px 0 8px;">
 					<ul class="list-group">
 						<c:forEach items="${tags}" var="tag">
 							<li class="list-group-item" onmouseover="$(this).find('div.iconGroup').show()" onmouseout="$(this).find('div.iconGroup').hide()">
@@ -74,7 +74,7 @@
 			<div class="container theme-showcase col-xs-10 col-xs-offset-2" role="main" style="margin-top:20px; margin-bottom:60px;">
 				<!-- TODO: Choose better red/green -->
 				<!-- TODO: Change color on mouse over -->
-				<div id="usedTagsElement" style="display:none;" class="well well-lg">
+				<div id="usedTagsElement" style="display:none;" class="well well-lg no_selection">
 					<strong>Tags:</strong><br/>
 				</div>
 				<table class="table table-hover musicTable">
