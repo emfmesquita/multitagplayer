@@ -31,14 +31,24 @@
 	    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
 	      <div class="container">
 	        <div class="navbar-header">
-	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-	            <span class="sr-only">Toggle navigation</span>
-	            <span class="icon-bar"></span>
-	            <span class="icon-bar"></span>
-	            <span class="icon-bar"></span>
-	          </button>
 	          <a class="navbar-brand" href="#">MultiTagPlayer</a>
 	        </div>
+	        
+	        <div class="btn-group navbar-btn navbar-right" style="margin-left:15px;">
+				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+			    	<span class="glyphicon glyphicon-cog"></span> Settings <span class="caret"></span>
+			  	</button>
+			  	<ul class="dropdown-menu" role="menu">
+			    	<li><a href="#"><span class="glyphicon glyphicon-file"></span> Create Config File</a></li>
+			    	<li><a href="#"><span class="glyphicon glyphicon-folder-open"></span> Load Config File</a></li>
+			  	</ul>
+			</div>
+	        <button type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;">
+	        	<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
+	        </button>
+	        <button type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;">
+	        	<span class="glyphicon glyphicon-music"></span>	Add music
+	        </button>
 	        <!-- <div class="collapse navbar-collapse">
 	          <ul class="nav navbar-nav">
 	            <li class="active"><a href="#">Home</a></li>
@@ -51,6 +61,7 @@
 		
 		<div style="margin-top:50px;">
 			<div class="col-xs-2 gray sidebar" >
+				<!-- TODO: be able to edit tags -->
 				<div id="tag-autocomplete" class="input-group">
 				  	<input type="text" class="form-control typeahead" placeholder="Filter by tag..." onkeyup="filterTagList(this.value, $('#tagsList'))"/>
 				  	<span class="input-group-addon">
@@ -72,9 +83,12 @@
 				</div>
 			</div>
 			<div class="container theme-showcase col-xs-10 col-xs-offset-2" role="main" style="margin-top:20px; margin-bottom:60px;">
-				<!-- TODO: Choose better red/green -->
-				<!-- TODO: Change color on mouse over -->
+				<div id="playerContainer" style="margin-bottom:15px;">
+					<audio src="resources/blank.mp3" style="width: 100%" id="player"/>
+				</div>
+				
 				<div id="usedTagsElement" style="display:none;" class="well well-lg no_selection">
+				<!-- TODO: make collapsible -->
 					<strong>Tags:</strong><br/>
 				</div>
 				<table class="table table-hover musicTable">
@@ -102,7 +116,7 @@
 					</tbody>
 				</table>
 	
-				<audio src="resources/blank.mp3" id="player"/>
+				
 			</div>
 		</div>
 

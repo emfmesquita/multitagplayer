@@ -24,8 +24,8 @@ var init = function(tagsList){
     		player = mediaElement;
 			player.setSrc("");
 		},
-		audioWidth : 500,
-		features: ['playpause','current','progress','duration','volume']
+		loop: true,
+		features: ['playpause','loop','current','progress','duration','volume']
 	});
 };
 
