@@ -16,6 +16,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.file.loadedFile.tags = [];
 			mtp.file.loadedFile.musics = {};
 			mtp.file.loadedFileName = mtp.file.C.NEW_CONFIG_FILE;
+			mtp.file.loadedFileID = null;
 			mtp.file._innerUpdateFile();
 		},
 		// true se tiver um arquivo de config carregado
@@ -131,7 +132,12 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		// retorna a lista de tags do arquivo de config
 		getFileTags : function(){
-			return mtp.file.loadedFile.tags;
+			var tags = mtp.file.loadedFile.tags;
+			if(!tags || tags.length <= 0){
+				return tags;
+			}
+			mtp.file.loadedFile.tags = tags.sort();
+			return mtp.file.loadedFile.tags.slice(0);
 		},
 		// busca musicas com as tags fornecidas
 		searchMusics : function(hasTags, hasNotTags){
@@ -239,6 +245,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			if(!tag) return;
 			var cleanTag = tag.toLowerCase().trim();
 			if(mtp.file._hasMusicTag(music, cleanTag)) return;
+			mtp.file._addFileTag(cleanTag);
 			music.tags.push(cleanTag);
 		},
 		// se uma musica possui uma tag
