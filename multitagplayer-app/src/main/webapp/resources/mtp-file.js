@@ -89,6 +89,34 @@ if(typeof mtp == 'undefined') mtp = {};
 			if(!music) return;
 			mtp.file._innerAddMusicTag(music, tag);
 		},
+		// retorna os dados de uma musica
+		getMusic : function(id, callback){
+			if(!id){
+				return null;
+			}
+
+			var existingMusic = mtp.file.loadedFile.musics[id];
+			if(!existingMusic){
+				return null;
+			}
+
+			var music = {};
+			music.id = id;
+			music.tags = existingMusic.tags;
+
+			var request = gapi.client.drive.files.get({
+				fileId: id
+			});
+
+			request.execute(function(file){
+				music.name = file.title;
+				music.link = file.webContentLink;
+
+				if(callback){
+					callback(music);
+				}
+			});
+		},
 		// remove uma tag de uma musica
 		removeMusicTag : function(id, tag){
 			if(!id) return;
@@ -104,17 +132,6 @@ if(typeof mtp == 'undefined') mtp = {};
 		// retorna a lista de tags do arquivo de config
 		getFileTags : function(){
 			return mtp.file.loadedFile.tags;
-		},
-		// retorna a lista de tags de uma musica
-		getMusicTags : function(id){
-			if(!id){
-				return [];
-			}
-			var music = mtp.file._getMusic(id);
-			if(!music){
-				return [];
-			}
-			return music.tags;
 		},
 		// busca musicas com as tags fornecidas
 		searchMusics : function(hasTags, hasNotTags){

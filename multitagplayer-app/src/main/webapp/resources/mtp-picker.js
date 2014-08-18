@@ -103,7 +103,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			if(!id){
 				return;
 			}
-			//TODO
+			mtp.file.addMusic(id);
 			console.log(id);
 		},
 		_configPickerCallback : function(data) {
