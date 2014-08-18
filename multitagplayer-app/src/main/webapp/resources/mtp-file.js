@@ -63,6 +63,16 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.file.loadedFile.musics[id] = music;
 			return true;
 		},
+		removeMusic : function(id){
+			if(!id) return false;
+			var music = mtp.file._getMusic(id);
+			if(!music) return false;
+
+			var musicTags = music.tags;
+			delete mtp.file.loadedFile.musics[id];
+			mtp.file._cleanFileTags(musicTags);
+			return true;
+		},
 		addMusicTag : function(id, tag){
 			if(!id) return;
 			var music = mtp.file._getMusic(id);
@@ -78,21 +88,7 @@ if(typeof mtp == 'undefined') mtp = {};
 				return;
 			}
 			music.tags.splice(index, 1);
-
-			// verifica se existe alguma musica com a tag
-			// se n tiver remove a tag do file
-			var musics = mtp.file.loadedFile.musics;
-			var hasTag = false;
-			jQuery.each(musics, function(index, music){
-				if(mtp.file._hasMusicTag(music, tag)){
-					hasTag = true;
-					return false;
-				}
-			});
-
-			if(!hasTag){
-				mtp.file._removeFileTag(tag);
-			}
+			mtp.file._cleanFileTags([tag]);
 		},
 		getFileTags : function(){
 			return mtp.file.loadedFile.tags;
@@ -147,6 +143,36 @@ if(typeof mtp == 'undefined') mtp = {};
 				result[music.id] = music;
 			});
 			return result;
+		},
+		// verifica se as tags fornecidas estao sendo usadas
+		// caso n estejam sao removidas das tags do arquivo
+		_cleanFileTags : function(tags){
+			if(!tags || tags.length <= 0){
+				return;
+			}
+
+			var musics = mtp.file.loadedFile.musics;
+			var toVerifyTags = {};
+
+			jQuery.each(tags, function(index, tag){
+				toVerifyTags[tag] = tag;
+			});
+
+			jQuery.each(musics, function(index, music){
+				jQuery.each(Object.keys(toVerifyTags), function(index, tag){
+					if(mtp.file._hasMusicTag(music, tag)){
+						delete toVerifyTags[tag];
+						return false;
+					}
+				});
+				if(Object.keys(toVerifyTags).length <= 0){
+					return false;
+				}
+			});
+
+			jQuery.each(Object.keys(toVerifyTags), function(index, tag){
+				mtp.file._removeFileTag(tag);
+			});
 		},
 		_removeFileTag : function(tag){
 			var index = mtp.file._getFileTagIndex(tag);
