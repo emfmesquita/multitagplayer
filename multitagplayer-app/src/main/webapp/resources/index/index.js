@@ -12,7 +12,7 @@ var usedTagTemplVar2 = "&EXCLUSION&";
 
 
 $(document).ajaxStart(function(){
-	$("#wait").css("display","block");
+	$("#wait").css("display","table-cell");
 });
 $(document).ajaxComplete(function(){
 	$("#wait").css("display","none");

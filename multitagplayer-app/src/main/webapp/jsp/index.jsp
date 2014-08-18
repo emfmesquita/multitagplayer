@@ -119,8 +119,10 @@
 	    	</div>
 	    </div>
 	    
-	    <div id="wait" style="display:none;position:fixed;width:100%;height:100%;background-color:white;opacity:0.6;z-index:1000000;display:table-cell;">
-	    	<img src='resources/images/loading.gif' style="margin-top:-128px;margin-left:-64px;position:absolute;left:50%;top:50%;"/>
+	    <div id="wait" style="display:none;position:fixed;width:100%;height:100%;background-color:white;opacity:0.6;z-index:1000000;">
+	    	<div style="position:fixed;width:100%;height:100%;background-color:white;opacity:0.6;z-index:1000000;display:table-cell;">
+	    		<img src='resources/images/loading.gif' style="margin-top:-128px;margin-left:-64px;position:absolute;left:50%;top:50%;"/>
+	    	</div>
 	    </div>
 
 		<!-- jQuery -->
