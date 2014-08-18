@@ -76,7 +76,7 @@ var save = function(){
 
 var refreshTagList = function(tagsList) {
 	$('#tagsList').fadeOut("slow");
-	$('#tagsList').load('ajax/tagsList.jsp', {tags: tagsList});
+	$('#tagsList').load('resources/ajax/tagsList.jsp', {tags: tagsList});
 	$('#tagsList').fadeIn("slow");
 }
 
@@ -145,4 +145,8 @@ var enableSaveButton = function(){
 
 var enableAddMusicButton = function(){
 	jQuery("#addMusicButton").attr("disabled", false);
+}
+
+var updateFileName = function(newName){
+	jQuery("#fileName").text(newName);
 }

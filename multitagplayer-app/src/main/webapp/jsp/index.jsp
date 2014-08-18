@@ -115,7 +115,10 @@
 
 		<div id="footer">
 	    	<div class="container">
-	        	<p class="text-muted"><strong>MultiTagPlayer&trade;</strong> <small><em>version ${version}</em></small></p>
+	        	<p class="text-muted">
+	        		<strong>MultiTagPlayer&trade;</strong> <small><em>version ${version}</em></small>
+	        		<span class="pull-right"><strong id="fileName"></strong></span>
+	        	</p>
 	    	</div>
 	    </div>
 	    

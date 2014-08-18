@@ -12,8 +12,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.file.loadedFile.tags = [];
 			mtp.file.loadedFile.musics = {};
 			mtp.file.loadedFileName = mtp.file.C.NEW_CONFIG_FILE;
-			enableSaveButton();
-			enableAddMusicButton();
+			mtp.file._innerUpdateFile();
 		},
 		isFileLoaded : function(){
 			return mtp.file.loadedFile != null;
@@ -32,9 +31,7 @@ if(typeof mtp == 'undefined') mtp = {};
 				xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
 				xhr.onload = function() {
 					mtp.file.loadedFile = JSON.parse(xhr.responseText);
-					refreshTagList(mtp.file.getFileTags());
-					enableSaveButton();
-					enableAddMusicButton();
+					mtp.file._innerUpdateFile();
 				};
 				xhr.send();
 			});
@@ -190,6 +187,12 @@ if(typeof mtp == 'undefined') mtp = {};
 			if(!tag) return -1;
 			var cleanTag = tag.toLowerCase().trim();
 			return jQuery.inArray(cleanTag, music.tags);
+		},
+		_innerUpdateFile : function(){
+			refreshTagList(mtp.file.getFileTags());
+			enableSaveButton();
+			enableAddMusicButton();
+			updateFileName(mtp.file.loadedFileName);
 		},
 		_innerInserFile : function(name, content, id, callback){
 			const boundary = '-------314159265358979323846';
