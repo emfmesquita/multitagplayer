@@ -73,17 +73,6 @@
 				</div>
 				<div id="tagsList" class="no_selection" style="padding: 10px 8px 0 8px;">
 					<%@include file="../resources/ajax/tagsList.jsp"  %>
-					<!-- <ul class="list-group">
-						<c:forEach items="${tags}" var="tag">
-							<li class="list-group-item" onmouseover="$(this).find('div.iconGroup').show()" onmouseout="$(this).find('div.iconGroup').hide()">
-								<strong>${tag}</strong>
-								<div class="pull-right iconGroup" style="margin-top:3px; display:none;">
-									<span class="glyphicon glyphicon-thumbs-down" style="cursor:pointer" onclick="addUsedTag($(this).parentsUntil('li').parent('li'), true)" ></span>
-									<span class="glyphicon glyphicon-thumbs-up" style="cursor:pointer" onclick="addUsedTag($(this).parentsUntil('li').parent('li'), false)" ></span>
-								</div>
-							</li>
-						</c:forEach>
-					</ul>-->
 				</div>
 			</div>
 			<div class="container theme-showcase col-xs-10 col-xs-offset-2" role="main" style="margin-top:20px; margin-bottom:60px;">
@@ -128,6 +117,10 @@
 	    	<div class="container">
 	        	<p class="text-muted"><strong>MultiTagPlayer&trade;</strong> <small><em>version ${version}</em></small></p>
 	    	</div>
+	    </div>
+	    
+	    <div id="wait" style="display:none;position:fixed;width:100%;height:100%;background-color:white;opacity:0.6;z-index:1000000;display:table-cell;">
+	    	<img src='resources/images/loading.gif' style="margin-top:-128px;margin-left:-64px;position:absolute;left:50%;top:50%;"/>
 	    </div>
 
 		<!-- jQuery -->

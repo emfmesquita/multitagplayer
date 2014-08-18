@@ -9,7 +9,15 @@ var tagTemplVar1 = "&TAG&";
 var usedTagTemplate = "<div onclick='removeUsedTag(this);' class='label label-&EXCLUSION& usedTag'>&TAG& &times;</div>";
 var usedTagTemplVar1 = "&TAG&";
 var usedTagTemplVar2 = "&EXCLUSION&";
- 
+
+
+$(document).ajaxStart(function(){
+	$("#wait").css("display","block");
+});
+$(document).ajaxComplete(function(){
+	$("#wait").css("display","none");
+});
+
 
 $("#tagsList, body").mCustomScrollbar({
     theme: "minimal"
@@ -66,8 +74,10 @@ var save = function(){
 	);
 };
 
-var refreshTagList = function(tagList) {
-	$('#tagsList').load('resources/ajax/tagsList.jsp', {tags: tagList});
+var refreshTagList = function(tagsList) {
+	$('#tagsList').fadeOut("slow");
+	$('#tagsList').load('ajax/tagsList.jsp', {tags: tagsList});
+	$('#tagsList').fadeIn("slow");
 }
 
 //TODO:Atualizar footer com nome do arquivo carregado
