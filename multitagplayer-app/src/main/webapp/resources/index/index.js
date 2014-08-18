@@ -10,14 +10,32 @@ var usedTagTemplate = "<div onclick='removeUsedTag(this);' class='label label-&E
 var usedTagTemplVar1 = "&TAG&";
 var usedTagTemplVar2 = "&EXCLUSION&";
 
+var startLoading = function(){
+	$("#wait").css("display","table-cell");
+};
+
+var endLoading = function(){
+	$("#wait").css("display","none");
+};
+
+var beautifyStrArr = function(strArr){
+	$.each(strArr, function( index, value ) {
+		  strArr[index] = beautifyString(value);
+	});
+}
+
+var beautifyString = function(str) {
+    return str.replace(/(?:^|\s)\w/g, function(match) {
+        return match.toUpperCase();
+    });
+}
 
 $(document).ajaxStart(function(){
-	$("#wait").css("display","table-cell");
+	startLoading();
 });
 $(document).ajaxComplete(function(){
-	$("#wait").css("display","none");
+	endLoading();
 });
-
 
 $("#tagsList, body").mCustomScrollbar({
     theme: "minimal"
@@ -32,8 +50,7 @@ var init = function(tagsList){
     		player = mediaElement;
 			player.setSrc("");
 		},
-		loop: true,
-		features: ['playpause','loop','current','progress','duration','volume']
+		features: ['playpause','current','progress','duration','volume']
 	});
 };
 
@@ -75,13 +92,16 @@ var save = function(){
 };
 
 var refreshTagList = function(tagsList) {
-	$('#tagsList').fadeOut("slow");
-	$('#tagsList').load('resources/ajax/tagsList.jsp', {tags: tagsList});
-	$('#tagsList').fadeIn("slow");
+	startLoading();
+	beautifyStrArr(tagsList);
+	tags = tagsList;
+	$('#tagsList').fadeOut("slow", function() {
+		$('#tagsList').load('resources/ajax/tagsList.jsp', {'tags[]': tagsList}, function(){
+			$('#tagsList').fadeIn("slow");
+		});
+	});
+	endLoading();
 }
-
-//TODO:Atualizar footer com nome do arquivo carregado
-
 var filterTagList = function(str, tagsList){
 	var strTrim = str.trim().toLowerCase();
 	var tagsLi = $(tagsList).find("li");
