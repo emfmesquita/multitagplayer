@@ -100,19 +100,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${musics}" var="music">
-							<tr class="row" onclick="mtp.view.play(this);">
-								<td class="col-xs-1">
-									<span class="glyphicon glyphicon-volume-up" style="display:none;"></span>
-								</td>
-								<td class="col-xs-5">
-									${music.name}
-									<input type="hidden" class="path" style="display:none" value="${music.path}"/>
-								</td>
-								<td class="col-xs-6">
-								</td>
-							</tr>
-						</c:forEach>
+						
 					</tbody>
 				</table>
 	

@@ -56,29 +56,19 @@ if(typeof mtp == 'undefined') mtp = {};
 			}
 			mtp.file._innerInserFile(name, content, id, idCallback);
 		},
-		// adiciona uma musica dado o id do google
-		addMusic : function(id, tags){
-			if(!id) return false;
-			var music = mtp.file._getMusic(id);
-			if(music) return false;
-
-			music = {};
-			music.id = id;
-			music.tags = [];
-			if(tags && tags.length > 0){
-				jQuery.each(tags, function(index, tag){
-					mtp.file._addFileTag(tag);
-					mtp.file._innerAddMusicTag(music, tag);
-				});
-			}
-
-			mtp.file.loadedFile.musics[id] = music;
-			return true;
+		// callback do picker de musicas
+		addMusic : function(id){
+			mtp.view.startLoading();
+			mtp.file.getMusic(id, function(music){
+				mtp.file._addMusicToConfig(id);
+				mtp.view.addMusic(id, music.name, music.link);
+				mtp.view.endLoading();
+			});
 		},
 		// remove uma musica dado o id do google
 		removeMusic : function(id){
 			if(!id) return false;
-			var music = mtp.file._getMusic(id);
+			var music = mtp.file._getMusicFromConfig(id);
 			if(!music) return false;
 
 			var musicTags = music.tags;
@@ -89,24 +79,24 @@ if(typeof mtp == 'undefined') mtp = {};
 		// adiciona uma tag a uma musica
 		addMusicTag : function(id, tag){
 			if(!id) return;
-			var music = mtp.file._getMusic(id);
+			var music = mtp.file._getMusicFromConfig(id);
 			if(!music) return;
 			mtp.file._innerAddMusicTag(music, tag);
 		},
 		// retorna os dados de uma musica
 		getMusic : function(id, callback){
 			if(!id){
-				return null;
-			}
-
-			var existingMusic = mtp.file.loadedFile.musics[id];
-			if(!existingMusic){
-				return null;
+				callback(null);
+				return;
 			}
 
 			var music = {};
 			music.id = id;
-			music.tags = existingMusic.tags;
+
+			var existingMusic = mtp.file._getMusicFromConfig(id);
+			if(existingMusic){
+				music.tags = existingMusic.tags;
+			}
 
 			var request = gapi.client.drive.files.get({
 				fileId: id
@@ -124,7 +114,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		// remove uma tag de uma musica
 		removeMusicTag : function(id, tag){
 			if(!id) return;
-			var music = mtp.file._getMusic(id);
+			var music = mtp.file._getMusicFromConfig(id);
 			if(!music) return;
 			var index = mtp.file._getMusicTagIndex(music, tag);
 			if(index == -1){
@@ -234,7 +224,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			return jQuery.inArray(cleanTag, mtp.file.loadedFile.tags);
 		},
 		// retorna uma musica do arquivo
-		_getMusic : function(id){
+		_getMusicFromConfig : function(id){
 			return mtp.file.loadedFile.musics[id];
 		},
 		// adiciona uma tag de arquivo
@@ -264,6 +254,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		// metodo chamado quando o arquivo de config eh atualizado
 		_innerUpdateFile : function(){
+			mtp.view.clearMusics();
 			mtp.view.refreshTagList(mtp.file.getFileTags());
 			mtp.view.enableSaveButton();
 			mtp.view.enableAddMusicButton();
@@ -311,6 +302,25 @@ if(typeof mtp == 'undefined') mtp = {};
 
 			var request = gapi.client.request(reqBody);
 			request.execute(callback);
+		},
+		// adiciona uma musica dado o id do google
+		_addMusicToConfig : function(id, tags){
+			if(!id) return false;
+			var music = mtp.file._getMusicFromConfig(id);
+			if(music) return false;
+
+			music = {};
+			music.id = id;
+			music.tags = [];
+			if(tags && tags.length > 0){
+				jQuery.each(tags, function(index, tag){
+					mtp.file._addFileTag(tag);
+					mtp.file._innerAddMusicTag(music, tag);
+				});
+			}
+
+			mtp.file.loadedFile.musics[id] = music;
+			return true;
 		}
 	}
 } ());

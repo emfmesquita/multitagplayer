@@ -103,8 +103,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			if(!id){
 				return;
 			}
-			mtp.file.addMusic(id);
-			console.log(id);
+			mtp.file.addMusic(id, true);
 		},
 		_configPickerCallback : function(data) {
 			var id = null;
