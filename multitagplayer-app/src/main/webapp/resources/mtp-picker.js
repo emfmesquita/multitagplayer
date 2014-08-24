@@ -95,15 +95,22 @@ if(typeof mtp == 'undefined') mtp = {};
 			return [view1, view2, view3, view4];
 		},
 		_musicPickerCallback : function(data) {
-			var id = null;
-			if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
-				var doc = data[google.picker.Response.DOCUMENTS][0];
-				id = doc[google.picker.Document.ID];
-			}
-			if(!id){
+			if(data[google.picker.Response.ACTION] != google.picker.Action.PICKED){
 				return;
 			}
-			mtp.file.addMusic(id);
+
+			var docs = data[google.picker.Response.DOCUMENTS];
+			if(!docs || docs.length == 0){
+				return;
+			}
+
+			jQuery.each(docs, function(index, doc){
+				var id = doc[google.picker.Document.ID];
+				if(!id){
+					return;
+				}
+				mtp.file.addMusic(id);
+			});
 		},
 		_configPickerCallback : function(data) {
 			var id = null;

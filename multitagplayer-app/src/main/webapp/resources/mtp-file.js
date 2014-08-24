@@ -58,6 +58,10 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		// callback do picker de musicas
 		addMusic : function(id){
+			if(mtp.view.isMusicVisible(id)){
+				return;
+			}
+			
 			mtp.view.startLoading();
 			mtp.file.getMusic(id, function(music){
 				mtp.file._addMusicToConfig(id);

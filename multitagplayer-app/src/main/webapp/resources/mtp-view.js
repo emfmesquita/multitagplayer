@@ -26,11 +26,20 @@ if(typeof mtp == 'undefined') mtp = {};
 			$("#tagsList").find("li").show();
 		},
 		play : function(item){
-			mtp.view._selectRow(item);
 			var path = $(item).find(".path").val();
 			if(!path || mtp.view._currentPath == path){
+				if(mtp.view._player.paused){
+					mtp.view._player.play();
+					mtp.view._playRow(item);
+				}
+				else{
+					mtp.view._player.pause();
+					mtp.view._pauseRow(item);
+				}
 				return;
 			}
+
+			mtp.view._selectRow(item);
 			mtp.view._currentPath = path;
 			mtp.view._player.pause();
 			mtp.view._player.setSrc(path);
@@ -128,8 +137,18 @@ if(typeof mtp == 'undefined') mtp = {};
 			jQuery("#fileName").text(newName);
 		},
 		addMusic : function(id, name, path){
+			if(mtp.view.isMusicVisible(id)){
+				return;
+			}
 			var musicRow = mtp.view._buildMusicRow(id, name, path);
 			jQuery(".musicTable tbody").append(musicRow);
+		},
+		isMusicVisible : function(id){
+			if(!id){
+				return true;
+			}
+
+			return jQuery("[musicID='" + id + "']").length > 0;
 		},
 		clearMusics : function(){
 			jQuery(".musicTable tbody").empty();
@@ -170,10 +189,19 @@ if(typeof mtp == 'undefined') mtp = {};
 		_selectRow : function(row){
 			var activeRows = $(row).parentsUntil("table").find("tr.active");
 			activeRows.find(".glyphicon.glyphicon-volume-up").hide();
+			activeRows.find(".glyphicon.glyphicon-pause").hide();
 			activeRows.removeClass("active");
 			
 			$(row).addClass("active");
 			$(row).find(".glyphicon.glyphicon-volume-up").show();
+		},
+		_pauseRow : function(row){
+			$(row).find(".glyphicon.glyphicon-volume-up").hide();
+			$(row).find(".glyphicon.glyphicon-pause").show();
+		},
+		_playRow : function(row){
+			$(row).find(".glyphicon.glyphicon-volume-up").show();
+			$(row).find(".glyphicon.glyphicon-pause").hide();
 		},
 		_fillUsedTagTemplate : function(tag, exclusion){
 			var filledUsedTagTempl = mtp.view._usedTagTemplate.replace(mtp.view._usedTagTemplVar1, tag);
@@ -181,7 +209,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		_buildMusicRow : function(id, name, path){
 			var musicRow = '<tr musicID="' + id + '" class="row" onclick="mtp.view.play(this);">';
-			musicRow += '<td class="col-xs-1"><span class="glyphicon glyphicon-volume-up" style="display:none;"></span></td>';
+			musicRow += '<td class="col-xs-1"><span class="glyphicon glyphicon-volume-up" style="display:none;"></span><span class="glyphicon glyphicon-pause" style="display:none;"></span></td>';
 			musicRow += '<td class="col-xs-5">';
 			musicRow += name;
 			musicRow += ' <input type="hidden" class="path" style="display:none" value="' + path + '"/>';
