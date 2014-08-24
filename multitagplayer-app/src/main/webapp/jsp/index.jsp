@@ -29,46 +29,53 @@
 		<script src="resources/mtp-file.js"></script>
 	</head>
 	
-	<body onload="mtp.gapi.init(); init('${tags}'.replace('[', '').replace(']', '').split(/, /g));">
+	<body onload="mtp.gapi.init(); mtp.view.init('${tags}');">
+
+		<div id="wait" style="display:none;position:fixed;width:100%;height:100%;background-color:white;opacity:0.6;z-index:1000000;">
+			<div style="position:fixed;width:100%;height:100%;background-color:white;opacity:0.6;z-index:1000000;display:table-cell;">
+				<img src='resources/images/loading.gif' style="margin-top:-128px;margin-left:-64px;position:absolute;left:50%;top:50%;"/>
+			</div>
+		</div>
+
 		<!-- Fixed navbar -->
-	    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-	      <div class="container">
-	        <div class="navbar-header">
-	          <a class="navbar-brand" href="#">MultiTagPlayer</a>
-	        </div>
-	        
-	        <div class="btn-group navbar-btn navbar-right" style="margin-left:15px;">
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+		  <div class="container">
+			<div class="navbar-header">
+			  <a class="navbar-brand" href="#">MultiTagPlayer</a>
+			</div>
+			
+			<div class="btn-group navbar-btn navbar-right" style="margin-left:15px;">
 				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-			    	<span class="glyphicon glyphicon-cog"></span> Settings <span class="caret"></span>
+					<span class="glyphicon glyphicon-cog"></span> Settings <span class="caret"></span>
 			  	</button>
 			  	<ul class="dropdown-menu" role="menu">
-			    	<li><a href="#" onclick="mtp.file.newFile()"><span class="glyphicon glyphicon-file"></span> Create Config File</a></li>
-			    	<li><a href="#" onclick="mtp.picker.openConfigPicker()"><span class="glyphicon glyphicon-folder-open"></span> Load Config File</a></li>
+					<li><a href="#" onclick="mtp.file.newFile()"><span class="glyphicon glyphicon-file"></span> Create Config File</a></li>
+					<li><a href="#" onclick="mtp.picker.openConfigPicker()"><span class="glyphicon glyphicon-folder-open"></span> Load Config File</a></li>
 			  	</ul>
 			</div>
-	        <button id="saveButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.file.saveFile()" disabled="true">
-	        	<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
-	        </button>
-	        <button id="addMusicButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.picker.openMusicPicker()" disabled="true">
-	        	<span class="glyphicon glyphicon-music"></span>	Add music
-	        </button>
-	        <!-- <div class="collapse navbar-collapse">
-	          <ul class="nav navbar-nav">
-	            <li class="active"><a href="#">Home</a></li>
-	            <li><a href="#about">About</a></li>
-	          </ul>
-	        </div>-->
-	        <!--/.nav-collapse -->
-	      </div>
-	    </div>
+			<button id="saveButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.file.saveFile()" disabled="true">
+				<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
+			</button>
+			<button id="addMusicButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.picker.openMusicPicker()" disabled="true">
+				<span class="glyphicon glyphicon-music"></span>	Add music
+			</button>
+			<!-- <div class="collapse navbar-collapse">
+			  <ul class="nav navbar-nav">
+				<li class="active"><a href="#">Home</a></li>
+				<li><a href="#about">About</a></li>
+			  </ul>
+			</div>-->
+			<!--/.nav-collapse -->
+		  </div>
+		</div>
 		
 		<div style="margin-top:50px;">
 			<div class="col-xs-2 gray sidebar" >
 				<!-- TODO: be able to edit tags -->
 				<div id="tag-autocomplete" class="input-group">
-				  	<input type="text" class="form-control typeahead" placeholder="Filter by tag..." onkeyup="filterTagList(this.value, $('#tagsList'))"/>
+				  	<input type="text" class="form-control typeahead" placeholder="Filter by tag..." onkeyup="mtp.view.filterTagList(this.value, $('#tagsList'))"/>
 				  	<span class="input-group-addon">
-				  		<button type="button" class="close" aria-hidden="true" onclick="clearAutoComplete(this);">&times;</button>
+				  		<button type="button" class="close" aria-hidden="true" onclick="mtp.view.clearAutoComplete(this);">&times;</button>
 				  	</span>
 				</div>
 				<div id="tagsList" class="no_selection" style="padding: 10px 8px 0 8px;">
@@ -94,7 +101,7 @@
 					</thead>
 					<tbody>
 						<c:forEach items="${musics}" var="music">
-							<tr class="row" onclick="play(this);">
+							<tr class="row" onclick="mtp.view.play(this);">
 								<td class="col-xs-1">
 									<span class="glyphicon glyphicon-volume-up" style="display:none;"></span>
 								</td>
@@ -114,19 +121,13 @@
 		</div>
 
 		<div id="footer">
-	    	<div class="container">
-	        	<p class="text-muted">
-	        		<strong>MultiTagPlayer&trade;</strong> <small><em>version ${version}</em></small>
-	        		<span class="pull-right"><strong id="fileName"></strong></span>
-	        	</p>
-	    	</div>
-	    </div>
-	    
-	    <div id="wait" style="display:none;position:fixed;width:100%;height:100%;background-color:white;opacity:0.6;z-index:1000000;">
-	    	<div style="position:fixed;width:100%;height:100%;background-color:white;opacity:0.6;z-index:1000000;display:table-cell;">
-	    		<img src='resources/images/loading.gif' style="margin-top:-128px;margin-left:-64px;position:absolute;left:50%;top:50%;"/>
-	    	</div>
-	    </div>
+			<div class="container">
+				<p class="text-muted">
+					<strong>MultiTagPlayer&trade;</strong> <small><em>version ${version}</em></small>
+					<span class="pull-right"><strong id="fileName"></strong></span>
+				</p>
+			</div>
+		</div>
 
 		<!-- jQuery -->
 		<script src="resources/jquery.min.js"></script>
@@ -141,6 +142,6 @@
 		<script type="text/javascript" src="https://apis.google.com/js/api.js?onload=mtpGapiOnApiLoad"></script>
 		<script type="text/javascript" src="https://apis.google.com/js/client.js?onload=mtpGapiOnClientApiLoad"></script>
 
-		<script src="resources/index/index.js"></script>
+		<script src="resources/mtp-view.js"></script>
 	</body>
 </html>

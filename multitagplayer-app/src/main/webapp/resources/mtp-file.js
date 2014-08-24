@@ -25,6 +25,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		// carrega um arquivo de gonfig dado o id do google
 		loadFile : function(id){
+			mtp.view.startLoading();
 			var request = gapi.client.drive.files.get({
 				fileId: id
 			});
@@ -45,11 +46,13 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		// salva no gdrive o arquivo de config carregado atualmente
 		saveFile : function(callback){
+			mtp.view.startLoading();
 			var name = mtp.file.loadedFileName;
 			var content = JSON.stringify(mtp.file.loadedFile);
 			var id = mtp.file.loadedFileID;
 			var idCallback = function(file){
 				mtp.file.loadedFileID = file.id;
+				mtp.view.endLoading();
 			}
 			mtp.file._innerInserFile(name, content, id, idCallback);
 		},
@@ -261,10 +264,10 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		// metodo chamado quando o arquivo de config eh atualizado
 		_innerUpdateFile : function(){
-			refreshTagList(mtp.file.getFileTags());
-			enableSaveButton();
-			enableAddMusicButton();
-			updateFileName(mtp.file.loadedFileName);
+			mtp.view.refreshTagList(mtp.file.getFileTags());
+			mtp.view.enableSaveButton();
+			mtp.view.enableAddMusicButton();
+			mtp.view.updateFileName(mtp.file.loadedFileName);
 		},
 		// metodo que envia para o gdrive um arquivo de config
 		_innerInserFile : function(name, content, id, callback){

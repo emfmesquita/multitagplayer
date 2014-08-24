@@ -20,6 +20,10 @@ if(typeof mtp == 'undefined') mtp = {};
 			if(!mtp.gapi.oauthToken){
 				mtp.gapi._auth();
 			}
+			else{
+				mtp.view.endLoading();
+			}
+
 			mtp.picker.init();
 			if(mtp.gapi.oauthToken && mtp.gapi._clientAPILoaded && !mtp.gapi._clientAPIAuthed){
 				mtp.gapi._authClientAPI();
@@ -41,6 +45,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			else{
 				mtp.gapi._createCookie(mtp.gapi.C.OAUTH_C_KEY, mtp.gapi.oauthToken, 59);
 				window.location.hash = "";
+				mtp.view.endLoading();
 			}
 		},
 		_getAuthURL : function(){
