@@ -11,6 +11,8 @@ if(typeof mtp == 'undefined') mtp = {};
 				success: function(mediaElement, originalNode) {
 					mtp.view._player = mediaElement;
 					mtp.view._player.setSrc("");
+					mtp.view._player.addEventListener("pause", function(){mtp.view._pauseCurrentRow()});
+					mtp.view._player.addEventListener("play", function(){mtp.view._playCurrentRow()});
 				},
 				features: ['playpause','current','progress','duration','volume']
 			});
@@ -136,11 +138,11 @@ if(typeof mtp == 'undefined') mtp = {};
 		updateFileName : function(newName){
 			jQuery("#fileName").text(newName);
 		},
-		addMusic : function(id, name, path){
+		addMusic : function(id, name, path, tags){
 			if(mtp.view.isMusicVisible(id)){
 				return;
 			}
-			var musicRow = mtp.view._buildMusicRow(id, name, path);
+			var musicRow = mtp.view._buildMusicRow(id, name, path, tags);
 			jQuery(".musicTable tbody").append(musicRow);
 		},
 		isMusicVisible : function(id){
@@ -172,7 +174,7 @@ if(typeof mtp == 'undefined') mtp = {};
 					if(mtp.view._usedTags.length == 0){
 						return;
 					}
-					mtp.view.addMusic(musicID, music.name, music.link);
+					mtp.view.addMusic(musicID, music.name, music.link, music.tags);
 				});
 			});
 		},
@@ -203,18 +205,31 @@ if(typeof mtp == 'undefined') mtp = {};
 			$(row).find(".glyphicon.glyphicon-volume-up").show();
 			$(row).find(".glyphicon.glyphicon-pause").hide();
 		},
+		_pauseCurrentRow : function(){
+			$(".glyphicon.glyphicon-volume-up:visible").hide().closest("tr").find(".glyphicon.glyphicon-pause").show();
+		},
+		_playCurrentRow : function(){
+			$(".glyphicon.glyphicon-pause:visible").hide().closest("tr").find(".glyphicon.glyphicon-volume-up").show();
+		},
 		_fillUsedTagTemplate : function(tag, exclusion){
 			var filledUsedTagTempl = mtp.view._usedTagTemplate.replace(mtp.view._usedTagTemplVar1, tag);
 			return filledUsedTagTempl.replace(mtp.view._usedTagTemplVar2, exclusion? "danger" : "success");
 		},
-		_buildMusicRow : function(id, name, path){
+		_buildMusicRow : function(id, name, path, tags){
+			var tagsString = "";
+			if(tags && tags.length > 0){
+				tags.sort();
+				mtp.view._beautifyStrArr(tags);
+				tagsString = tags.join(", ");
+			}
+
 			var musicRow = '<tr musicID="' + id + '" class="row" onclick="mtp.view.play(this);">';
 			musicRow += '<td class="col-xs-1"><span class="glyphicon glyphicon-volume-up" style="display:none;"></span><span class="glyphicon glyphicon-pause" style="display:none;"></span></td>';
 			musicRow += '<td class="col-xs-5">';
 			musicRow += name;
 			musicRow += ' <input type="hidden" class="path" style="display:none" value="' + path + '"/>';
 			musicRow += '</td>';
-			musicRow += '<td class="col-xs-6"></td>'
+			musicRow += '<td class="col-xs-6">' + tagsString + '</td>'
 			musicRow += '</tr>';
 			return musicRow;
 		},

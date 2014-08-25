@@ -92,7 +92,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.view.startLoading();
 			mtp.file.getMusic(id, function(music){
 				mtp.file._addMusicToConfig(id);
-				mtp.view.addMusic(id, music.name, music.link);
+				mtp.view.addMusic(id, music.name, music.link, music.tags);
 				mtp.view.endLoading();
 			});
 		},
@@ -126,7 +126,7 @@ if(typeof mtp == 'undefined') mtp = {};
 
 			var existingMusic = mtp.file._getMusicFromConfig(id);
 			if(existingMusic){
-				music.tags = existingMusic.tags;
+				music.tags = existingMusic.tags.slice(0);
 			}
 
 			var request = gapi.client.drive.files.get({
