@@ -77,7 +77,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			}
 		},
 		_getAuthURL : function(){
-			var protocol = "https";
+			var protocol = "https:";
 			var rightId = null;
 			if(location.hostname == "localhost"){
 				rightId = mtp.gapi.clientIdLocal;
