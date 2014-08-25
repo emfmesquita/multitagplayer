@@ -47,7 +47,6 @@ if(typeof mtp == 'undefined') mtp = {};
 				setOAuthToken(mtp.gapi.oauthToken).
 				setDeveloperKey(mtp.gapi.developerKey).
 				setCallback(mtp.picker._configPickerCallback).
-				enableFeature(google.picker.Feature.MULTISELECT_ENABLED).
 				build();
 		},
 		_getMusicPickerViews : function(){

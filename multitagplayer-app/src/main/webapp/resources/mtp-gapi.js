@@ -22,11 +22,10 @@ if(typeof mtp == 'undefined') mtp = {};
 			// se n tiver token autentica
 			if(!mtp.gapi.oauthToken){
 				mtp.gapi._auth();
-				return;
 			}
 			
-			// se tiver inicia as outras apis
 			mtp.picker.init();
+			// se tiver inicia as outras apis
 			if(mtp.gapi._clientAPILoaded && !mtp.gapi._clientAPIAuthed){
 				mtp.gapi._authClientAPI();
 				if(mtp.gapi._driveAPILoaded){
