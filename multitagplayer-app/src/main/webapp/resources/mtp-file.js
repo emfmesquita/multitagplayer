@@ -2,7 +2,8 @@ if(typeof mtp == 'undefined') mtp = {};
 (function() {
 	mtp.file = {
 		C : {
-			NEW_CONFIG_FILE : "New Config File"
+			NEW_CONFIG_FILE : "New Config File",
+			CONFIG_C_KEY : "MTP_CONFIG_ID"
 		},
 		// o arquivo de config carregado atualmente
 		loadedFile : null,
@@ -10,6 +11,21 @@ if(typeof mtp == 'undefined') mtp = {};
 		loadedFileName : null,
 		// o id do gdrive do arquivo de config carregado atualmente
 		loadedFileID : null,
+		_fileAPILoaded : false,
+		init : function(){
+			if(mtp.file._fileAPILoaded){
+				mtp.view.endLoading();
+				return;
+			}
+
+			mtp.file._fileAPILoaded = true;
+			var configID = mtp.gapi.readCookie(mtp.file.C.CONFIG_C_KEY);
+			if(!configID){
+				mtp.view.endLoading();
+				return;
+			}
+			mtp.file.loadFile(configID, true);
+		},
 		// cria um arquivo de config novo
 		newFile : function(){
 			mtp.file.loadedFile = {};
@@ -18,13 +34,14 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.file.loadedFileName = mtp.file.C.NEW_CONFIG_FILE;
 			mtp.file.loadedFileID = null;
 			mtp.file._innerUpdateFile();
+			mtp.gapi.eraseCookie(mtp.file.C.CONFIG_C_KEY);
 		},
 		// true se tiver um arquivo de config carregado
 		isFileLoaded : function(){
 			return mtp.file.loadedFile != null;
 		},
 		// carrega um arquivo de gonfig dado o id do google
-		loadFile : function(id){
+		loadFile : function(id, eraseCookieInFail){
 			mtp.view.startLoading();
 			var request = gapi.client.drive.files.get({
 				fileId: id
@@ -38,8 +55,17 @@ if(typeof mtp == 'undefined') mtp = {};
 				xhr.open('GET', file.downloadUrl);
 				xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
 				xhr.onload = function() {
-					mtp.file.loadedFile = JSON.parse(xhr.responseText);
-					mtp.file._innerUpdateFile();
+					try{
+						var parsedFile = JSON.parse(xhr.responseText);
+						mtp.file.loadedFile = parsedFile;
+						mtp.file._innerUpdateFile();
+						mtp.gapi.createCookie(mtp.file.C.CONFIG_C_KEY, id);
+					}catch(err) {
+						mtp.file._loadConfigError(eraseCookieInFail);
+					}
+				};
+				xhr.onError = function(){
+					mtp.file._loadConfigError(eraseCookieInFail);
 				};
 				xhr.send();
 			});
@@ -52,6 +78,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			var id = mtp.file.loadedFileID;
 			var idCallback = function(file){
 				mtp.file.loadedFileID = file.id;
+				mtp.gapi.createCookie(mtp.file.C.CONFIG_C_KEY, file.id);
 				mtp.view.endLoading();
 			}
 			mtp.file._innerInserFile(name, content, id, idCallback);
@@ -325,6 +352,13 @@ if(typeof mtp == 'undefined') mtp = {};
 
 			mtp.file.loadedFile.musics[id] = music;
 			return true;
+		},
+		// caso aconteca erro ao carregar arquivo
+		_loadConfigError : function(eraseCookie){
+			if(eraseCookie){
+				mtp.gapi.eraseCookie(mtp.file.C.CONFIG_C_KEY);
+			}
+			mtp.view.endLoading();
 		}
 	}
 } ());
