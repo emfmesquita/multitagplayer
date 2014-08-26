@@ -285,8 +285,8 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		// metodo chamado quando o arquivo de config eh atualizado
 		_innerUpdateFile : function(){
-			mtp.view.clearMusics();
 			mtp.view.refreshTagList(mtp.file.getFileTags());
+			mtp.view.removeAllUsedTags();
 			mtp.view.enableSaveButton();
 			mtp.view.enableAddMusicButton();
 			mtp.view.updateFileName(mtp.file.loadedFileName);
