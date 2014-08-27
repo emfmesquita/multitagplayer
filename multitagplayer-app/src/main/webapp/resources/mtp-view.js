@@ -3,9 +3,6 @@ if(typeof mtp == 'undefined') mtp = {};
 	mtp.view = {
 		init : function(tagsListString){
 			mtp.view._tags = tagsListString.replace('[', '').replace(']', '').split(/, /g);
-			mtp.view._usedTags = [];
-			mtp.view._usedUpTags = [];
-			mtp.view._usedDownTags = [];
 			
 			$('#player').mediaelementplayer({
 				success: function(mediaElement, originalNode) {
@@ -152,7 +149,22 @@ if(typeof mtp == 'undefined') mtp = {};
 			var musicRow = mtp.view.isMusicVisible(id);
 			if(!musicRow){
 				musicRow = $(mtp.view._buildMusicRow(id, name, path, tags))[0];
-				$(".musicTable tbody").append(musicRow);
+				var trs = $(".musicTable tbody tr");
+				var tbody = $(".musicTable tbody");
+				if(trs.length == 0){
+					tbody.append(musicRow);
+					mtp.view._musicNames.push(name);
+				}
+				else{
+					var position = mtp.view._locationOf(name, mtp.view._musicNames);
+					if(position == -1){
+						tbody.prepend(musicRow);
+					}
+					else{
+						trs.eq(position).after(musicRow);
+						mtp.view._addMusicName(name, position + 1);
+					}
+				}
 			}
 			if(id == mtp.view._player.musicid){
 				mtp.view._selectRow(musicRow);
@@ -172,6 +184,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		clearMusics : function(){
 			jQuery(".musicTable tbody").empty();
+			mtp.view._musicNames = [];
 		},
 		addMusics : function(musics, execution){
 			if(!musics || Object.keys(musics).length == 0){
@@ -195,7 +208,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		_beautifyStrArr : function(strArr){
 			$.each(strArr, function( index, value ) {
-				  strArr[index] = mtp.view._beautifyString(value);
+				strArr[index] = mtp.view._beautifyString(value);
 			});
 		},
 		_beautifyString : function(str) {
@@ -280,11 +293,33 @@ if(typeof mtp == 'undefined') mtp = {};
 			var musics = mtp.file.searchMusics(mtp.view._usedUpTags, mtp.view._usedDownTags);
 			mtp.view.addMusics(musics, ++mtp.view._currentFilterExecution);
 		},
+		_locationOf : function(element, array, start, end) {
+			start = start || 0;
+			end = end || array.length;
+			var pivot = parseInt(start + (end - start) / 2, 10);
+			if (array[pivot] === element) return pivot;
+			if (end - start <= 1)
+				return array[pivot] > element ? pivot - 1 : pivot;
+			if (array[pivot] < element) {
+				return mtp.view._locationOf(element, array, pivot, end);
+			} else {
+				return mtp.view._locationOf(element, array, start, pivot);
+			}
+		},
+		_addMusicName : function(element, position){
+			var array = mtp.view._musicNames;
+			if(array.indexOf(element) != -1){
+				return array;
+			}
+			array.splice(position, 0, element);
+			return array;
+		},
 		_player : null,
 		_tags : null,
-		_usedTags : null,
-		_usedUpTags : null,
-		_usedDownTags : null,
+		_usedTags : [],
+		_usedUpTags : [],
+		_usedDownTags : [],
+		_musicNames : [],
 		_tagTemplate : "<strong>&TAG&</strong><span class='glyphicon glyphicon-thumbs-down' onclick='addTag($(this).parent(), true)'/><span class='glyphicon glyphicon-thumbs-up' onclick='addTag($(this).parent(), false)'/>",
 		_tagTemplVar1 : "&TAG&",
 		_usedTagTemplate : "<div onclick='mtp.view.removeUsedTag(this);' class='label label-&EXCLUSION& usedTag'>&TAG& &times;</div>",
