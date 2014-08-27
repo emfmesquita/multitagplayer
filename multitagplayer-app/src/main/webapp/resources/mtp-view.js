@@ -162,8 +162,8 @@ if(typeof mtp == 'undefined') mtp = {};
 					}
 					else{
 						trs.eq(position).after(musicRow);
-						mtp.view._addMusicName(name, position + 1);
 					}
+					mtp.view._addMusicName(name, position + 1);
 				}
 			}
 			if(id == mtp.view._player.musicid){
