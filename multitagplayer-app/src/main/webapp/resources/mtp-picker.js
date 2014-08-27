@@ -3,7 +3,7 @@ if(typeof mtp == 'undefined') mtp = {};
 	mtp.picker = {
 		_pickerApiLoaded : false,
 		_musicPicker : null,
-		_musicMimeTypes : "audio/mpeg3,audio/x-mpeg-3,video/x-mpeg,audio/mp3,audio/mpeg,audio/mp4,audio/mpg,audio/mp4a-latm,audio/ogg,audio/webm,audio/wav,audio/x-wav,audio/wave",
+		_musicMimeTypes : "audio/mpeg3,audio/x-mpeg-3,video/x-mpeg,audio/mp3,audio/mpeg,audio/mp4,audio/mpg,audio/mp4a-latm,audio/ogg,application/ogg,audio/webm,audio/wav,audio/x-wav,audio/wave",
 		_configPicker : null,
 		_configMimeTypes : "application/json",
 		init : function(){
