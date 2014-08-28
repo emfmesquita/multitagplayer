@@ -1,9 +1,6 @@
 if(typeof mtp == 'undefined') mtp = {};
 (function() {
 	mtp.gapi = {
-		C : {
-			OAUTH_C_KEY : "G_OAUTH_TOKEN"
-		},
 		// The API developer key obtained from the Google Developers Console.
 		developerKey : 'AIzaSyB4OD8l3nKAOUlYX6mz8sisQTFKxLJfr0U',
 		clientId : '1005266131738-tdv38pudoj50a5jgmbr6khoo3f9fj6pv.apps.googleusercontent.com', // heroko
@@ -17,7 +14,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		_driveAPILoaded : false,
 		_fileAPILoaded : false,
 		init : function(){
-			mtp.gapi.oauthToken = mtp.gapi.readCookie(mtp.gapi.C.OAUTH_C_KEY);
+			mtp.gapi.oauthToken = mtp.cookies.getOauth();
 
 			// se n tiver token autentica
 			if(!mtp.gapi.oauthToken){
@@ -71,7 +68,7 @@ if(typeof mtp == 'undefined') mtp = {};
 				window.location.href = mtp.gapi._getAuthURL();
 			}
 			else{
-				mtp.gapi.createCookie(mtp.gapi.C.OAUTH_C_KEY, mtp.gapi.oauthToken, 59);
+				mtp.cookies.storeOauth(mtp.gapi.oauthToken, 59);
 				window.location.hash = "";
 			}
 		},

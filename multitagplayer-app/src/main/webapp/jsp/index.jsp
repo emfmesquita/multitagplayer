@@ -24,6 +24,7 @@
 		<!-- Mediaelement -->
 		<link href="resources/mediaelement/mediaelementplayer.css" rel="stylesheet" />
 		<link href="resources/index/index.css" rel="stylesheet">
+		<script src="resources/mtp-cookies.js"></script>
 		<script src="resources/mtp-gapi.js"></script>
 		<script src="resources/mtp-picker.js"></script>
 		<script src="resources/mtp-file.js"></script>

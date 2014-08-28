@@ -2,8 +2,7 @@ if(typeof mtp == 'undefined') mtp = {};
 (function() {
 	mtp.file = {
 		C : {
-			NEW_CONFIG_FILE : "New Config File",
-			CONFIG_C_KEY : "MTP_CONFIG_ID"
+			NEW_CONFIG_FILE : "New Config File"
 		},
 		// o arquivo de config carregado atualmente
 		loadedFile : null,
@@ -19,7 +18,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			}
 
 			mtp.file._fileAPILoaded = true;
-			var configID = mtp.gapi.readCookie(mtp.file.C.CONFIG_C_KEY);
+			var configID = mtp.cookies.getConfigID();
 			if(!configID){
 				mtp.view.endLoading();
 				return;
@@ -34,7 +33,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.file.loadedFileName = mtp.file.C.NEW_CONFIG_FILE;
 			mtp.file.loadedFileID = null;
 			mtp.file._innerUpdateFile();
-			mtp.gapi.eraseCookie(mtp.file.C.CONFIG_C_KEY);
+			mtp.cookies.eraseConfigID();
 		},
 		// true se tiver um arquivo de config carregado
 		isFileLoaded : function(){
@@ -59,7 +58,7 @@ if(typeof mtp == 'undefined') mtp = {};
 						var parsedFile = JSON.parse(xhr.responseText);
 						mtp.file.loadedFile = parsedFile;
 						mtp.file._innerUpdateFile();
-						mtp.gapi.createCookie(mtp.file.C.CONFIG_C_KEY, id);
+						mtp.cookies.storeConfigID(id);
 					}catch(err) {
 						mtp.file._loadConfigError(eraseCookieInFail);
 					}
@@ -78,7 +77,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			var id = mtp.file.loadedFileID;
 			var idCallback = function(file){
 				mtp.file.loadedFileID = file.id;
-				mtp.gapi.createCookie(mtp.file.C.CONFIG_C_KEY, file.id);
+				mtp.cookies.storeConfigID(file.id);
 				mtp.view.endLoading();
 			}
 			mtp.file._innerInserFile(name, content, id, idCallback);
@@ -356,7 +355,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		// caso aconteca erro ao carregar arquivo
 		_loadConfigError : function(eraseCookie){
 			if(eraseCookie){
-				mtp.gapi.eraseCookie(mtp.file.C.CONFIG_C_KEY);
+				mtp.cookies.eraseConfigID();
 			}
 			mtp.view.endLoading();
 		}
