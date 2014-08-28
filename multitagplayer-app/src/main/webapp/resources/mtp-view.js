@@ -50,16 +50,19 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.view._player.play();
 			mtp.view._selectRow(item);
 		},
-		refreshTagList : function(tagsList) {
+		refreshTagList : function(tagsList, callback) {
 			mtp.view.startLoading();
 			mtp.view._beautifyStrArr(tagsList);
 			mtp.view._tags = tagsList;
 			$('#tagsList').fadeOut("slow", function() {
 				$('#tagsList').load('resources/ajax/tagsList.jsp', {'tags[]': tagsList}, function(){
 					$('#tagsList').fadeIn("slow");
+					if(callback){
+						callback();
+					}
+					mtp.view.endLoading();
 				});
 			});
-			mtp.view.endLoading();
 		},
 		filterTagList : function(str, tagsList){
 			var strTrim = str.trim().toLowerCase();
@@ -94,6 +97,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			$("#usedTagsElement").append(mtp.view._fillUsedTagTemplate(tagText, exclusion)); //TODO: place in list ordered by name
 			$(tagElement).addClass("hidden");
 
+			mtp.cookies.storeUsedTags(mtp.view._usedUpTags, mtp.view._usedDownTags);
 			mtp.view._updateMusics();
 		},
 		removeUsedTag : function(usedtagElement){
@@ -123,6 +127,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			}
 			$(usedtagElement).remove();
 
+			mtp.cookies.storeUsedTags(mtp.view._usedUpTags, mtp.view._usedDownTags);
 			mtp.view._updateMusics();
 		},
 		removeAllUsedTags : function(){
@@ -133,7 +138,40 @@ if(typeof mtp == 'undefined') mtp = {};
 			$("#usedTagsElement").hide();
 			$("#usedTagsElement .usedTag").remove();
 			$("#tagsList li").removeClass("hidden");
+		},
+		addUsedTags : function(upTags, downTags){
+			var usedTagsElement = $("#usedTagsElement");
+			$.each(upTags, function( index, tag ) {
+				// remove se for uma tag invalida
+				if(!mtp.file.hasFileTag(tag)){
+					upTags.splice(index, 1);
+					return;
+				}
+				usedTagsElement.append(mtp.view._fillUsedTagTemplate(tag, false)); //TODO: place in list ordered by name
+			});
+			$.each(downTags, function( index, tag ) {
+				if(!mtp.file.hasFileTag(tag)){
+					downTags.splice(index, 1);
+					return;
+				}
+				usedTagsElement.append(mtp.view._fillUsedTagTemplate(tag, true)); //TODO: place in list ordered by name
+			});
 
+			mtp.view._usedUpTags = upTags;
+			mtp.view._usedDownTags = downTags;
+			mtp.view._usedTags = [].concat(upTags, downTags);
+
+			$("#tagsList li strong").each(function(index, element){
+				var tag = element.textContent;
+				if(mtp.view._usedTags.indexOf(tag) != -1){
+					$(element).closest('li').addClass("hidden");
+				}
+			});
+			if(mtp.view._usedTags.length > 0){
+				usedTagsElement.show();
+			}
+
+			mtp.cookies.storeUsedTags(mtp.view._usedUpTags, mtp.view._usedDownTags);
 			mtp.view._updateMusics();
 		},
 		enableSaveButton : function(){

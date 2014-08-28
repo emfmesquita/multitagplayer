@@ -120,6 +120,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			if(!id){
 				return;
 			}
+			mtp.cookies.eraseUsedTags();
 			mtp.file.loadFile(id);
 		}
 	}

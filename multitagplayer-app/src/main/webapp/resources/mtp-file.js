@@ -32,8 +32,9 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.file.loadedFile.musics = {};
 			mtp.file.loadedFileName = mtp.file.C.NEW_CONFIG_FILE;
 			mtp.file.loadedFileID = null;
-			mtp.file._innerUpdateFile();
+			mtp.cookies.eraseUsedTags();
 			mtp.cookies.eraseConfigID();
+			mtp.file._innerUpdateFile();
 		},
 		// true se tiver um arquivo de config carregado
 		isFileLoaded : function(){
@@ -81,6 +82,11 @@ if(typeof mtp == 'undefined') mtp = {};
 				mtp.view.endLoading();
 			}
 			mtp.file._innerInserFile(name, content, id, idCallback);
+		},
+		// se o arquivo de config possui a tag fornecida
+		hasFileTag : function(tag){
+			var index = mtp.file._getFileTagIndex(tag);
+			return index != -1;
 		},
 		// callback do picker de musicas
 		addMusic : function(id){
@@ -242,11 +248,6 @@ if(typeof mtp == 'undefined') mtp = {};
 			}
 			mtp.file.loadedFile.tags.splice(index, 1);
 		},
-		// se o arquivo de config possui a tag fornecida
-		_hasFileTag : function(tag){
-			var index = mtp.file._getFileTagIndex(tag);
-			return index != -1;
-		},
 		// o indice da tag no array de tags de arquivo
 		_getFileTagIndex : function(tag){
 			if(!tag) return -1;
@@ -261,7 +262,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		_addFileTag : function(tag){
 			if(!tag) return;
 			var cleanTag = tag.toLowerCase().trim();
-			if(mtp.file._hasFileTag(cleanTag)) return;
+			if(mtp.file.hasFileTag(cleanTag)) return;
 			mtp.file.loadedFile.tags.push(cleanTag);
 		},
 		_innerAddMusicTag : function(music, tag){
@@ -284,8 +285,8 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		// metodo chamado quando o arquivo de config eh atualizado
 		_innerUpdateFile : function(){
-			mtp.view.refreshTagList(mtp.file.getFileTags());
 			mtp.view.removeAllUsedTags();
+			mtp.view.refreshTagList(mtp.file.getFileTags(), mtp.cookies.restoreUsedTags);
 			mtp.view.enableSaveButton();
 			mtp.view.enableAddMusicButton();
 			mtp.view.updateFileName(mtp.file.loadedFileName);

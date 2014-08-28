@@ -3,7 +3,9 @@ if(typeof mtp == 'undefined') mtp = {};
 	mtp.cookies = {
 		C : {
 			OAUTH_C_KEY : "G_OAUTH_TOKEN",
-			CONFIG_C_KEY : "MTP_CONFIG_ID"
+			CONFIG_C_KEY : "MTP_CONFIG_ID",
+			UP_TAGS_C_KEY : "MTP_USED_UP_TAGS",
+			DOWN_TAGS_C_KEY : "MTP_USED_DOWN_TAGS"
 		},
 		getOauth : function(){
 			return mtp.cookies._readCookie(mtp.cookies.C.OAUTH_C_KEY);
@@ -19,6 +21,27 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		storeConfigID : function(configID){
 			mtp.cookies._createCookie(mtp.cookies.C.CONFIG_C_KEY, configID);
+		},
+		storeUsedTags : function(upTags, downTags){
+			mtp.cookies._createCookie(mtp.cookies.C.UP_TAGS_C_KEY, JSON.stringify(upTags));
+			mtp.cookies._createCookie(mtp.cookies.C.DOWN_TAGS_C_KEY, JSON.stringify(downTags));
+		},
+		restoreUsedTags : function(){
+			var upTags = [];
+			var downTags = [];
+			var storedUpTags = mtp.cookies._readCookie(mtp.cookies.C.UP_TAGS_C_KEY);
+			var storedDownTags = mtp.cookies._readCookie(mtp.cookies.C.DOWN_TAGS_C_KEY);
+			if(storedUpTags){
+				upTags = JSON.parse(storedUpTags);
+			}
+			if(storedDownTags){
+				downTags = JSON.parse(storedDownTags);
+			}
+			mtp.view.addUsedTags(upTags, downTags);
+		},
+		eraseUsedTags : function(){
+			mtp.cookies._eraseCookie(mtp.cookies.C.UP_TAGS_C_KEY);
+			mtp.cookies._eraseCookie(mtp.cookies.C.DOWN_TAGS_C_KEY);
 		},
 		_createCookie : function(name,value,minutes) {
 			if (minutes){
