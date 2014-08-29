@@ -457,6 +457,8 @@ if(typeof mtp == 'undefined') mtp = {};
 			var tagsString = "";
 			if(tagsArr && tagsArr.length > 0){
 				mtp.view._beautifyStrArr(tagsArr);
+				tagsArr = $.grep(tagsArr,function(n){ return(n) });
+				tagsArr = $.unique(tagsArr);
 				tagsArr.sort();
 				tagsString = tagsArr.join(", ");
 			}
