@@ -261,9 +261,17 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.view._updateMusicTags(musicID, tagsString);
 		},
 		_refreshMusicTags : function(id, tags){
-			$(tags).not(mtp.view._tags).each(function(index, tag){
+			var configMusicTags = mtp.file.getMusicTags(id);
+			mtp.view._beautifyStrArr(configMusicTags);
+
+			$(tags).not(configMusicTags).each(function(index, tag){
 				mtp.view._addMusicTag(id, tag);
 			});
+
+			var removedTags = $(configMusicTags).not(tags).get();
+			$.each(removedTags, function(index, tag){
+				mtp.view._removeMusicTag(id, tag);
+			});			
 
 			var searchText = $('#tagSearchInput').val();
 			mtp.view.filterTagList(searchText, $("#tagsList")[0]);
@@ -274,6 +282,9 @@ if(typeof mtp == 'undefined') mtp = {};
 			}
 			var tagAdded = mtp.file.addMusicTag(id, tag);
 			if(!tagAdded){
+				return;
+			}
+			if(mtp.view._tags.indexOf(tag) != -1){
 				return;
 			}
 
@@ -288,6 +299,27 @@ if(typeof mtp == 'undefined') mtp = {};
 				$("#tagsList li").eq(position).after(tagLi);
 			}
 			mtp.view._tags.push(tag);
+		},
+		_removeMusicTag : function(id, tag){
+			if(!tag){
+				return;
+			}
+
+			var tagRemovedFromFile = mtp.file.removeMusicTag(id, tag);
+			if(!tagRemovedFromFile){
+				return;
+			}
+			if(mtp.view._tags.indexOf(tag) == -1){
+				return;
+			}
+
+			$("#tagsList li strong").each(function(index, element){		
+				if(element.textContent.trim() == tag){
+					$(element).closest("li").remove();
+					return false;
+				}
+			});
+			mtp.view._tags.splice(mtp.view._tags.indexOf(tag), 1);
 		},
 		_beautifyStrArr : function(strArr){
 			$.each(strArr, function( index, value ) {

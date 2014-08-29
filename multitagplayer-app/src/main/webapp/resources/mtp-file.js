@@ -148,16 +148,18 @@ if(typeof mtp == 'undefined') mtp = {};
 			});
 		},
 		// remove uma tag de uma musica
+		// retorna true se a tag foi removida do arquivo
 		removeMusicTag : function(id, tag){
-			if(!id) return;
+			if(!id) return false;
 			var music = mtp.file._getMusicFromConfig(id);
-			if(!music) return;
+			if(!music) return false;
 			var index = mtp.file._getMusicTagIndex(music, tag);
 			if(index == -1){
-				return;
+				return false;
 			}
 			music.tags.splice(index, 1);
-			mtp.file._cleanFileTags([tag]);
+			var removedTags = mtp.file._cleanFileTags([tag]);
+			return removedTags.indexOf(tag) != -1;
 		},
 		// retorna a lista de tags do arquivo de config
 		getFileTags : function(){
@@ -219,20 +221,22 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		// verifica se as tags fornecidas estao sendo usadas
 		// caso n estejam sao removidas das tags do arquivo de config
+		// retorna um array com as tags que foram removidas
 		_cleanFileTags : function(tags){
 			if(!tags || tags.length <= 0){
-				return;
+				return [];
 			}
 
 			var musics = mtp.file.loadedFile.musics;
 			var toVerifyTags = {};
+			var removedTags = [];
 
-			jQuery.each(tags, function(index, tag){
+			$.each(tags, function(index, tag){
 				toVerifyTags[tag] = tag;
 			});
 
-			jQuery.each(musics, function(index, music){
-				jQuery.each(Object.keys(toVerifyTags), function(index, tag){
+			$.each(musics, function(index, music){
+				$.each(Object.keys(toVerifyTags), function(index, tag){
 					if(mtp.file._hasMusicTag(music, tag)){
 						delete toVerifyTags[tag];
 						return false;
@@ -243,9 +247,12 @@ if(typeof mtp == 'undefined') mtp = {};
 				}
 			});
 
-			jQuery.each(Object.keys(toVerifyTags), function(index, tag){
+			$.each(Object.keys(toVerifyTags), function(index, tag){
+				removedTags.push(tag);
 				mtp.file._removeFileTag(tag);
 			});
+
+			return removedTags;
 		},
 		// remove uma tag do arquivo de config
 		_removeFileTag : function(tag){
