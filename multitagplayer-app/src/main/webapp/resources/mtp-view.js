@@ -29,7 +29,12 @@ if(typeof mtp == 'undefined') mtp = {};
 			$(button).parentsUntil('div').parent().children('input').val('');
 			$("#tagsList").find("li").show();
 		},
-		play : function(item){
+		play : function(item, event){
+			// foi clicado em algum botao de acao de musica
+			if($(event.target).closest(".musicButtons").length != 0){
+				return;
+			}
+
 			var path = $(item).find(".path").val();
 			var musicid = item.getAttribute("musicid");
 			if(musicid == mtp.view._player.musicid){
@@ -388,14 +393,14 @@ if(typeof mtp == 'undefined') mtp = {};
 		_buildMusicRow : function(id, name, path, tags){
 			var tagsString = mtp.view._stringifyTagArr(tags);
 			
-			var musicRow = '<tr musicID="' + id + '" class="row" onclick="mtp.view.play(this);">';
+			var musicRow = '<tr musicID="' + id + '" class="row" onclick="mtp.view.play(this, event);">';
 			musicRow += '<td class="col-xs-1"><span class="glyphicon glyphicon-volume-up" style="display:none;"></span><span class="glyphicon glyphicon-pause" style="display:none;"></span></td>';
 			musicRow += '<td class="col-xs-4 musicName">';
 			musicRow += name;
 			musicRow += ' <input type="hidden" class="path" style="display:none" value="' + path + '"/>';
 			musicRow += '</td>';
 			musicRow += '<td class="col-xs-6 musicTags">' + tagsString + '</td>';
-			musicRow += '<td class="col-xs-1"><button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalTags" onClick="mtp.view.initModalTags(this);"><span class="glyphicon glyphicon-tags"></span></button></td>';
+			musicRow += '<td class="col-xs-1 musicButtons"><button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalTags" onClick="mtp.view.initModalTags(this);"><span class="glyphicon glyphicon-tags"></span></button></td>';
 			musicRow += '</tr>';
 			return musicRow;
 		},
