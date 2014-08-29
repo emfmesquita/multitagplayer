@@ -1,6 +1,4 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<div>${teste}</div>
-
 <ul class="list-group">
 	<c:forEach items="${paramValues['tags[]']}" var="tag">
 		<li class="list-group-item" onmouseover="$(this).find('div.iconGroup').show()" onmouseout="$(this).find('div.iconGroup').hide()">

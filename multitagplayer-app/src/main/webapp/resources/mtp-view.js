@@ -407,12 +407,11 @@ if(typeof mtp == 'undefined') mtp = {};
 			var tagsArr = mtp.view._parseTagsStr(tagsStr);
 			var beautyTagsStr = mtp.view._stringifyTagArr(tagsArr);
 			
-			// TODO:atualizar a lista de tags no arquivo
-			
+			mtp.view._refreshMusicTags(musicID, tagsArr);
 			$("#musicsTable").find("tr[musicID=" + musicID + "] .musicTags").text(beautyTagsStr);
 		},
 		_parseTagsStr : function(tagsStr){
-			var tagsArr = tagsStr.split(",");
+			var tagsArr = tagsStr.split(/[,\n]/g);
 			mtp.view._beautifyStrArr(tagsArr);
 			tagsArr.sort();
 			return tagsArr;
