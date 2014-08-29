@@ -168,6 +168,13 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.file.loadedFile.tags = tags.sort();
 			return mtp.file.loadedFile.tags.slice(0);
 		},
+		// recupera as tags de uma music
+		getMusicTags : function(id){
+			if(!id) return [];
+			var music = mtp.file._getMusicFromConfig(id);
+			if(!music) return [];
+			return music.tags.slice(0);
+		},
 		// busca musicas com as tags fornecidas
 		searchMusics : function(hasTags, hasNotTags){
 			var nullHas = !hasTags || hasTags.length <= 0;

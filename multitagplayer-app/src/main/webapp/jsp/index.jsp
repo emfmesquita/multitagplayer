@@ -92,12 +92,13 @@
 				<div id="playerContainer" style="margin-bottom:15px;">
 					<audio src="resources/blank.mp3" style="width: 100%" id="player"/>
 				</div>
-				<table class="table table-hover musicTable">
+				<table id="musicsTable" class="table table-hover musicTable">
 					<thead>
 						<tr class="row">
 							<th class="col-xs-1"></th>
-							<th class="col-xs-5">Name</th>
-							<th class="col-xs-6">Tags</th>
+							<th class="col-xs-6">Name</th>
+							<th class="col-xs-4">Tags</th>
+							<th class="col-xs-1"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -106,6 +107,26 @@
 				</table>
 	
 				
+			</div>
+				
+			<!-- Modal -->
+			<div class="modal fade" id="modalTags" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  		<div class="modal-dialog">
+				    <div class="modal-content">
+				      	<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+				        	<h4 class="modal-title" id="myModalLabel">Tags of...</h4>
+				      	</div>
+				      	<div class="modal-body">
+				      		<input id="musicId" type="hidden" />
+				        	<textarea id="tagsText" class="form-control" rows="3"></textarea>
+				      	</div>
+				      	<div class="modal-footer">
+				        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				        	<button type="button" class="btn btn-primary" onClick="mtp.view.endModalTags();" data-dismiss="modal">Save changes</button>
+				      	</div>
+				    </div>
+				</div>
 			</div>
 		</div>
 

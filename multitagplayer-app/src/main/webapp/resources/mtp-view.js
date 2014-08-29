@@ -244,6 +244,27 @@ if(typeof mtp == 'undefined') mtp = {};
 				});
 			});
 		},
+		initModalTags : function(element){
+			var musicID = $(element).closest("tr").attr("musicID");
+			var name = $(element).closest("tr").find(".musicName").text();
+			var tags = mtp.file.getMusicTags(musicID);
+			var tagsString = "";
+			if(tags && tags.length > 0){
+				tags.sort();
+				mtp.view._beautifyStrArr(tags);
+				tagsString = tags.join(", ");
+			}
+			
+			$("#modalTags #myModalLabel").text('Tags of "' + name.substring(0, Math.min(20,name.length)) + '"');
+			$("#modalTags #musicId").val(musicID);
+			$("#modalTags #tagsText").val(tagsString);
+		},
+		endModalTags : function(){
+			var musicID = $("#modalTags #musicId").val();
+			var tagsString = $("#modalTags #tagsText").val();
+			
+			mtp.view._updateMusicTags(musicID, tagsString);
+		},
 		_beautifyStrArr : function(strArr){
 			$.each(strArr, function( index, value ) {
 				strArr[index] = mtp.view._beautifyString(value);
@@ -315,14 +336,14 @@ if(typeof mtp == 'undefined') mtp = {};
 				mtp.view._beautifyStrArr(tags);
 				tagsString = tags.join(", ");
 			}
-
 			var musicRow = '<tr musicID="' + id + '" class="row" onclick="mtp.view.play(this);">';
 			musicRow += '<td class="col-xs-1"><span class="glyphicon glyphicon-volume-up" style="display:none;"></span><span class="glyphicon glyphicon-pause" style="display:none;"></span></td>';
-			musicRow += '<td class="col-xs-5">';
+			musicRow += '<td class="col-xs-4 musicName">';
 			musicRow += name;
 			musicRow += ' <input type="hidden" class="path" style="display:none" value="' + path + '"/>';
 			musicRow += '</td>';
-			musicRow += '<td class="col-xs-6">' + tagsString + '</td>'
+			musicRow += '<td class="col-xs-6 musicTags">' + tagsString + '</td>';
+			musicRow += '<td class="col-xs-1"><button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalTags" onClick="mtp.view.initModalTags(this);"><span class="glyphicon glyphicon-tags"></span></button></td>';
 			musicRow += '</tr>';
 			return musicRow;
 		},
@@ -351,6 +372,9 @@ if(typeof mtp == 'undefined') mtp = {};
 			}
 			array.splice(position, 0, element);
 			return array;
+		},
+		_updateMusicTags : function(musicID, tagsStr){
+			$("#musicsTable").find("tr[musicID=" + musicID + "] .musicTags").text(tagsStr);
 		},
 		_player : null,
 		_tags : null,

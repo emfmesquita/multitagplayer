@@ -75,3 +75,10 @@
     -khtml-user-select: none; /* webkit (konqueror) browsers */
     -ms-user-select: none; /* IE10+ */
 }
+
+#modalTags #tagsText {
+	resize: none;
+	wrap: hard;
+	rows: 3;
+	
+}
