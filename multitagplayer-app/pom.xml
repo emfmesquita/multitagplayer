@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.xablau</groupId>
 		<artifactId>multitagplayer</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>RC1</version>
 	</parent>
 	<artifactId>multitagplayer-app</artifactId>
 	<name>multitagplayer-app</name>

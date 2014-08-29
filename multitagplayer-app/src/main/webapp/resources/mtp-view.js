@@ -248,12 +248,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			var musicID = $(element).closest("tr").attr("musicID");
 			var name = $(element).closest("tr").find(".musicName").text();
 			var tags = mtp.file.getMusicTags(musicID);
-			var tagsString = "";
-			if(tags && tags.length > 0){
-				tags.sort();
-				mtp.view._beautifyStrArr(tags);
-				tagsString = tags.join(", ");
-			}
+			var tagsString = mtp.view._stringifyTagArr(tags);
 			
 			$("#modalTags #myModalLabel").text('Tags of "' + name.substring(0, Math.min(40,name.length)) + (name.length > 40 ? '...' : '') + '"');
 			$("#modalTags #musicId").val(musicID);
@@ -359,12 +354,8 @@ if(typeof mtp == 'undefined') mtp = {};
 			return filledUsedTagTempl.replace(mtp.view._usedTagTemplVar2, exclusion? "danger" : "success");
 		},
 		_buildMusicRow : function(id, name, path, tags){
-			var tagsString = "";
-			if(tags && tags.length > 0){
-				tags.sort();
-				mtp.view._beautifyStrArr(tags);
-				tagsString = tags.join(", ");
-			}
+			var tagsString = mtp.view._stringifyTagArr(tags);
+			
 			var musicRow = '<tr musicID="' + id + '" class="row" onclick="mtp.view.play(this);">';
 			musicRow += '<td class="col-xs-1"><span class="glyphicon glyphicon-volume-up" style="display:none;"></span><span class="glyphicon glyphicon-pause" style="display:none;"></span></td>';
 			musicRow += '<td class="col-xs-4 musicName">';
@@ -413,8 +404,28 @@ if(typeof mtp == 'undefined') mtp = {};
 			return array;
 		},
 		_updateMusicTags : function(musicID, tagsStr){
-			// atualizar a lista de tags na lateral e o arquivo
-			$("#musicsTable").find("tr[musicID=" + musicID + "] .musicTags").text(tagsStr);
+			var tagsArr = mtp.view._parseTagsStr(tagsStr);
+			var beautyTagsStr = mtp.view._stringifyTagArr(tagsArr);
+			
+			// TODO:atualizar a lista de tags no arquivo
+			
+			$("#musicsTable").find("tr[musicID=" + musicID + "] .musicTags").text(beautyTagsStr);
+		},
+		_parseTagsStr : function(tagsStr){
+			var tagsArr = tagsStr.split(",");
+			mtp.view._beautifyStrArr(tagsArr);
+			tagsArr.sort();
+			return tagsArr;
+		},
+		_stringifyTagArr : function(tagsArr){
+			var tagsString = "";
+			if(tagsArr && tagsArr.length > 0){
+				mtp.view._beautifyStrArr(tagsArr);
+				tagsArr.sort();
+				tagsString = tagsArr.join(", ");
+			}
+			
+			return tagsString;
 		},
 		_player : null,
 		_tags : null,
