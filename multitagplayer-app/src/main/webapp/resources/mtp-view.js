@@ -255,7 +255,7 @@ if(typeof mtp == 'undefined') mtp = {};
 				tagsString = tags.join(", ");
 			}
 			
-			$("#modalTags #myModalLabel").text('Tags of "' + name.substring(0, Math.min(20,name.length)) + '"');
+			$("#modalTags #myModalLabel").text('Tags of "' + name.substring(0, Math.min(40,name.length)) + (name.length > 40 ? '...' : '') + '"');
 			$("#modalTags #musicId").val(musicID);
 			$("#modalTags #tagsText").val(tagsString);
 		},
@@ -374,6 +374,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			return array;
 		},
 		_updateMusicTags : function(musicID, tagsStr){
+			// atualizar a lista de tags na lateral e o arquivo
 			$("#musicsTable").find("tr[musicID=" + musicID + "] .musicTags").text(tagsStr);
 		},
 		_player : null,
@@ -391,8 +392,12 @@ if(typeof mtp == 'undefined') mtp = {};
 	}
 } ());
 
-$("#tagsList, body").mCustomScrollbar({
+$("#tagsList").mCustomScrollbar({
 	theme: "minimal"
+});
+
+$("body").mCustomScrollbar({
+	theme: "minimal-dark"
 });
 
 mtp.view.startLoading();
