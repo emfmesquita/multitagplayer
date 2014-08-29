@@ -265,15 +265,44 @@ if(typeof mtp == 'undefined') mtp = {};
 			
 			mtp.view._updateMusicTags(musicID, tagsString);
 		},
+		_refreshMusicTags : function(id, tags){
+			$(tags).not(mtp.view._tags).each(function(index, tag){
+				mtp.view._addMusicTag(id, tag);
+			});
+
+			var searchText = $('#tagSearchInput').val();
+			mtp.view.filterTagList(searchText, $("#tagsList")[0]);
+		},
+		_addMusicTag : function(id, tag){
+			if(!tag){
+				return;
+			}
+			var tagAdded = mtp.file.addMusicTag(id, tag);
+			if(!tagAdded){
+				return;
+			}
+
+			mtp.view._tags = mtp.view._tags.sort();
+			var position = mtp.view._locationOf(tag, mtp.view._tags);
+
+			var tagLi = mtp.view._buildTagLI(tag);
+			if(position == -1){
+				$("#tagsList ul").prepend(tagLi);
+			}
+			else{
+				$("#tagsList li").eq(position).after(tagLi);
+			}
+			mtp.view._tags.push(tag);
+		},
 		_beautifyStrArr : function(strArr){
 			$.each(strArr, function( index, value ) {
 				strArr[index] = mtp.view._beautifyString(value);
 			});
 		},
 		_beautifyString : function(str) {
-			return str.replace(/(?:^|\s)\w/g, function(match) {
-				return match.toUpperCase();
-			});
+			return str.replace(/(?:^|\s)+\w/g, function(match) {
+				return ' ' + match.toUpperCase().trim();
+			}).trim();
 		},
 		_selectRow : function(row){
 			var activeRows = $(row).parentsUntil("table").find("tr.active");
@@ -346,6 +375,16 @@ if(typeof mtp == 'undefined') mtp = {};
 			musicRow += '<td class="col-xs-1"><button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalTags" onClick="mtp.view.initModalTags(this);"><span class="glyphicon glyphicon-tags"></span></button></td>';
 			musicRow += '</tr>';
 			return musicRow;
+		},
+		_buildTagLI : function(tag){
+			var tagLI = "<li class=\"list-group-item\" onmouseover=\"$(this).find('div.iconGroup').show()\" onmouseout=\"$(this).find('div.iconGroup').hide()\">";
+			tagLI += "<strong>" + tag + "</strong>";
+			tagLI += '<div class="pull-right iconGroup" style="margin-top: 3px; display: none;">';
+			tagLI += "<span class=\"glyphicon glyphicon-thumbs-down\" style=\"cursor:pointer\" onclick=\"mtp.view.addUsedTag($(this).parentsUntil('li').parent('li'), true)\"></span>";
+			tagLI += " <span class=\"glyphicon glyphicon-thumbs-up\" style=\"cursor:pointer\" onclick=\"mtp.view.addUsedTag($(this).parentsUntil('li').parent('li'), false)\"></span>";
+			tagLI += "</div>";
+			tagLI += "</li>";
+			return tagLI;
 		},
 		_updateMusics : function(){
 			mtp.view.clearMusics();

@@ -74,7 +74,7 @@
 			<div class="col-xs-2 gray sidebar" >
 				<!-- TODO: be able to edit tags -->
 				<div id="tag-autocomplete" class="input-group">
-				  	<input type="text" class="form-control typeahead" placeholder="Filter by tag..." onkeyup="mtp.view.filterTagList(this.value, $('#tagsList'))"/>
+				  	<input id="tagSearchInput" type="text" class="form-control typeahead" placeholder="Filter by tag..." onkeyup="mtp.view.filterTagList(this.value, $('#tagsList'))"/>
 				  	<span class="input-group-addon">
 				  		<button type="button" class="close" aria-hidden="true" onclick="mtp.view.clearAutoComplete(this);">&times;</button>
 				  	</span>

@@ -114,10 +114,10 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		// adiciona uma tag a uma musica
 		addMusicTag : function(id, tag){
-			if(!id) return;
+			if(!id) return false;
 			var music = mtp.file._getMusicFromConfig(id);
-			if(!music) return;
-			mtp.file._innerAddMusicTag(music, tag);
+			if(!music) return false;
+			return mtp.file._innerAddMusicTag(music, tag);
 		},
 		// retorna os dados de uma musica
 		getMusic : function(id, callback){
@@ -273,11 +273,12 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.file.loadedFile.tags.push(cleanTag);
 		},
 		_innerAddMusicTag : function(music, tag){
-			if(!tag) return;
+			if(!tag) return false;
 			var cleanTag = tag.toLowerCase().trim();
-			if(mtp.file._hasMusicTag(music, cleanTag)) return;
+			if(mtp.file._hasMusicTag(music, cleanTag)) return false;
 			mtp.file._addFileTag(cleanTag);
 			music.tags.push(cleanTag);
+			return true;
 		},
 		// se uma musica possui uma tag
 		_hasMusicTag : function(music, tag){
