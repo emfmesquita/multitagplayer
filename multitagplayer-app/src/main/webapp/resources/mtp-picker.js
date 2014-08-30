@@ -103,7 +103,7 @@ if(typeof mtp == 'undefined') mtp = {};
 				return;
 			}
 
-			jQuery.each(docs, function(index, doc){
+			$.each(docs, function(index, doc){
 				var id = doc[google.picker.Document.ID];
 				if(!id){
 					return;

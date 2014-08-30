@@ -187,12 +187,12 @@ if(typeof mtp == 'undefined') mtp = {};
 
 			var result = {};
 			var musics = mtp.file.loadedFile.musics;
-			jQuery.each(musics, function(index, music){
+			$.each(musics, function(index, music){
 				var hasFailure = false;
 				var hasNotFailure = false;
 
 				if(!nullHas){
-					jQuery.each(hasTags, function(index, tag){
+					$.each(hasTags, function(index, tag){
 						if(!mtp.file._hasMusicTag(music, tag)){
 							hasFailure = true;
 							return false;
@@ -204,7 +204,7 @@ if(typeof mtp == 'undefined') mtp = {};
 				}
 
 				if(!nullHasNot){
-					jQuery.each(hasNotTags, function(index, tag){
+					$.each(hasNotTags, function(index, tag){
 						if(mtp.file._hasMusicTag(music, tag)){
 							hasNotFailure = true;
 							return false;
@@ -266,7 +266,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		_getFileTagIndex : function(tag){
 			if(!tag) return -1;
 			var cleanTag = tag.toLowerCase().trim();
-			return jQuery.inArray(cleanTag, mtp.file.loadedFile.tags);
+			return $.inArray(cleanTag, mtp.file.loadedFile.tags);
 		},
 		// retorna uma musica do arquivo
 		_getMusicFromConfig : function(id){
@@ -296,7 +296,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		_getMusicTagIndex : function(music, tag){
 			if(!tag) return -1;
 			var cleanTag = tag.toLowerCase().trim();
-			return jQuery.inArray(cleanTag, music.tags);
+			return $.inArray(cleanTag, music.tags);
 		},
 		// metodo chamado quando o arquivo de config eh atualizado
 		_innerUpdateFile : function(){
@@ -359,7 +359,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			music.id = id;
 			music.tags = [];
 			if(tags && tags.length > 0){
-				jQuery.each(tags, function(index, tag){
+				$.each(tags, function(index, tag){
 					mtp.file._addFileTag(tag);
 					mtp.file._innerAddMusicTag(music, tag);
 				});

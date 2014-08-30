@@ -31,7 +31,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		play : function(item, event){
 			// foi clicado em algum botao de acao de musica
-			if($(event.target).closest(".musicButtons").length != 0){
+			if(event && $(event.target).closest(".musicButtons").length != 0){
 				return;
 			}
 
@@ -180,33 +180,34 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.view._updateMusics();
 		},
 		enableSaveButton : function(){
-			jQuery("#saveButton").attr("disabled", false);
+			$("#saveButton").attr("disabled", false);
 		},
 		enableAddMusicButton : function(){
-			jQuery("#addMusicButton").attr("disabled", false);
+			$("#addMusicButton").attr("disabled", false);
 		},
 		updateFileName : function(newName){
-			jQuery("#fileName").text(newName);
+			$("#fileName").text(newName);
 		},
 		addMusic : function(id, name, path, tags){
 			var musicRow = mtp.view.isMusicVisible(id);
 			if(!musicRow){
-				musicRow = $(mtp.view._buildMusicRow(id, name, path, tags))[0];
+				var cleanName = name.replace(/\.\w+$/g, "");
+				musicRow = $(mtp.view._buildMusicRow(id, cleanName, path, tags))[0];
 				var trs = $(".musicTable tbody tr");
 				var tbody = $(".musicTable tbody");
 				if(trs.length == 0){
 					tbody.append(musicRow);
-					mtp.view._musicNames.push(name);
+					mtp.view._musicNames.push(cleanName);
 				}
 				else{
-					var position = mtp.view._locationOf(name, mtp.view._musicNames);
+					var position = mtp.view._locationOf(cleanName, mtp.view._musicNames);
 					if(position == -1){
 						tbody.prepend(musicRow);
 					}
 					else{
 						trs.eq(position).after(musicRow);
 					}
-					mtp.view._addMusicName(name, position + 1);
+					mtp.view._addMusicName(cleanName, position + 1);
 				}
 			}
 			if(id == mtp.view._player.musicid){
@@ -226,7 +227,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			return null;
 		},
 		clearMusics : function(){
-			jQuery(".musicTable tbody").empty();
+			$(".musicTable tbody").empty();
 			mtp.view._musicNames = [];
 		},
 		addMusics : function(musics, execution){
@@ -236,7 +237,7 @@ if(typeof mtp == 'undefined') mtp = {};
 
 			var startedExecution = execution;
 
-			jQuery.each(Object.keys(musics), function(index, musicID){
+			$.each(Object.keys(musics), function(index, musicID){
 				if(startedExecution != mtp.view._currentFilterExecution){
 					return false;
 				}
