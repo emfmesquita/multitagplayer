@@ -165,7 +165,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		getFileTags : function(){
 			var tags = mtp.file.loadedFile.tags;
 			if(!tags || tags.length <= 0){
-				return tags;
+				return [];
 			}
 			mtp.file.loadedFile.tags = tags.sort();
 			return mtp.file.loadedFile.tags.slice(0);

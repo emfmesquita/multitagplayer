@@ -6,7 +6,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		clientId : '1005266131738-tdv38pudoj50a5jgmbr6khoo3f9fj6pv.apps.googleusercontent.com', // heroko
 		clientIdLocal : '1005266131738-3hcds8n24ubv16rmls7vlktd9q1hjj98.apps.googleusercontent.com', // local
 		// Scope to use to access user's files.
-		scopes : ['https://www.googleapis.com/auth/drive'].join(' '),
+		scopes : ['https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive.readonly.metadata'].join(' '),
 		oauthToken : null,
 		_pickerApiLoaded : false,
 		_clientAPILoaded : false,

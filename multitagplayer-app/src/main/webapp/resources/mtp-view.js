@@ -293,15 +293,21 @@ if(typeof mtp == 'undefined') mtp = {};
 				return;
 			}
 
-			mtp.view._tags = mtp.view._tags.sort();
-			var position = mtp.view._locationOf(tag, mtp.view._tags);
 
 			var tagLi = mtp.view._buildTagLI(tag);
-			if(position == -1){
-				$("#tagsList ul").prepend(tagLi);
+			if(mtp.view._tags.length == 0){
+				$("#tagsList ul").append(tagLi);
 			}
 			else{
-				$("#tagsList li").eq(position).after(tagLi);
+				mtp.view._tags = mtp.view._tags.sort();
+				var position = mtp.view._locationOf(tag, mtp.view._tags);
+
+				if(position == -1){
+					$("#tagsList ul").prepend(tagLi);
+				}
+				else{
+					$("#tagsList li").eq(position).after(tagLi);
+				}
 			}
 			mtp.view._tags.push(tag);
 		},
