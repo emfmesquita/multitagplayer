@@ -80,7 +80,8 @@
 				  	</span>
 				</div>
 				<div id="tagsList" class="no_selection" style="padding: 10px 8px 0 8px;">
-					<%@include file="../resources/ajax/tagsList.jsp"  %>
+					<ul class="list-group">
+					</ul>
 				</div>
 			</div>
 			<div class="container theme-showcase col-xs-10 col-xs-offset-2" role="main" style="margin-top:20px; margin-bottom:60px;">
@@ -119,7 +120,7 @@
 				      	</div>
 				      	<div class="modal-body">
 				      		<input id="musicId" type="hidden" />
-				        	<textarea id="tagsText" class="form-control" rows="3"></textarea>
+				        	<textarea id="tagsText" class="form-control" rows="3" onkeypress="mtp.view.enterOnTagArea(event);"></textarea>
 				      	</div>
 				      	<div class="modal-footer">
 				        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
