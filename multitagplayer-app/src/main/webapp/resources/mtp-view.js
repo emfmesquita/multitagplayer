@@ -269,6 +269,13 @@ if(typeof mtp == 'undefined') mtp = {};
 			
 			mtp.view._updateMusicTags(musicID, tagsString);
 		},
+		enterOnTagArea : function(event){
+			if(event.keyCode != 13){
+				return;
+			}
+			event.stopPropagation();
+			$("#modalTags #saveModal").click();
+		},
 		_refreshMusicTags : function(id, tags){
 			var configMusicTags = mtp.file.getMusicTags(id);
 			mtp.view._beautifyStrArr(configMusicTags);
@@ -497,6 +504,11 @@ $("#tagsList").mCustomScrollbar({
 
 $("body").mCustomScrollbar({
 	theme: "minimal-dark"
+});
+
+$('#modalTags').on('shown.bs.modal', function () {
+    $("#modalTags #tagsText").focus(); 
+	$("#modalTags #tagsText").select();
 });
 
 mtp.view.startLoading();

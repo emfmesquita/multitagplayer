@@ -124,7 +124,7 @@
 				      	</div>
 				      	<div class="modal-footer">
 				        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				        	<button type="button" class="btn btn-primary" onClick="mtp.view.endModalTags();" data-dismiss="modal">Save changes</button>
+				        	<button id="saveModal" type="button" class="btn btn-primary" onClick="mtp.view.endModalTags();" data-dismiss="modal">Save changes</button>
 				      	</div>
 				    </div>
 				</div>
