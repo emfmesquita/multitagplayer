@@ -13,6 +13,9 @@ if(typeof mtp == 'undefined') mtp = {};
 		storeOauth : function(token, minutes){
 			mtp.cookies._createCookie(mtp.cookies.C.OAUTH_C_KEY, token, minutes);
 		},
+		eraseOauth : function(){
+			mtp.cookies._eraseCookie(mtp.cookies.C.OAUTH_C_KEY);
+		},
 		getConfigID : function(){
 			return mtp.cookies._readCookie(mtp.cookies.C.CONFIG_C_KEY);
 		},
@@ -65,7 +68,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			return null;
 		},
 		_eraseCookie : function(name) {
-			mtp.gapi.createCookie(name,"",-1);
+			mtp.cookies._createCookie(name,"",-1);
 		}
 	}
 } ());

@@ -30,29 +30,10 @@ if(typeof mtp == 'undefined') mtp = {};
 				}
 			}
 		},
-		createCookie : function(name,value,minutes) {
-			if (minutes){
-				var date = new Date();
-				date.setTime(date.getTime()+(minutes*60*1000));
-				var expires = "; expires="+date.toGMTString();
-			}
-			else{
-				var expires = "";
-			}
-			document.cookie = name+"="+value+expires+"; path=/";
-		},
-		readCookie : function(name) {
-			var nameEQ = name + "=";
-			var ca = document.cookie.split(';');
-			for(var i=0;i < ca.length;i++) {
-				var c = ca[i];
-				while (c.charAt(0)==' ') c = c.substring(1,c.length);
-				if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-			}
-			return null;
-		},
-		eraseCookie : function(name) {
-			mtp.gapi.createCookie(name,"",-1);
+		logOut : function(){
+			mtp.cookies.eraseOauth();
+			mtp.gapi.oauthToken = null;
+			mtp.gapi._auth();
 		},
 		_auth : function(){
 			var params = {};

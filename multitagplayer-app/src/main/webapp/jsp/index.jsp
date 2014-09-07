@@ -54,6 +54,7 @@
 						<li><a href="#" onclick="mtp.file.newFile();"><span class="glyphicon glyphicon-file"></span> Create Config File</a></li>
 						<li><a href="#" onclick="mtp.picker.openConfigPicker();"><span class="glyphicon glyphicon-folder-open"></span> Load Config File</a></li>
 						<li><a id="shortcutsButton" href="#" data-toggle="modal" data-target="#modalShortcuts"><span class="glyphicon glyphicon-share-alt"></span> Shortcuts</a></li>
+						<li><a href="#" onclick="mtp.gapi.logOut();"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 					</ul>
 				</div>
 				<button id="saveButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.file.saveFile()" disabled="true">
