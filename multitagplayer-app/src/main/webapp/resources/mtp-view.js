@@ -3,21 +3,7 @@ if(typeof mtp == 'undefined') mtp = {};
 	mtp.view = {
 		init : function(tagsListString){
 			mtp.view._tags = tagsListString.replace('[', '').replace(']', '').split(/, /g);
-			
-			$('#player').mediaelementplayer({
-				success: function(mediaElement, originalNode) {
-					mtp.view._player = mediaElement;
-					mtp.view._player.setSrc("");
-					mtp.view._player.addEventListener("pause", function(){
-						if(!mtp.view._player.ended){
-							mtp.view._pauseCurrentRow();
-						}
-					});
-					mtp.view._player.addEventListener("play", function(){mtp.view._playCurrentRow()});
-					mtp.view._player.addEventListener("ended", function(){mtp.view._playNext()});
-				},
-				features: ['playpause','current','progress','duration','volume']
-			});
+			mtp.player.init();
 		},
 		startLoading : function(){
 			$("#wait").css("display","table-cell");
@@ -34,26 +20,12 @@ if(typeof mtp == 'undefined') mtp = {};
 			if(event && $(event.target).closest(".musicButtons").length != 0){
 				return;
 			}
-
 			var path = $(item).find(".path").val();
 			var musicid = item.getAttribute("musicid");
-			if(musicid == mtp.view._player.musicid){
-				if(mtp.view._player.paused){
-					mtp.view._player.play();
-					mtp.view._playRow(item);
-				}
-				else{
-					mtp.view._player.pause();
-					mtp.view._pauseRow(item);
-				}
-				return;
+			var sameMusic = mtp.player.play(musicid, path);
+			if(!sameMusic){
+				mtp.view._selectRow(item);
 			}
-
-			mtp.view._player.pause();
-			mtp.view._player.setSrc(path);
-			mtp.view._player.musicid = musicid;
-			mtp.view._player.play();
-			mtp.view._selectRow(item);
 		},
 		refreshTagList : function(tagsList, callback) {
 			mtp.view.startLoading();
@@ -213,7 +185,7 @@ if(typeof mtp == 'undefined') mtp = {};
 					mtp.view._addMusicName(cleanName, position + 1);
 				}
 			}
-			if(id == mtp.view._player.musicid){
+			if(id == mtp.player.currentMusicId()){
 				mtp.view._selectRow(musicRow);
 			}
 		},
@@ -259,9 +231,12 @@ if(typeof mtp == 'undefined') mtp = {};
 			var tags = mtp.file.getMusicTags(musicID);
 			var tagsString = mtp.view._stringifyTagArr(tags);
 			
-			$("#modalTags #myModalLabel").text('Tags of "' + name.substring(0, Math.min(40,name.length)) + (name.length > 40 ? '...' : '') + '"');
+			$("#modalTags #tagsModalLabel").text('Tags of "' + name.substring(0, Math.min(40,name.length)) + (name.length > 40 ? '...' : '') + '"');
 			$("#modalTags #musicId").val(musicID);
 			$("#modalTags #tagsText").val(tagsString);
+		},
+		initModalTagsActiveRow : function(){
+			$("tr.row.active .tagButton").click();
 		},
 		endModalTags : function(){
 			var musicID = $("#modalTags #musicId").val();
@@ -275,6 +250,68 @@ if(typeof mtp == 'undefined') mtp = {};
 			}
 			event.stopPropagation();
 			$("#modalTags #saveModal").click();
+		},
+		pauseCurrentRow : function(){
+			mtp.view._pauseRow($("tr.active"));
+		},
+		playCurrentRow : function(){
+			var active = $("tr.active");
+			if(active.length <= 0){
+				mtp.view.playNext();
+				return;
+			}
+			mtp.view._playRow(active);
+		},
+		playNext : function(){
+			var currentRow = $("tr.active");
+
+			var nextRow = [];
+			if(currentRow[0]){
+				nextRow = currentRow.next("tr");
+			}
+			if(!nextRow[0]){
+				nextRow = $(".musicTable tbody tr").first();
+			}
+			if(!nextRow[0]){
+				return;
+			}
+
+			if(currentRow[0] == nextRow[0]){
+				mtp.player.simplePlay();
+			}
+			else{
+				mtp.view.play(nextRow[0]);
+			}
+		},
+		playPrev : function(){
+			var currentRow = $("tr.active");
+
+			var prevRow = [];
+			if(currentRow[0]){
+				prevRow = currentRow.prev("tr");
+			}
+			if(!prevRow[0]){
+				prevRow = $(".musicTable tbody tr").last();
+			}
+			if(!prevRow[0]){
+				return;
+			}
+
+			if(currentRow[0] == prevRow[0]){
+				mtp.player.simplePlay();
+			}
+			else{
+				mtp.view.play(prevRow[0]);
+			}
+		},
+		toogleShortcutsModal : function(){
+			var modal = $("#modalShortcuts");
+			if(modal.is(":visible")){
+				modal.modal("hide");
+			}
+			else{
+				modal.modal("show");
+			}
 		},
 		_refreshMusicTags : function(id, tags){
 			var configMusicTags = mtp.file.getMusicTags(id);
@@ -362,7 +399,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			
 			$(row).addClass("active");
 
-			if(mtp.view._player.paused){
+			if(mtp.player.isPaused()){
 				$(row).find(".glyphicon.glyphicon-pause").show();
 			}
 			else{
@@ -376,33 +413,6 @@ if(typeof mtp == 'undefined') mtp = {};
 		_playRow : function(row){
 			$(row).find(".glyphicon.glyphicon-volume-up").show();
 			$(row).find(".glyphicon.glyphicon-pause").hide();
-		},
-		_pauseCurrentRow : function(){
-			mtp.view._pauseRow($("tr.active"));
-		},
-		_playCurrentRow : function(){
-			mtp.view._playRow($("tr.active"));
-		},
-		_playNext : function(){
-			var currentRow = $("tr.active");
-
-			var nextRow = [];
-			if(currentRow[0]){
-				nextRow = currentRow.next("tr");
-			}
-			if(!nextRow[0]){
-				nextRow = $(".musicTable tbody tr").first();
-			}
-			if(!nextRow[0]){
-				return;
-			}
-
-			if(currentRow[0] == nextRow[0]){
-				mtp.view._player.play();
-			}
-			else{
-				mtp.view.play(nextRow[0]);
-			}
 		},
 		_fillUsedTagTemplate : function(tag, exclusion){
 			var filledUsedTagTempl = mtp.view._usedTagTemplate.replace(mtp.view._usedTagTemplVar1, tag);
@@ -418,7 +428,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			musicRow += ' <input type="hidden" class="path" style="display:none" value="' + path + '"/>';
 			musicRow += '</td>';
 			musicRow += '<td class="col-xs-6 musicTags">' + tagsString + '</td>';
-			musicRow += '<td class="col-xs-1 musicButtons"><button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalTags" onClick="mtp.view.initModalTags(this);"><span class="glyphicon glyphicon-tags"></span></button></td>';
+			musicRow += '<td class="col-xs-1 musicButtons"><button class="btn btn-default btn-sm tagButton" data-toggle="modal" data-target="#modalTags" onClick="mtp.view.initModalTags(this);"><span class="glyphicon glyphicon-tags"></span></button></td>';
 			musicRow += '</tr>';
 			return musicRow;
 		},
@@ -503,6 +513,10 @@ $("#tagsList").mCustomScrollbar({
 });
 
 $("body").mCustomScrollbar({
+	theme: "minimal-dark"
+});
+
+$("#modalShortcuts .modal-body").mCustomScrollbar({
 	theme: "minimal-dark"
 });
 

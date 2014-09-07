@@ -32,6 +32,7 @@ if(typeof mtp == 'undefined') mtp = {};
 				addView(views[1]).
 				addView(views[2]).
 				addView(views[3]).
+				setTitle("Select musics").
 				setOAuthToken(mtp.gapi.oauthToken).
 				setDeveloperKey(mtp.gapi.developerKey).
 				setCallback(mtp.picker._musicPickerCallback).
@@ -44,6 +45,7 @@ if(typeof mtp == 'undefined') mtp = {};
 				addView(views[1]).
 				addView(views[2]).
 				addView(views[3]).
+				setTitle("Select a config file").
 				setOAuthToken(mtp.gapi.oauthToken).
 				setDeveloperKey(mtp.gapi.developerKey).
 				setCallback(mtp.picker._configPickerCallback).

@@ -80,5 +80,13 @@
 	resize: none;
 	wrap: hard;
 	rows: 3;
-	
+}
+
+#modalShortcuts .modal-body {
+	max-height: 420px; 
+	overflow-y: auto;
+}
+
+#modalShortcuts .mCSB_scrollTools {
+	opacity: 1 !important;
 }

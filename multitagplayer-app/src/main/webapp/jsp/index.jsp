@@ -17,8 +17,8 @@
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-		  <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 		<![endif]-->
 
 		<!-- Mediaelement -->
@@ -28,6 +28,7 @@
 		<script src="resources/mtp-gapi.js"></script>
 		<script src="resources/mtp-picker.js"></script>
 		<script src="resources/mtp-file.js"></script>
+		<script src="resources/mtp-player.js"></script>
 	</head>
 	
 	<body onload="mtp.gapi.init(); mtp.view.init('${tags}');">
@@ -40,44 +41,45 @@
 
 		<!-- Fixed navbar -->
 		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
-		  <div class="container">
-			<div class="navbar-header">
-			  <a class="navbar-brand" href="#">MultiTagPlayer</a>
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">MultiTagPlayer</a>
+				</div>
+				
+				<div class="btn-group navbar-btn navbar-right" style="margin-left:15px;">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						<span class="glyphicon glyphicon-cog"></span> Settings <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#" onclick="mtp.file.newFile();"><span class="glyphicon glyphicon-file"></span> Create Config File</a></li>
+						<li><a href="#" onclick="mtp.picker.openConfigPicker();"><span class="glyphicon glyphicon-folder-open"></span> Load Config File</a></li>
+						<li><a id="shortcutsButton" href="#" data-toggle="modal" data-target="#modalShortcuts"><span class="glyphicon glyphicon-share-alt"></span> Shortcuts</a></li>
+					</ul>
+				</div>
+				<button id="saveButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.file.saveFile()" disabled="true">
+					<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
+				</button>
+				<button id="addMusicButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.picker.openMusicPicker()" disabled="true">
+					<span class="glyphicon glyphicon-music"></span>	Add music
+				</button>
+				<!-- <div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="#">Home</a></li>
+						<li><a href="#about">About</a></li>
+					</ul>
+				</div>-->
+				<!--/.nav-collapse -->
 			</div>
-			
-			<div class="btn-group navbar-btn navbar-right" style="margin-left:15px;">
-				<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-					<span class="glyphicon glyphicon-cog"></span> Settings <span class="caret"></span>
-			  	</button>
-			  	<ul class="dropdown-menu" role="menu">
-					<li><a href="#" onclick="mtp.file.newFile()"><span class="glyphicon glyphicon-file"></span> Create Config File</a></li>
-					<li><a href="#" onclick="mtp.picker.openConfigPicker()"><span class="glyphicon glyphicon-folder-open"></span> Load Config File</a></li>
-			  	</ul>
-			</div>
-			<button id="saveButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.file.saveFile()" disabled="true">
-				<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
-			</button>
-			<button id="addMusicButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.picker.openMusicPicker()" disabled="true">
-				<span class="glyphicon glyphicon-music"></span>	Add music
-			</button>
-			<!-- <div class="collapse navbar-collapse">
-			  <ul class="nav navbar-nav">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="#about">About</a></li>
-			  </ul>
-			</div>-->
-			<!--/.nav-collapse -->
-		  </div>
 		</div>
 		
 		<div style="margin-top:50px;">
 			<div class="col-xs-2 gray sidebar" >
 				<!-- TODO: be able to edit tags -->
 				<div id="tag-autocomplete" class="input-group">
-				  	<input id="tagSearchInput" type="text" class="form-control typeahead" placeholder="Filter by tag..." onkeyup="mtp.view.filterTagList(this.value, $('#tagsList'))"/>
-				  	<span class="input-group-addon">
-				  		<button type="button" class="close" aria-hidden="true" onclick="mtp.view.clearAutoComplete(this);">&times;</button>
-				  	</span>
+					<input id="tagSearchInput" type="text" class="form-control typeahead ignoreKeyEvents" placeholder="Filter by tag..." onkeyup="mtp.view.filterTagList(this.value, $('#tagsList'))"/>
+					<span class="input-group-addon">
+						<button type="button" class="close" aria-hidden="true" onclick="mtp.view.clearAutoComplete(this);">&times;</button>
+					</span>
 				</div>
 				<div id="tagsList" class="no_selection" style="padding: 10px 8px 0 8px;">
 					<ul class="list-group">
@@ -106,27 +108,101 @@
 						
 					</tbody>
 				</table>
-	
-				
 			</div>
 				
-			<!-- Modal -->
-			<div class="modal fade" id="modalTags" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		  		<div class="modal-dialog">
-				    <div class="modal-content">
-				      	<div class="modal-header">
+			<!-- Modal de Tags-->
+			<div class="modal fade" id="modalTags" tabindex="-1" role="dialog" aria-labelledby="tagsModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+					  	<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				        	<h4 class="modal-title" id="myModalLabel">Tags of...</h4>
-				      	</div>
-				      	<div class="modal-body">
-				      		<input id="musicId" type="hidden" />
-				        	<textarea id="tagsText" class="form-control" rows="3" onkeypress="mtp.view.enterOnTagArea(event);"></textarea>
-				      	</div>
-				      	<div class="modal-footer">
-				        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				        	<button id="saveModal" type="button" class="btn btn-primary" onClick="mtp.view.endModalTags();" data-dismiss="modal">Save changes</button>
-				      	</div>
-				    </div>
+							<h4 class="modal-title" id="tagsModalLabel">Tags of...</h4>
+						</div>
+						<div class="modal-body">
+							<input id="musicId" type="hidden" />
+							<textarea id="tagsText" class="form-control ignoreKeyEvents" rows="3" onkeypress="mtp.view.enterOnTagArea(event);"></textarea>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button id="saveModal" type="button" class="btn btn-primary" onClick="mtp.view.endModalTags();" data-dismiss="modal">Save changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal de Atalhos-->
+			<div class="modal fade" id="modalShortcuts" tabindex="-1" role="dialog" aria-labelledby="shortcutsModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+					  	<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title" id="shortcutsModalLabel">Shortcuts</h4>
+						</div>
+						<div class="modal-body">
+							<table class="table table-hover">
+								<thead>
+									<tr class="row">
+										<th class="col-xs-4">Button</th>
+										<th class="col-xs-8">Effect</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="row">
+										<td class="col-xs-4">h</td>
+										<td class="col-xs-8">Show shortcuts</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">Espace</td>
+										<td class="col-xs-8">Play or pause</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">Left Arrow</td>
+										<td class="col-xs-8">Go back</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">Right Arrow</td>
+										<td class="col-xs-8">Go right</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">b</td>
+										<td class="col-xs-8">Play previous</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">n</td>
+										<td class="col-xs-8">Play next</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">-</td>
+										<td class="col-xs-8">Turn volume down</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">+</td>
+										<td class="col-xs-8">Turn volume up</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">m</td>
+										<td class="col-xs-8">Mute or unmute</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">t</td>
+										<td class="col-xs-8">Add tags to music</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">s</td>
+										<td class="col-xs-8">Save</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">a</td>
+										<td class="col-xs-8">Add music</td>
+									</tr>
+									<tr class="row">
+										<td class="col-xs-4">l</td>
+										<td class="col-xs-8">Load config file</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
