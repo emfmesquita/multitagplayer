@@ -251,8 +251,10 @@ if(typeof mtp == 'undefined') mtp = {};
 			event.stopPropagation();
 			$("#modalTags #saveModal").click();
 		},
-		pauseCurrentRow : function(){
-			mtp.view._pauseRow($("tr.active"));
+		statusPauseCurrentRow : function(){
+			var active = $("tr.active");
+			$(active).find(".glyphicon.glyphicon-volume-up").hide();
+			$(active).find(".glyphicon.glyphicon-pause").show();
 		},
 		playCurrentRow : function(){
 			var active = $("tr.active");
@@ -260,7 +262,17 @@ if(typeof mtp == 'undefined') mtp = {};
 				mtp.view.playNext();
 				return;
 			}
-			mtp.view._playRow(active);
+			$(active).find(".glyphicon.glyphicon-volume-up").show();
+			$(active).find(".glyphicon.glyphicon-pause").hide();
+		},
+		statusToogleLoopCurrentRow : function(){
+			var active = $("tr.active");
+			var loopSpan = $(active).find(".glyphicon.glyphicon-repeat");
+			if(mtp.player.isInLoop()){
+				loopSpan.show();
+			}else{
+				loopSpan.hide();
+			}
 		},
 		playNext : function(){
 			var currentRow = $("tr.active");
@@ -395,6 +407,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			var activeRows = $(row).parentsUntil("table").find("tr.active");
 			activeRows.find(".glyphicon.glyphicon-volume-up").hide();
 			activeRows.find(".glyphicon.glyphicon-pause").hide();
+			activeRows.find(".glyphicon.glyphicon-repeat").hide();
 			activeRows.removeClass("active");
 			
 			$(row).addClass("active");
@@ -405,14 +418,9 @@ if(typeof mtp == 'undefined') mtp = {};
 			else{
 				$(row).find(".glyphicon.glyphicon-volume-up").show();
 			}
-		},
-		_pauseRow : function(row){
-			$(row).find(".glyphicon.glyphicon-volume-up").hide();
-			$(row).find(".glyphicon.glyphicon-pause").show();
-		},
-		_playRow : function(row){
-			$(row).find(".glyphicon.glyphicon-volume-up").show();
-			$(row).find(".glyphicon.glyphicon-pause").hide();
+			if(mtp.player.isInLoop()){
+				$(row).find(".glyphicon.glyphicon-repeat").show();
+			}
 		},
 		_fillUsedTagTemplate : function(tag, exclusion){
 			var filledUsedTagTempl = mtp.view._usedTagTemplate.replace(mtp.view._usedTagTemplVar1, tag);
@@ -421,14 +429,22 @@ if(typeof mtp == 'undefined') mtp = {};
 		_buildMusicRow : function(id, name, path, tags){
 			var tagsString = mtp.view._stringifyTagArr(tags);
 			
-			var musicRow = '<tr musicID="' + id + '" class="row" onclick="mtp.view.play(this, event);">';
-			musicRow += '<td class="col-xs-1"><span class="glyphicon glyphicon-volume-up" style="display:none;"></span><span class="glyphicon glyphicon-pause" style="display:none;"></span></td>';
+			var musicRow = '<tr musicID="' + id + '" title="Play/Pause" class="row" onclick="mtp.view.play(this, event);">';
+			musicRow += '<td class="col-xs-1">';
+			musicRow += '<span class="music-status glyphicon glyphicon-volume-up" style="display:none;"></span>'; 
+			musicRow += '<span class="music-status glyphicon glyphicon-pause" style="display:none;"></span>';
+			musicRow += '    <span class="music-status glyphicon glyphicon-repeat" style="display:none;"></span>';
+			musicRow += '</td>';
 			musicRow += '<td class="col-xs-4 musicName">';
 			musicRow += name;
 			musicRow += ' <input type="hidden" class="path" style="display:none" value="' + path + '"/>';
 			musicRow += '</td>';
 			musicRow += '<td class="col-xs-6 musicTags">' + tagsString + '</td>';
-			musicRow += '<td class="col-xs-1 musicButtons"><button class="btn btn-default btn-sm tagButton" data-toggle="modal" data-target="#modalTags" onClick="mtp.view.initModalTags(this);"><span class="glyphicon glyphicon-tags"></span></button></td>';
+			musicRow += '<td class="col-xs-1 musicButtons">';
+			musicRow += '<button class="btn btn-default btn-sm tagButton" title="Edit Tags" data-toggle="modal" data-target="#modalTags" onClick="mtp.view.initModalTags(this);">';
+			musicRow += '<span class="glyphicon glyphicon-tags"></span>';
+			musicRow += '</button>';
+			musicRow += '</td>';
 			musicRow += '</tr>';
 			return musicRow;
 		},

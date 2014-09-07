@@ -2,6 +2,21 @@ if(typeof mtp == 'undefined') mtp = {};
 (function() {
 	mtp.player = {
 		init : function(){
+			// loop toggle
+			MediaElementPlayer.prototype.buildloop = function(player, controls, layers, media) {
+					// create the loop button
+				var loop =  
+					$('<div id="playerLoopDiv" class="mejs-button mejs-loop-button ' + ((player.options.loop) ? 'mejs-loop-on' : 'mejs-loop-off') + '">' +
+						'<button type="button" title="Toogle Loop" aria-label="Loop"></button>' +
+					'</div>')
+					// append it to the toolbar
+					.appendTo(controls)
+					// add a click toggle event
+					.click(function() {
+						mtp.player._innerToogleLoop(player.media, player, loop);
+					});
+			}
+
 			$('#player').mediaelementplayer({
 				success: function(mediaElement, originalNode) {
 					mtp.player._audioEl = mediaElement;
@@ -9,13 +24,13 @@ if(typeof mtp == 'undefined') mtp = {};
 					mtp.player._audioEl.setSrc("");
 					mtp.player._audioEl.addEventListener("pause", function(){
 						if(!mtp.player._audioEl.ended){
-							mtp.view.pauseCurrentRow();
+							mtp.view.statusPauseCurrentRow();
 						}
 					});
 					mtp.player._audioEl.addEventListener("play", function(){mtp.view.playCurrentRow()});
 					mtp.player._audioEl.addEventListener("ended", function(){mtp.view.playNext()});
 				},
-				features: ['playpause','current','progress','duration','volume'],
+				features: ['playpause','loop','current','progress','duration','volume'],
 				keyActions: []
 			});
 			$("body").keydown(function(event) {
@@ -31,9 +46,9 @@ if(typeof mtp == 'undefined') mtp = {};
 				var player = mtp.player._player;
 				var shift = event.shiftKey;
 
-				//console.log(event);
 				// SPACE
 				if(keyCode == 32){
+					$(":focus").blur();
 					if (media.paused || media.ended) {
 						media.play();
 					} else {
@@ -65,6 +80,10 @@ if(typeof mtp == 'undefined') mtp = {};
 				// M mute unmute
 				else if(keyCode == 77){
 					player.setMuted(!media.muted);
+				}
+				// L toogle loop
+				else if(keyCode == 76){
+					mtp.player.toogleLoop();
 				}
 				// S save
 				else if(keyCode == 83){
@@ -128,6 +147,22 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		currentMusicId : function(){
 			return mtp.player._audioEl.musicid;
+		},
+		toogleLoop : function(){
+			mtp.player._innerToogleLoop(mtp.player._audioEl, mtp.player._player, $("#playerLoopDiv"));
+		},
+		isInLoop : function(){
+			return mtp.player._audioEl.loop;
+		},
+		_innerToogleLoop : function(media, player, playerLoopDiv){
+			player.options.loop = !player.options.loop;
+			media.loop = !media.loop;
+			if (player.options.loop) {
+				playerLoopDiv.removeClass('mejs-loop-off').addClass('mejs-loop-on');
+			} else {
+				playerLoopDiv.removeClass('mejs-loop-on').addClass('mejs-loop-off');
+			}
+			mtp.view.statusToogleLoopCurrentRow();
 		},
 		_isKeyEventsNotEnabled : function(){
 			if($("#wait").is(":visible")){

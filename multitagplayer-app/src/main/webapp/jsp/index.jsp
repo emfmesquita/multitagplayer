@@ -181,6 +181,10 @@
 										<td class="col-xs-8">Turn volume up</td>
 									</tr>
 									<tr class="row">
+										<td class="col-xs-4">l</td>
+										<td class="col-xs-8">Toogle loop</td>
+									</tr>
+									<tr class="row">
 										<td class="col-xs-4">m</td>
 										<td class="col-xs-8">Mute or unmute</td>
 									</tr>

@@ -90,3 +90,7 @@
 #modalShortcuts .mCSB_scrollTools {
 	opacity: 1 !important;
 }
+
+.music-status {
+	padding-top: 3px;
+}
