@@ -363,7 +363,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			$(row).addClass("active");
 
 			if(mtp.view._player.paused){
-				$(row).find(".glyphicon.glyphicon-pauses").show();
+				$(row).find(".glyphicon.glyphicon-pause").show();
 			}
 			else{
 				$(row).find(".glyphicon.glyphicon-volume-up").show();
