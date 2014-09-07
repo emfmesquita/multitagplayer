@@ -74,8 +74,8 @@ if(typeof mtp == 'undefined') mtp = {};
 				else if(keyCode == 65){
 					mtp.picker.openMusicPicker();
 				}
-				// L load config
-				else if(keyCode == 76){
+				// O open config
+				else if(keyCode == 79){
 					mtp.picker.openConfigPicker();
 				}
 				// B play before

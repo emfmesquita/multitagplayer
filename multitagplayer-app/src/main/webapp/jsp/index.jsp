@@ -197,7 +197,7 @@
 										<td class="col-xs-8">Add music</td>
 									</tr>
 									<tr class="row">
-										<td class="col-xs-4">l</td>
+										<td class="col-xs-4">o</td>
 										<td class="col-xs-8">Load config file</td>
 									</tr>
 								</tbody>
