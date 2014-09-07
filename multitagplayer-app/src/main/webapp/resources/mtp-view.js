@@ -58,15 +58,18 @@ if(typeof mtp == 'undefined') mtp = {};
 		refreshTagList : function(tagsList, callback) {
 			mtp.view.startLoading();
 			mtp.view._beautifyStrArr(tagsList);
-			mtp.view._tags = tagsList;
+			mtp.view._tags = [];
+
 			$('#tagsList').fadeOut("slow", function() {
-				$('#tagsList').load('resources/ajax/tagsList.jsp', {'tags[]': tagsList}, function(){
-					$('#tagsList').fadeIn("slow");
-					if(callback){
-						callback();
-					}
-					mtp.view.endLoading();
+				$("#tagsList ul").empty();
+				$.each(tagsList, function(index, tag){
+					mtp.view._innerAddTag(tag);
 				});
+				$('#tagsList').fadeIn("slow");
+				if(callback){
+					callback();
+				}
+				mtp.view.endLoading();
 			});
 		},
 		filterTagList : function(str, tagsList){
@@ -293,8 +296,9 @@ if(typeof mtp == 'undefined') mtp = {};
 			if(mtp.view._tags.indexOf(tag) != -1){
 				return;
 			}
-
-
+			mtp.view._innerAddTag(tag);
+		},
+		_innerAddTag : function(tag){
 			var tagLi = mtp.view._buildTagLI(tag);
 			if(mtp.view._tags.length == 0){
 				$("#tagsList ul").append(tagLi);
