@@ -103,14 +103,14 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		// remove uma musica dado o id do google
 		removeMusic : function(id){
-			if(!id) return false;
+			if(!id) return [];
 			var music = mtp.file._getMusicFromConfig(id);
-			if(!music) return false;
+			if(!music) return [];
 
 			var musicTags = music.tags;
 			delete mtp.file.loadedFile.musics[id];
-			mtp.file._cleanFileTags(musicTags);
-			return true;
+			var removedTags = mtp.file._cleanFileTags(musicTags);
+			return removedTags;
 		},
 		// adiciona uma tag a uma musica
 		addMusicTag : function(id, tag){

@@ -325,6 +325,17 @@ if(typeof mtp == 'undefined') mtp = {};
 				modal.modal("show");
 			}
 		},
+		removeMusic : function(buttonEl){
+			var musicTR = $(buttonEl).closest("tr");
+			var musicid = musicTR.attr("musicid");
+			musicTR.remove();
+			var removedTags = mtp.file.removeMusic(musicid);
+			if(removedTags.length == 0){
+				return;
+			}
+			
+			mtp.view.refreshTagList(mtp.file.getFileTags());
+		},
 		_refreshMusicTags : function(id, tags){
 			var configMusicTags = mtp.file.getMusicTags(id);
 			mtp.view._beautifyStrArr(configMusicTags);
