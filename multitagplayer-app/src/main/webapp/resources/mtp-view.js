@@ -402,7 +402,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			$( "#musicLoopRangeSliderValue" ).text(cMin + " - " + cMax);
 		},
 		_secondsToTime : function(seconds){
-			var timeMin = (seconds / 60).toFixed(0);
+			var timeMin = Math.floor(seconds / 60);
 			var timeSec = (seconds % 60);
 			var lessThanTen = timeSec < 10;
 			timeSec = timeSec.toFixed(3);
