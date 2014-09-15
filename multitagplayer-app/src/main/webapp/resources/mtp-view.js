@@ -345,6 +345,72 @@ if(typeof mtp == 'undefined') mtp = {};
 			
 			mtp.view.refreshTagList(mtp.file.getFileTags());
 		},
+		initModalLoopRange : function(element){
+			var musicID = $(element).closest("tr").attr("musicID");
+			var name = $(element).closest("tr").find(".musicName").text();
+			var loopRange = mtp.file.getMusicLoopRange(musicID);
+			
+			$("#modalLoopRange #loopRangeModalLabel").text('Loop Range of "' + name.substring(0, Math.min(40,name.length)) + (name.length > 40 ? '...' : '') + '"');
+			$("#modalLoopRange .musicId").val(musicID);
+
+			var duration = mtp.player.getMusicDuration();
+			var musicRange = mtp.file.getMusicLoopRange(musicID);
+			musicRange[0] = musicRange[0] ? new Number(musicRange[0]) : 0;
+			musicRange[1] = musicRange[1] ? new Number(musicRange[1]) : duration;
+			mtp.view._updateRangeDisplay(musicRange);
+
+			$( "#musicLoopRangeSlider" ).slider({ 
+				min: "0", 
+				max : duration, 
+				range: true, 
+				step: 0.25,
+				slide: function( event, ui ) {
+					mtp.view._updateRangeDisplay(ui.values);
+				}
+			});
+			$( "#musicLoopRangeSlider" ).slider( "option", "values", musicRange);
+		},
+		initModalLoopRangeActiveRow : function(){
+			$("tr.row.active .loopRangeButton").click();
+		},
+		saveMusicLoopRange : function(){
+			var musicid = $("#modalLoopRange .musicId").val();
+			var range = $( "#musicLoopRangeSlider" ).slider( "option", "values" );
+			mtp.file.setMusicLoopRange(musicid, range[0], range[1]);
+
+			var currentMusicId = $("tr.active").attr("musicid");
+			if(musicid == currentMusicId){
+				mtp.player.setLoopRange(range[0], range[1]);
+			}
+		},
+		resetMusicLoopRange : function(){
+			var duration = mtp.player.getMusicDuration();
+			var range = [0, duration];
+			mtp.view._updateRangeDisplay(range);
+			$( "#musicLoopRangeSlider" ).slider( "option", "values", range);
+		},
+		enableRangeButton : function(){
+			var active = $("tr.active");
+			$(active).find(".loopRangeButton").removeAttr("disabled");
+		},
+		disableRangeButton : function(){
+			$(".loopRangeButton").attr("disabled", "true");
+		},
+		_updateRangeDisplay : function(range){
+			var cMin = mtp.view._secondsToTime(new Number(range[0]));
+			var cMax = mtp.view._secondsToTime(new Number(range[1]));
+			$( "#musicLoopRangeSliderValue" ).text(cMin + " - " + cMax);
+		},
+		_secondsToTime : function(seconds){
+			var timeMin = (seconds / 60).toFixed(0);
+			var timeSec = (seconds % 60);
+			var lessThanTen = timeSec < 10;
+			timeSec = timeSec.toFixed(3);
+			if(lessThanTen){
+				timeSec = "0" + timeSec;
+			}
+			return timeMin + ":" + timeSec;
+		},
 		_refreshMusicTags : function(id, tags){
 			var configMusicTags = mtp.file.getMusicTags(id);
 			mtp.view._beautifyStrArr(configMusicTags);
@@ -456,18 +522,23 @@ if(typeof mtp == 'undefined') mtp = {};
 			musicRow += '<span class="music-status glyphicon glyphicon-pause" style="display:none;"></span>';
 			musicRow += '    <span class="music-status glyphicon glyphicon-repeat" style="display:none;"></span>';
 			musicRow += '</td>';
-			musicRow += '<td class="col-xs-4 musicName">';
+			musicRow += '<td class="col-xs-5 musicName">';
 			musicRow += name;
 			musicRow += ' <input type="hidden" class="path" style="display:none" value="' + path + '"/>';
 			musicRow += '</td>';
-			musicRow += '<td class="col-xs-6 musicTags">' + tagsString + '</td>';
-			musicRow += '<td class="col-xs-1 musicButtons">';
+			musicRow += '<td class="col-xs-4 musicTags">' + tagsString + '</td>';
+			musicRow += '<td class="col-xs-2 musicButtons">';
+			musicRow += '<div class="btn-group">';
 			musicRow += '<button class="btn btn-default btn-sm tagButton" title="Edit Tags" data-toggle="modal" data-target="#modalTags" onClick="mtp.view.initModalTags(this);">';
 			musicRow += '<span class="glyphicon glyphicon-tags"></span>';
 			musicRow += '</button>';
-			musicRow += '<button class="btn btn-default btn-sm tagButton removeMusicButton" title="Remove Music?" data-toggle="confirmation">';
+			musicRow += '<button class="btn btn-default btn-sm loopRangeButton" disabled="true" title="Music Loop Range" data-toggle="modal" data-target="#modalLoopRange" onClick="mtp.view.initModalLoopRange(this);">';
+			musicRow += '<span class="glyphicon glyphicon-resize-horizontal"></span>';
+			musicRow += '</button>';
+			musicRow += '<button class="btn btn-default btn-sm removeMusicButton" title="Remove Music?" data-toggle="confirmation">';
 			musicRow += '<span class="glyphicon glyphicon-trash"></span>';
 			musicRow += '</button>';
+			musicRow += '</div>';
 			musicRow += '</td>';
 			musicRow += '</tr>';
 			return musicRow;

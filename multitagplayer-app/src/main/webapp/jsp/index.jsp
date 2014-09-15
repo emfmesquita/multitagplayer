@@ -14,6 +14,11 @@
 		<!-- Scrollbar -->
 		<link href="resources/scrollbar/jquery.mCustomScrollbar.css" rel="stylesheet" />
 
+		<!-- JQuery UI -->
+		<link href="resources/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+		<link href="resources/jquery-ui/jquery-ui.structure.min.css" rel="stylesheet" />
+		<link href="resources/jquery-ui/jquery-ui.theme.min.css" rel="stylesheet" />
+
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
@@ -100,9 +105,9 @@
 					<thead>
 						<tr class="row">
 							<th class="col-xs-1"></th>
-							<th class="col-xs-4">Name</th>
-							<th class="col-xs-6">Tags</th>
-							<th class="col-xs-1"></th>
+							<th class="col-xs-5">Name</th>
+							<th class="col-xs-4">Tags</th>
+							<th class="col-xs-2"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -126,6 +131,31 @@
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 							<button id="saveModal" type="button" class="btn btn-primary" onClick="mtp.view.endModalTags();" data-dismiss="modal">Save changes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal de Range de Loop-->
+			<div class="modal fade" id="modalLoopRange" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="loopRangeModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+					  	<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+							<h4 class="modal-title" id="loopRangeModalLabel">Music Loop Range</h4>
+						</div>
+						<div class="modal-body">
+							<input class="musicId" type="hidden" />
+							<div id="musicLoopRangeSlider" class="ui-slider-handle ignoreKeyEvents"></div>
+							
+							<p class="rangeDisplay">
+								<button type="button" class="btn btn-default btn-xs" onClick="mtp.view.resetMusicLoopRange()">Reset</button>
+								<span id="musicLoopRangeSliderValue"></span>
+							</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button id="saveModal" type="button" class="btn btn-primary" onClick="mtp.view.saveMusicLoopRange()" data-dismiss="modal">Save changes</button>
 						</div>
 					</div>
 				</div>
@@ -193,6 +223,10 @@
 										<td class="col-xs-8">Add tags to music</td>
 									</tr>
 									<tr class="row">
+										<td class="col-xs-4">r</td>
+										<td class="col-xs-8">Change the loop range of a music</td>
+									</tr>
+									<tr class="row">
 										<td class="col-xs-4">s</td>
 										<td class="col-xs-8">Save</td>
 									</tr>
@@ -223,6 +257,8 @@
 
 		<!-- jQuery -->
 		<script src="resources/jquery.min.js"></script>
+		<!-- jQuery UI-->
+		<script src="resources/jquery-ui/jquery-ui.min.js"></script>
 		<!-- Bootstrap -->
 		<script src="resources/bootstrap/js/bootstrap.min.js"></script>
 		<script src="resources/bootstrap/js/transition.js"></script>

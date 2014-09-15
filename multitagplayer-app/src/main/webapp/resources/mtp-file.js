@@ -219,6 +219,32 @@ if(typeof mtp == 'undefined') mtp = {};
 			});
 			return result;
 		},
+		// marca os ranges de loop de uma musica
+		setMusicLoopRange : function(id, minLoop, maxLoop){
+			if(!id){
+				return;
+			}
+			var existingMusic = mtp.file._getMusicFromConfig(id);
+			if(!existingMusic){
+				return;
+			}
+			existingMusic.minLoop = minLoop ? minLoop : null;
+			existingMusic.maxLoop = maxLoop ? maxLoop : null;
+		},
+		// recupera o range de loop de uma musica
+		getMusicLoopRange : function(id){
+			if(!id){
+				[null, null];
+			}
+			var existingMusic = mtp.file._getMusicFromConfig(id);
+			if(!existingMusic){
+				[null, null];
+			}
+			var loopRange = [];
+			loopRange[0] = existingMusic.minLoop ? existingMusic.minLoop : null;
+			loopRange[1] = existingMusic.maxLoop ? existingMusic.maxLoop : null;
+			return loopRange;
+		},
 		// verifica se as tags fornecidas estao sendo usadas
 		// caso n estejam sao removidas das tags do arquivo de config
 		// retorna um array com as tags que foram removidas
@@ -358,6 +384,8 @@ if(typeof mtp == 'undefined') mtp = {};
 			music = {};
 			music.id = id;
 			music.tags = [];
+			music.minLoop = null;
+			music.maxLoop = null;
 			if(tags && tags.length > 0){
 				$.each(tags, function(index, tag){
 					mtp.file._addFileTag(tag);

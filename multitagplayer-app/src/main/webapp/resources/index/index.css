@@ -95,6 +95,10 @@
 	padding-top: 3px;
 }
 
-.tagButton{
-	margin-left: 5px;
+.rangeDisplay {
+	padding-top: 10px;
+}
+
+#modalLoopRange .modal-body{
+	padding-bottom: 0px;
 }
