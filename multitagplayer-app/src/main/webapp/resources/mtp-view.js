@@ -188,6 +188,7 @@ if(typeof mtp == 'undefined') mtp = {};
 					popout : true,
 					singleton : true,
 					placement : "left",
+					btnOkLabel : "Remove",
 					onConfirm: function(event, element){
 						mtp.view.removeMusic(element);
 					}
