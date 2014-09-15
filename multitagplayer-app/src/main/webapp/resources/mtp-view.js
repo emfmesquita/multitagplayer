@@ -184,6 +184,14 @@ if(typeof mtp == 'undefined') mtp = {};
 					}
 					mtp.view._addMusicName(cleanName, position + 1);
 				}
+				$(musicRow).find(".removeMusicButton").confirmation({
+					popout : true,
+					singleton : true,
+					placement : "left",
+					onConfirm: function(event, element){
+						mtp.view.removeMusic(element);
+					}
+				});
 			}
 			if(id == mtp.player.currentMusicId()){
 				mtp.view._selectRow(musicRow);
@@ -439,6 +447,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		},
 		_buildMusicRow : function(id, name, path, tags){
 			var tagsString = mtp.view._stringifyTagArr(tags);
+			/**data-toggle="confirmation-singleton-popout"**/
 			
 			var musicRow = '<tr musicID="' + id + '" title="Play/Pause" class="row" onclick="mtp.view.play(this, event);">';
 			musicRow += '<td class="col-xs-1">';
@@ -454,6 +463,9 @@ if(typeof mtp == 'undefined') mtp = {};
 			musicRow += '<td class="col-xs-1 musicButtons">';
 			musicRow += '<button class="btn btn-default btn-sm tagButton" title="Edit Tags" data-toggle="modal" data-target="#modalTags" onClick="mtp.view.initModalTags(this);">';
 			musicRow += '<span class="glyphicon glyphicon-tags"></span>';
+			musicRow += '</button>';
+			musicRow += '<button class="btn btn-default btn-sm tagButton removeMusicButton" title="Remove Music?" data-toggle="confirmation">';
+			musicRow += '<span class="glyphicon glyphicon-trash"></span>';
 			musicRow += '</button>';
 			musicRow += '</td>';
 			musicRow += '</tr>';

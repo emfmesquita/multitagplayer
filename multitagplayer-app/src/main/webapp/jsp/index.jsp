@@ -100,8 +100,8 @@
 					<thead>
 						<tr class="row">
 							<th class="col-xs-1"></th>
-							<th class="col-xs-6">Name</th>
-							<th class="col-xs-4">Tags</th>
+							<th class="col-xs-4">Name</th>
+							<th class="col-xs-6">Tags</th>
 							<th class="col-xs-1"></th>
 						</tr>
 					</thead>
@@ -226,6 +226,8 @@
 		<!-- Bootstrap -->
 		<script src="resources/bootstrap/js/bootstrap.min.js"></script>
 		<script src="resources/bootstrap/js/transition.js"></script>
+		<script src="resources/bootstrap/js/tooltip.js"></script>
+		<script src="resources/bootstrap/js/bootstrap-confirmation.js"></script>
 		<!-- Scrollbar -->
 		<script src="resources/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
 		<!-- Mediaelement -->
