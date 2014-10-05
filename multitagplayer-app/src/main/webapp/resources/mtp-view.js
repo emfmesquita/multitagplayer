@@ -160,6 +160,9 @@ if(typeof mtp == 'undefined') mtp = {};
 		enableAddMusicButton : function(){
 			$("#addMusicButton").attr("disabled", false);
 		},
+		enableDownloadButton : function(){
+			$("#downloadConfigButton").attr("disabled", false);
+		},
 		updateFileName : function(newName){
 			$("#fileName").text(newName);
 		},

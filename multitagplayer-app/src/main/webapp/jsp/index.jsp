@@ -62,6 +62,9 @@
 						<li><a href="#" onclick="mtp.gapi.logOut();"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 					</ul>
 				</div>
+				<button id="downloadConfigButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.file.downloadFile();" disabled="true">
+					<span class="glyphicon glyphicon-download-alt"></span>	Download Config File
+				</button>
 				<button id="saveButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.file.saveFile()" disabled="true">
 					<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
 				</button>
@@ -254,6 +257,8 @@
 				</p>
 			</div>
 		</div>
+
+		<div id="hiddenArea" style="display:none"></div>
 
 		<!-- jQuery -->
 		<script src="resources/jquery.min.js"></script>

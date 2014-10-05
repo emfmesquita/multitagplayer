@@ -83,6 +83,16 @@ if(typeof mtp == 'undefined') mtp = {};
 			}
 			mtp.file._innerInserFile(name, content, id, idCallback);
 		},
+		// faz o download do arquivo de configuracao
+		downloadFile : function(){
+			var b = document.createElement('a');
+			b.download = mtp.file.loadedFileName;
+			b.href = 'data:application/javascript;charset=utf-8,'+JSON.stringify(mtp.file.loadedFile);
+			var hiddenArea = $("#hiddenArea");
+			hiddenArea.append(b);
+			b.click();
+			hiddenArea.empty();
+		},
 		// se o arquivo de config possui a tag fornecida
 		hasFileTag : function(tag){
 			var index = mtp.file._getFileTagIndex(tag);
@@ -330,6 +340,7 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.view.refreshTagList(mtp.file.getFileTags(), mtp.cookies.restoreUsedTags);
 			mtp.view.enableSaveButton();
 			mtp.view.enableAddMusicButton();
+			mtp.view.enableDownloadButton();
 			mtp.view.updateFileName(mtp.file.loadedFileName);
 		},
 		// metodo que envia para o gdrive um arquivo de config
