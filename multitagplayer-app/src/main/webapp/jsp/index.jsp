@@ -273,6 +273,8 @@
 		<script src="resources/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
 		<!-- Mediaelement -->
 		<script src="resources/mediaelement/mediaelement-and-player.min.js"></script>
+		<!-- LZ-String - compactador -->
+		<script type="text/javascript" src="resources/lz-string/lz-string.min.js"></script>
 		<!-- The Google API Loader script. -->
 		<script type="text/javascript" src="https://apis.google.com/js/api.js?onload=mtpGapiOnApiLoad"></script>
 		<script type="text/javascript" src="https://apis.google.com/js/client.js?onload=mtpGapiOnClientApiLoad"></script>

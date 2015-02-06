@@ -5,7 +5,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		_musicPicker : null,
 		_musicMimeTypes : "audio/mpeg3,audio/x-mpeg-3,video/x-mpeg,audio/mp3,audio/mpeg,audio/mp4,audio/mpg,audio/mp4a-latm,audio/ogg,application/ogg,audio/webm,audio/wav,audio/x-wav,audio/wave",
 		_configPicker : null,
-		_configMimeTypes : "application/json",
+		_configMimeTypes : "application/json,application/multitagplayer",
 		init : function(){
 			if(mtp.gapi.oauthToken && mtp.picker._pickerApiLoaded 
 				&& (!mtp.picker._musicPicker || !mtp.picker._configPicker)){
