@@ -1,0 +1,138 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>HitPointTracker</title>
+
+		<!-- Bootstrap -->
+		<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+		<!-- HPT -->
+		<link href="resources/css/hpt.css" rel="stylesheet" />
+	</head>
+	
+	<body onload="hpt.view.init();">
+
+		<!-- Fixed navbar -->
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">HitPointTracker</a>
+				</div>
+			</div>
+		</div>
+		
+		<div id="main-table-container">
+			<table id="main-table">
+				<tbody>
+					<tr>
+						<td class="player-column">
+							<div class="main-column-container">
+								<div class="portrait" title="Player 1">
+									<div class="portrait-text-blank"></div>
+									<div class="portrait-text"><span>Player 1</span></div>
+								</div>
+								<div class="full-hp-bar">
+									<div class="hp-bar-part max-hp-lost" title="0 Max HP lost">0&#x2620;</div>
+									<div class="hp-bar">
+										<table>
+											<tbody><tr>
+												<td class="current-hp-column">
+													<div class="hp-bar-part hp-lost" title="0 from 0 HP Lost">0/0&#x2661;</div>
+													<div class="hp-bar-part temp-hp" title="0 Temporary HP">0&#x231a;</div>
+													<div class="hp-bar-part current-hp" title="0 from 0 HP">0/0&#x2665;</div>
+												</td>
+												<td class="non-lethal-damage-column" title="0 non Lethal Damage">
+													<span class="hp-bar-part non-lethal-damage-text">0</span>
+													<div class="non-lethal-damage-blank"></div>
+													<div class="non-lethal-damage"></div>
+												</td>
+											</tr></tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td class="player-column">
+							<div class="main-column-container">
+								<div class="portrait" title="Player 2">
+									<div class="portrait-text-blank"></div>
+									<div class="portrait-text"><span>Player 2</span></div>
+								</div>
+								<div class="full-hp-bar">
+									<div class="hp-bar-part max-hp-lost" title="0 Max HP lost">0&#x2620;</div>
+									<div class="hp-bar">
+										<table>
+											<tbody><tr>
+												<td class="current-hp-column">
+													<div class="hp-bar-part hp-lost" title="0 from 0 HP Lost">0/0&#x2661;</div>
+													<div class="hp-bar-part temp-hp" title="0 Temporary HP">0&#x231a;</div>
+													<div class="hp-bar-part current-hp" title="0 from 0 HP">0/0&#x2665;</div>
+												</td>
+												<td class="non-lethal-damage-column" title="0 non Lethal Damage">
+													<span class="hp-bar-part non-lethal-damage-text">0</span>
+													<div class="non-lethal-damage-blank"></div>
+													<div class="non-lethal-damage"></div>
+												</td>
+											</tr></tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td class="player-column">
+							<div class="main-column-container">
+								<div class="portrait" title="Player 3">
+									<div class="portrait-text-blank"></div>
+									<div class="portrait-text"><span>Player 3</span></div>
+								</div>
+								<div class="full-hp-bar">
+									<div class="hp-bar-part max-hp-lost" title="0 Max HP lost">0&#x2620;</div>
+									<div class="hp-bar">
+										<table>
+											<tbody><tr>
+												<td class="current-hp-column">
+													<div class="hp-bar-part hp-lost" title="0 from 0 HP Lost">0/0&#x2661;</div>
+													<div class="hp-bar-part temp-hp" title="0 Temporary HP">0&#x231a;</div>
+													<div class="hp-bar-part current-hp" title="0 from 0 HP">0/0&#x2665;</div>
+												</td>
+												<td class="non-lethal-damage-column" title="0 non Lethal Damage">
+													<span class="hp-bar-part non-lethal-damage-text">0</span>
+													<div class="non-lethal-damage-blank"></div>
+													<div class="non-lethal-damage"></div>
+												</td>
+											</tr></tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</td>
+						<td class="player-column">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- jQuery -->
+		<script src="resources/jquery.min.js"></script>
+		<!-- jQuery textfill -->
+		<script src="resources/jquery.textfill.min.js"></script>
+
+		<!-- Bootstrap -->
+		<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+		<script src="resources/bootstrap/js/transition.js"></script>
+		<script src="resources/bootstrap/js/tooltip.js"></script>
+		<script src="resources/bootstrap/js/bootstrap-confirmation.js"></script>
+
+		<script src="resources/hpt-view.js"></script>
+	</body>
+</html>

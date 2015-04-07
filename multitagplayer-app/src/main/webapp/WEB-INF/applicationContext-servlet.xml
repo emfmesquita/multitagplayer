@@ -21,6 +21,10 @@
 	</bean>
 	
 	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<mvc:resources mapping="/mhp/**" location="/mhp/" />
+
+	<mvc:resources mapping="/hpt/**" location="/hpt/" />
 	
 	<mvc:annotation-driven />
 </beans>

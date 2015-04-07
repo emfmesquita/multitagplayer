@@ -1,0 +1,88 @@
+.main-menu {
+	font-size: 20px;
+}
+
+#main-container {
+	padding-top: 55px;
+	height: 100%;
+}
+
+form {
+	margin-bottom: 0px;
+}
+
+.hidden-content {
+	display: none;
+}
+
+.monster-row {
+	padding: 8px;
+}
+
+.well {
+	padding: 8px;
+	margin-bottom: 16px;
+}
+
+.hp-column {
+	padding-right: 8px;
+	padding-left: 8px;
+}
+
+.left-column {
+	padding-right: 2px;
+}
+
+.right-column {
+	padding-left: 2px;
+}
+
+.add-monster-form {
+	margin-top: 5px;
+}
+
+.add-monster-form .form-group {
+	margin-bottom: 4px;
+}
+
+.max-hp-input {
+	width: 100%;
+}
+
+.add-monster-button {
+	width: 100%;
+}
+
+.remove-monster-button {
+	font-size: 12px;
+}
+
+.monster-title {
+	margin: 4px;
+}
+
+.monster-hp-panel {
+	background-color: #FFFFFF;
+}
+
+.progress {
+	position: relative;
+	margin-bottom: 4px;
+}
+
+.hp-bar-text {
+	position: absolute;
+	width: 100%;
+	color: #333;
+	font-weight: bold;
+}
+
+.hp-input {
+	width: 100% !important;
+}
+
+.hp-button {
+	padding-left: 2px;
+	padding-right: 2px;
+	height: 34px;
+}

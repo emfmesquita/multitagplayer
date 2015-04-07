@@ -1,0 +1,121 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>MonsterHP</title>
+
+		<!-- Bootstrap -->
+		<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+		<!-- MHP -->
+		<link href="resources/css/mhp.css" rel="stylesheet" />
+	</head>
+	
+	<body onload="mhp.view.init();">	
+		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
+				<ul class="nav navbar-nav">
+					<li class="dropdown">
+						<a href="javascript:void(0);" class="dropdown-toggle main-menu" data-toggle="dropdown" role="button" aria-expanded="false">
+							MonsterHP <span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span>
+						</a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="javascript:void(0);" onclick="mhp.view.removeAll();">Remove All</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="main-container" class="container-fluid">
+			<div class="row monster-row">
+				<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 hp-column">
+					<div class="well">
+						<form role="form" class="add-monster-form" action="javascript:void(0)">
+							<div class="form-group">
+								<input type="text" class="form-control name-input text-center" placeholder="Name" pattern=".{1,25}" required/>
+							</div>
+
+							<div class="row">
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 left-column">
+									<div class="form-group">
+										<input type="text" class="form-control max-hp-input" placeholder="Max HP"	pattern="(\s*(\+|\-)?\s*(([0-9]{0,3}d[0-9]{1,3})|([0-9]{1,4}))\s*)(\s*(\+|\-)\s*(([0-9]{0,3}d[0-9]{1,3})|([0-9]{1,4}))\s*)*" required/>
+									</div>
+								</div>
+								<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 right-column">
+									<div class="form-group">
+										<button class="btn btn-info add-monster-button" type="submit">Add</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="hidden-content">
+			<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 hp-column monster-hp-column hidden-content">
+				<div class="well monster-hp-panel">
+					<a class="close pull-right remove-monster-button" href="javascript:void(0)" onclick="mhp.view.removeMonster(this);" role="button">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</a>
+					<h5 class="text-center monster-title">
+						<span class="monster-name-title"></span>
+						<span class="monster-number-title">(1)</span>
+					</h5>
+					<div class="progress">
+						<div class="progress-bar progress-bar-info hp-bar" role="progressbar" style="width: 100%">
+							<span class="show hp-bar-text"></span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 left-column">
+							<form role="form" class="form-inline remove-hp-form" action="javascript:void(0)">
+								<div class="form-group input-group">
+									<span class="input-group-btn">
+										<button class="btn btn-info hp-button" type="submit">
+											<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+										</button>
+									</span>
+									<input type="text" class="form-control hp-input dmg-input" placeholder="DMG" required pattern="[0-9]+"/>
+								</div>
+							</form>
+						</div>
+						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 right-column">
+							<form role="form" class="form-inline add-hp-form" action="javascript:void(0)">
+								<div class="form-group input-group">
+									<input type="text" class="form-control hp-input heal-input" placeholder="Heal" required pattern="[0-9]+"/>
+									<span class="input-group-btn">
+										<button class="btn btn-info hp-button" type="submit">
+											<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+										</button>
+									</span>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- jQuery -->
+		<script src="resources/jquery.min.js"></script>
+
+		<!-- Bootstrap -->
+		<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+
+		<!-- Validator -->
+		<script src="resources/validator/validator.min.js"></script>
+
+		<script src="resources/mhp-view.js"></script>
+	</body>
+</html>
