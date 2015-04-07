@@ -15,6 +15,11 @@ form {
 	display: none;
 }
 
+.premade-select .dropdown-menu>.active>a {
+	background-color: #f5f5f5;
+	color: #333;
+}
+
 .monster-row {
 	padding: 8px;
 }
@@ -63,6 +68,10 @@ form {
 
 .monster-hp-panel {
 	background-color: #FFFFFF;
+}
+
+.monster-dead {
+	background-color: #C8C8C8 !important;
 }
 
 .progress {

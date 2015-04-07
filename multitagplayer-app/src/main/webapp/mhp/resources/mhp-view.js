@@ -2,10 +2,10 @@ if(typeof mhp == 'undefined') mhp = {};
 (function() {
 	mhp.view = {
 		C : {
-			NO_NAME : "Unknown",
 			CURRENT_HP_ATTR : "currentHP",
 			MAX_HP_ATTR : "maxHP",
 		},
+		_premadeArray : [],
 		init : function(){
 			$('.add-monster-form').validator().on('submit', mhp.view._addMonsterSubmit);
 		},
@@ -20,18 +20,26 @@ if(typeof mhp == 'undefined') mhp = {};
 			var columns = $(".monster-row .monster-hp-column");
 			columns.fadeOut("slow", function(){ columns.remove(); });
 		},
+		// chamado ao clicar no botao de adicionar monstro da lista de premade
+		addFromPremade : function(){
+			var selected = $('select.premade-select').val();
+			if(!selected) return;
+
+			var entry = mhp.view._premadeArray[selected.toLowerCase()];
+			mhp.view._addMonster(entry.name, entry.hpExp);
+		},
 		// chamado no submit de adicionar monstro
 		_addMonsterSubmit : function(submitEvent){
 			if(submitEvent.isDefaultPrevented()) return;
 			var hpExp = $(submitEvent.target).find(".max-hp-input").val();
-			var name = $(submitEvent.target).find(".name-input").val();			
-			var maxHP = mhp.view._calcHP(hpExp);
-			if(maxHP < 1) maxHP = 1;
-			mhp.view._addMonster(name, maxHP);
+			var name = $(submitEvent.target).find(".name-input").val();	
+			mhp.view._addMonster(name, hpExp);
 		},
 		// metodo para adicionar um monstro novo
-		_addMonster : function(name, maxHP){
+		_addMonster : function(name, hpExp){
+			var maxHP = mhp.view._calcHP(hpExp);
 			if(maxHP < 1) maxHP = 1;
+
 			var row = $(".monster-row");
 			var monsterColumnClone = $(".hidden-content .monster-hp-column").first().clone();
 			monsterColumnClone.find('.remove-hp-form').validator().on('submit', mhp.view._removeHPSubmit);
@@ -39,9 +47,7 @@ if(typeof mhp == 'undefined') mhp = {};
 
 			mhp.view._setHPValue(monsterColumnClone[0], maxHP, maxHP);
 
-			var realName = name;
-			if(realName) realName = realName.trim();
-			if(!realName) realName = mhp.view.C.NO_NAME;
+			var realName = name.trim();
 			var number = 1;
 			var added = false;
 
@@ -75,7 +81,8 @@ if(typeof mhp == 'undefined') mhp = {};
 		_innerHPSubmit : function(inputClass, method, submitEvent){
 			if(submitEvent.isDefaultPrevented()) return;
 			var input = $(submitEvent.target).find(inputClass);
-			var value = Number(input.val());
+			var stringVal = input.val();
+			var value = stringVal ? Number(stringVal) : 1;
 			$(submitEvent.target).closest(".monster-hp-column").each(function(index, column){
 				method(column, value);
 			});
@@ -84,13 +91,6 @@ if(typeof mhp == 'undefined') mhp = {};
 		_calcHP : function(hpExp){
 			var spaceLessExp = hpExp.replace(/\s/g, '');
 			var hp = 0;
-			
-			//var tokens = spaceLessExp.split("+");
-			//$.each(tokens, function(index, token){
-			//	var tokenValue = mhp.view._calcTokenHP(token);
-			//	hp += tokenValue;
-			//});
-
 			var token = "";
 			var add = true;
 			for(var i=0; i < spaceLessExp.length; i++){
@@ -143,6 +143,9 @@ if(typeof mhp == 'undefined') mhp = {};
 
 			var hpText = currentValue + " / " + maxValue;
 			$(monsterColumn).find(".hp-bar-text").text(hpText);
+
+			if(currentValue == 0) $(monsterColumn).find(".monster-hp-panel").addClass("monster-dead");
+			else $(monsterColumn).find(".monster-hp-panel").removeClass("monster-dead");
 		},
 		// dimunui o hp de um monstro
 		_damage : function(monsterColumn, damage){
@@ -165,6 +168,32 @@ if(typeof mhp == 'undefined') mhp = {};
 			var text = $(monsterColumn).find(".monster-number-title").text();
 			text = text.substring(1, text.length - 1);
 			return Number(text);
+		},
+		_addPremadeToSelect : function(name, hpExp){
+			var spaceLessExp = hpExp.replace(/\s/g, '');
+
+			var realName = name.trim();
+			var lowerName = realName.toLowerCase();
+			var existingEntry = mhp.view._premadeArray[lowerName];
+			if(existingEntry) existingEntry.hpExp = spaceLessExp;
+			else{
+				mhp.view._premadeArray[lowerName] = {
+					name : realName,
+					hpExp : spaceLessExp
+				}
+			}
+			mhp.view._updatePremadeSelect();
+		},
+		_updatePremadeSelect : function(){
+			var premadeSelect = $("select.premade-select");
+			premadeSelect.empty();
+
+			var keys = Object.keys(mhp.view._premadeArray).sort();
+			$(keys).each(function(index, key){
+				var entry = mhp.view._premadeArray[key];
+				premadeSelect.append("<option data-subtext='" + entry.hpExp + "'>" + entry.name + "</option>");
+			});
+			premadeSelect.selectpicker('refresh');
 		}
 	}
 } ());

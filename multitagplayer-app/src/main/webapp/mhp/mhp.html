@@ -7,6 +7,7 @@
 
 		<!-- Bootstrap -->
 		<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+		<link href="resources/bootstrap_select/css/bootstrap-select.min.css" rel="stylesheet" />
 
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -20,7 +21,7 @@
 	</head>
 	
 	<body onload="mhp.view.init();">	
-		<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="container-fluid">
 				<ul class="nav navbar-nav">
 					<li class="dropdown">
@@ -32,8 +33,16 @@
 						</ul>
 					</li>
 				</ul>
+
+				<form class="navbar-form navbar-left" role="search">
+					<div class="form-group">
+						<select class="selectpicker premade-select" data-live-search="true" data-show-subtext="true" data-size="10" title='Premade...'>
+						</select>
+						<button type="button" class="btn btn-info" onclick="mhp.view.addFromPremade();">Add</button>
+					</div>
+				</form>
 			</div>
-		</div>
+		</nav>
 
 		<div id="main-container" class="container-fluid">
 			<div class="row monster-row">
@@ -41,7 +50,7 @@
 					<div class="well">
 						<form role="form" class="add-monster-form" action="javascript:void(0)">
 							<div class="form-group">
-								<input type="text" class="form-control name-input text-center" placeholder="Name" pattern=".{1,25}" required/>
+								<input type="text" class="form-control name-input text-center" placeholder="Name" pattern="\s*\S.{0,24}\s*" required/>
 							</div>
 
 							<div class="row">
@@ -60,47 +69,47 @@
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="hidden-content">
-			<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 hp-column monster-hp-column hidden-content">
-				<div class="well monster-hp-panel">
-					<a class="close pull-right remove-monster-button" href="javascript:void(0)" onclick="mhp.view.removeMonster(this);" role="button">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-					</a>
-					<h5 class="text-center monster-title">
-						<span class="monster-name-title"></span>
-						<span class="monster-number-title">(1)</span>
-					</h5>
-					<div class="progress">
-						<div class="progress-bar progress-bar-info hp-bar" role="progressbar" style="width: 100%">
-							<span class="show hp-bar-text"></span>
+			<div class="hidden-content">
+				<div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 hp-column monster-hp-column hidden-content">
+					<div class="well monster-hp-panel">
+						<a class="close pull-right remove-monster-button" href="javascript:void(0)" onclick="mhp.view.removeMonster(this);" role="button">
+							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+						</a>
+						<h5 class="text-center monster-title">
+							<span class="monster-name-title"></span>
+							<span class="monster-number-title">(1)</span>
+						</h5>
+						<div class="progress">
+							<div class="progress-bar progress-bar-info hp-bar" role="progressbar" style="width: 100%">
+								<span class="show hp-bar-text"></span>
+							</div>
 						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 left-column">
-							<form role="form" class="form-inline remove-hp-form" action="javascript:void(0)">
-								<div class="form-group input-group">
-									<span class="input-group-btn">
-										<button class="btn btn-info hp-button" type="submit">
-											<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-										</button>
-									</span>
-									<input type="text" class="form-control hp-input dmg-input" placeholder="DMG" required pattern="[0-9]+"/>
-								</div>
-							</form>
-						</div>
-						<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 right-column">
-							<form role="form" class="form-inline add-hp-form" action="javascript:void(0)">
-								<div class="form-group input-group">
-									<input type="text" class="form-control hp-input heal-input" placeholder="Heal" required pattern="[0-9]+"/>
-									<span class="input-group-btn">
-										<button class="btn btn-info hp-button" type="submit">
-											<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-										</button>
-									</span>
-								</div>
-							</form>
+						<div class="row">
+							<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 left-column">
+								<form role="form" class="form-inline remove-hp-form" action="javascript:void(0)">
+									<div class="form-group input-group">
+										<span class="input-group-btn">
+											<button class="btn btn-info hp-button" type="submit">
+												<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+											</button>
+										</span>
+										<input type="text" class="form-control hp-input dmg-input" placeholder="DMG" pattern="[0-9]{0,5}"/>
+									</div>
+								</form>
+							</div>
+							<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 right-column">
+								<form role="form" class="form-inline add-hp-form" action="javascript:void(0)">
+									<div class="form-group input-group">
+										<input type="text" class="form-control hp-input heal-input" placeholder="Heal" pattern="[0-9]{0,5}"/>
+										<span class="input-group-btn">
+											<button class="btn btn-info hp-button" type="submit">
+												<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+											</button>
+										</span>
+									</div>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -112,6 +121,7 @@
 
 		<!-- Bootstrap -->
 		<script src="resources/bootstrap/js/bootstrap.min.js"></script>
+		<script src="resources/bootstrap_select/js/bootstrap-select.min.js"></script>
 
 		<!-- Validator -->
 		<script src="resources/validator/validator.min.js"></script>
