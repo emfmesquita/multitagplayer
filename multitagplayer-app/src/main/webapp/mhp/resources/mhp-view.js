@@ -1,18 +1,20 @@
 if(typeof mhp == 'undefined') mhp = {};
 (function() {
-	mhp.view = {
-		C : {
-			CURRENT_HP_ATTR : "currentHP",
-			MAX_HP_ATTR : "maxHP",
+	mhp = {
+		M : {
+			sequence : 0,
+			premades : {}, // lowerName como indice - name, hpExp 
+			monsters : {} // sequence como indice - id, name, hpExp, number, currentHP, maxHP
 		},
-		_premadeArray : [],
 		init : function(){
-			$('.add-monster-form').validator().on('submit', mhp.view._addMonsterSubmit);
+			$('.add-monster-form').validator().on('submit', mhp._addMonsterSubmit);
+			$('.add-premade-form').validator().on('submit', mhp._addPremadeSubmit);
 		},
 		// chamado ao clicar no botao de remover monstro
 		// remove o painel de monstro
 		removeMonster : function(removeButton){
 			var column = $(removeButton).closest(".monster-hp-column");
+			mhp._removeMonsterFromMemory(Number(column.attr("monster-id")));
 			column.fadeOut("slow", function(){ column.remove(); });
 		},
 		// chamado ao clicar no botao de remover todos
@@ -25,38 +27,60 @@ if(typeof mhp == 'undefined') mhp = {};
 			var selected = $('select.premade-select').val();
 			if(!selected) return;
 
-			var entry = mhp.view._premadeArray[selected.toLowerCase()];
-			mhp.view._addMonster(entry.name, entry.hpExp);
+			var entry = mhp.M.premades[selected.toLowerCase()];
+			var monster = {hpExp : entry.hpExp, name : entry.name};
+			mhp._addMonsterToMemory(monster);
+			mhp._addMonster(monster);
+		},
+		// remove um premade
+		removePremade : function(removeButton) {
+			var name = $(removeButton).closest("tr").find(".premade-name-cell").text();
+			name = name.trim();
+			name = name.toLowerCase();
+			delete mhp.M.premades[name];
+			mhp._updatePremades();
 		},
 		// chamado no submit de adicionar monstro
 		_addMonsterSubmit : function(submitEvent){
 			if(submitEvent.isDefaultPrevented()) return;
-			var hpExp = $(submitEvent.target).find(".max-hp-input").val();
-			var name = $(submitEvent.target).find(".name-input").val();	
-			mhp.view._addMonster(name, hpExp);
+			var monster = {
+				hpExp : $(submitEvent.target).find(".max-hp-input").val(),
+				name : $(submitEvent.target).find(".name-input").val()
+			};
+			mhp._addMonsterToMemory(monster);
+			mhp._addMonster(monster);
 		},
 		// metodo para adicionar um monstro novo
-		_addMonster : function(name, hpExp){
-			var maxHP = mhp.view._calcHP(hpExp);
-			if(maxHP < 1) maxHP = 1;
+		_addMonster : function(monster){
+			if(!monster.maxHP){
+				monster.maxHP = mhp._calcHP(monster.hpExp);
+				if(monster.maxHP < 1) monster.maxHP = 1;
+				monster.currentHP = monster.maxHP;
+			}
 
 			var row = $(".monster-row");
 			var monsterColumnClone = $(".hidden-content .monster-hp-column").first().clone();
-			monsterColumnClone.find('.remove-hp-form').validator().on('submit', mhp.view._removeHPSubmit);
-			monsterColumnClone.find('.add-hp-form').validator().on('submit', mhp.view._addHPSubmit);
+			monsterColumnClone.attr("monster-id", monster.id);
+			monsterColumnClone.find('.remove-hp-form').validator().on('submit', mhp._removeHPSubmit);
+			monsterColumnClone.find('.add-hp-form').validator().on('submit', mhp._addHPSubmit);
 
-			mhp.view._setHPValue(monsterColumnClone[0], maxHP, maxHP);
+			mhp._setHPValue(monsterColumnClone[0], monster);
 
-			var realName = name.trim();
-			var number = 1;
+			monster.name = monster.name.trim();
+			var localNumber = monster.number ? monster.number : 1;
 			var added = false;
 
-			var lowerName = realName.toLowerCase();
+			var lowerName = monster.name.toLowerCase();
 			$(".monster-row .monster-hp-column").each(function(index, column){
 				var testName = $(column).find(".monster-name-title").text().toLowerCase();
 				if(lowerName == testName){
-					var testNumber = mhp.view._getNumber(column);
-					number = testNumber + 1;
+					var testNumber = mhp._getNumber(column);
+					if(monster.number && localNumber < testNumber){
+						added = true;
+						$(column).before(monsterColumnClone);
+						return false;
+					}
+					else if(!monster.number) localNumber = testNumber + 1;
 				}
 				if(lowerName < testName){
 					added = true;
@@ -66,16 +90,31 @@ if(typeof mhp == 'undefined') mhp = {};
 			});
 			
 			if(!added) $(".monster-row").append(monsterColumnClone);
-			mhp.view._setName(monsterColumnClone[0], realName, number);
+			mhp._setName(monsterColumnClone[0], monster.name, localNumber);
+			monster.number = localNumber;
 			monsterColumnClone.fadeIn("slow");
+		},
+		// adicona monstro na memoria
+		_addMonsterToMemory : function(monster){
+			mhp.M.sequence++;
+			monster.id = mhp.M.sequence;
+			mhp.M.monsters[monster.id] = monster;
+		},
+		// remove monstro da memoria
+		_removeMonsterFromMemory : function(id){
+			delete mhp.M.monsters[id];
+		},
+		// encontra monstro da memoria
+		_findMonsterFromMemory : function(id){
+			return mhp.M.monsters[id];
 		},
 		// chamado no submit de reducao de hp
 		_removeHPSubmit : function(submitEvent){
-			mhp.view._innerHPSubmit(".dmg-input", mhp.view._damage, submitEvent);
+			mhp._innerHPSubmit(".dmg-input", mhp._damage, submitEvent);
 		},
 		// chamado no submit de adicionar hp
 		_addHPSubmit : function(submitEvent){
-			mhp.view._innerHPSubmit(".heal-input", mhp.view._heal, submitEvent);
+			mhp._innerHPSubmit(".heal-input", mhp._heal, submitEvent);
 		},
 		// metodo comum de adicionar e remover hp
 		_innerHPSubmit : function(inputClass, method, submitEvent){
@@ -95,8 +134,8 @@ if(typeof mhp == 'undefined') mhp = {};
 			var add = true;
 			for(var i=0; i < spaceLessExp.length; i++){
 				if(spaceLessExp[i] == '+' || spaceLessExp[i] == '-'){
-					if(add) hp += mhp.view._calcTokenHP(token);
-					else hp -= mhp.view._calcTokenHP(token);
+					if(add) hp += mhp._calcTokenHP(token);
+					else hp -= mhp._calcTokenHP(token);
 
 					add = spaceLessExp[i] == '+';
 					token = "";
@@ -104,8 +143,8 @@ if(typeof mhp == 'undefined') mhp = {};
 				}
 				token += spaceLessExp[i];
 			}
-			if(add) hp += mhp.view._calcTokenHP(token);
-			else hp -= mhp.view._calcTokenHP(token);
+			if(add) hp += mhp._calcTokenHP(token);
+			else hp -= mhp._calcTokenHP(token);
 
 			return hp;
 		},
@@ -129,34 +168,31 @@ if(typeof mhp == 'undefined') mhp = {};
 			return tokenValue;
 		},
 		// muda o hp de um monstro
-		_setHPValue : function(monsterColumn, currentValue, maxValue){
+		_setHPValue : function(monsterColumn, monster){
 			var hpBar = $(monsterColumn).find(".hp-bar");
-			if(currentValue < 0) currentValue = 0;
-			if(maxValue < 1) maxValue = 1;
-			if(currentValue > maxValue) currentValue = maxValue;
+			if(monster.currentHP < 0) monster.currentHP = 0;
+			if(monster.maxHP < 1) monster.maxHP = 1;
+			if(monster.currentHP > monster.maxHP) monster.currentHP = monster.maxHP;
 
-			hpBar.attr(mhp.view.C.MAX_HP_ATTR, maxValue);
-			hpBar.attr(mhp.view.C.CURRENT_HP_ATTR, currentValue);
-
-			var hpPercentage = (currentValue / maxValue) * 100 + "%";
+			var hpPercentage = (monster.currentHP / monster.maxHP) * 100 + "%";
 			hpBar.css("width", hpPercentage);
 
-			var hpText = currentValue + " / " + maxValue;
+			var hpText = monster.currentHP + " / " + monster.maxHP;
 			$(monsterColumn).find(".hp-bar-text").text(hpText);
 
-			if(currentValue == 0) $(monsterColumn).find(".monster-hp-panel").addClass("monster-dead");
+			if(monster.currentHP == 0) $(monsterColumn).find(".monster-hp-panel").addClass("monster-dead");
 			else $(monsterColumn).find(".monster-hp-panel").removeClass("monster-dead");
 		},
 		// dimunui o hp de um monstro
 		_damage : function(monsterColumn, damage){
-			var hpBar = $(monsterColumn).find(".hp-bar");
-			var maxHP = Number(hpBar.attr(mhp.view.C.MAX_HP_ATTR));
-			var currentHP = Number(hpBar.attr(mhp.view.C.CURRENT_HP_ATTR));
-			mhp.view._setHPValue(monsterColumn, currentHP - damage, maxHP);
+			var id = Number($(monsterColumn).attr("monster-id"));
+			var monster = mhp._findMonsterFromMemory(id);
+			monster.currentHP = monster.currentHP - damage;
+			mhp._setHPValue(monsterColumn, monster);
 		},
 		// aumenta o hp de um monstro
 		_heal : function(monsterColumn, heal){
-			mhp.view._damage(monsterColumn, -heal);
+			mhp._damage(monsterColumn, -heal);
 		},
 		// muda o nome de um monstro
 		_setName : function(monsterColumn, name, number){
@@ -169,29 +205,55 @@ if(typeof mhp == 'undefined') mhp = {};
 			text = text.substring(1, text.length - 1);
 			return Number(text);
 		},
-		_addPremadeToSelect : function(name, hpExp){
+		// chamado pelo botao de submit do form que adiciona um premade
+		_addPremadeSubmit : function(submitEvent){
+			if(submitEvent.isDefaultPrevented()) return;
+			var hpExp = $(submitEvent.target).find(".max-hp-input").val();
+			var name = $(submitEvent.target).find(".name-input").val();	
+			mhp._addPremade(name, hpExp);
+		},
+		// adiciona um premade
+		_addPremade : function(name, hpExp){
 			var spaceLessExp = hpExp.replace(/\s/g, '');
 
 			var realName = name.trim();
 			var lowerName = realName.toLowerCase();
-			var existingEntry = mhp.view._premadeArray[lowerName];
+			var existingEntry = mhp.M.premades[lowerName];
 			if(existingEntry) existingEntry.hpExp = spaceLessExp;
 			else{
-				mhp.view._premadeArray[lowerName] = {
+				mhp.M.premades[lowerName] = {
 					name : realName,
 					hpExp : spaceLessExp
 				}
 			}
-			mhp.view._updatePremadeSelect();
+			mhp._updatePremades();
 		},
-		_updatePremadeSelect : function(){
+		// atualiza a lista de premades no select e na tabela
+		_updatePremades : function(){
 			var premadeSelect = $("select.premade-select");
 			premadeSelect.empty();
 
-			var keys = Object.keys(mhp.view._premadeArray).sort();
+			var premadeTableBody = $(".premade-table tbody");
+			$(".premade-table .premade-row").remove();
+
+			var keys = Object.keys(mhp.M.premades).sort();
 			$(keys).each(function(index, key){
-				var entry = mhp.view._premadeArray[key];
+				var entry = mhp.M.premades[key];
 				premadeSelect.append("<option data-subtext='" + entry.hpExp + "'>" + entry.name + "</option>");
+
+				var newRow = "<tr class='row premade-row'>";
+				newRow += "<td class='premade-name-cell'>" + entry.name + "</td>";
+				newRow += "<td>" + entry.hpExp + "</td>";
+				
+				newRow += '<td>';
+				newRow += '    <button type="button" class="close center-block remove-premade-button" aria-label="Close" onclick="mhp.removePremade(this)">';
+				newRow += '        <span aria-hidden="true">&times;</span>';
+				newRow += '    </button>';
+				newRow += '</td>';
+				
+				newRow += "</tr>";
+			
+				premadeTableBody.append(newRow);
 			});
 			premadeSelect.selectpicker('refresh');
 		}

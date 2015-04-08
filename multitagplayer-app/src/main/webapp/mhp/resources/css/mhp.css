@@ -95,3 +95,7 @@ form {
 	padding-right: 2px;
 	height: 34px;
 }
+
+.remove-premade-button {
+	float: none !important;
+}
