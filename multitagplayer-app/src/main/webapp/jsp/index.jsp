@@ -258,7 +258,9 @@
 			</div>
 		</div>
 
-		<div id="hiddenArea" style="display:none"></div>
+		<div id="hiddenArea" style="display:none">
+			<div id="access_token">${access_token}</div>
+		</div>
 
 		<!-- jQuery -->
 		<script src="resources/jquery.min.js"></script>

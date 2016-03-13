@@ -6,7 +6,7 @@ if(typeof mtp == 'undefined') mtp = {};
 		clientId : '1005266131738-tdv38pudoj50a5jgmbr6khoo3f9fj6pv.apps.googleusercontent.com', // heroko
 		clientIdLocal : '1005266131738-3hcds8n24ubv16rmls7vlktd9q1hjj98.apps.googleusercontent.com', // local
 		// Scope to use to access user's files.
-		scopes : ['https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive.readonly.metadata'].join(' '),
+		scopes : ['email', 'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive.readonly.metadata'].join(' '),
 		oauthToken : null,
 		_pickerApiLoaded : false,
 		_clientAPILoaded : false,
@@ -36,14 +36,8 @@ if(typeof mtp == 'undefined') mtp = {};
 			mtp.gapi._auth();
 		},
 		_auth : function(){
-			var params = {};
-			var queryString = location.hash.substring(1);
-			var regex = /([^&=]+)=([^&]*)/g;
-			var m;
-			while (m = regex.exec(queryString)) {
-				params[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
-			}
-			mtp.gapi.oauthToken = params['access_token'];
+			var token = $("#access_token").text();
+			if("" !== token) mtp.gapi.oauthToken = token;
 
 			if(!mtp.gapi.oauthToken){
 				window.location.href = mtp.gapi._getAuthURL();
@@ -65,9 +59,9 @@ if(typeof mtp == 'undefined') mtp = {};
 			}
 			var redirect = encodeURIComponent(protocol + '//' + location.host + location.pathname);
 
-			return "https://accounts.google.com/o/oauth2/auth?"
+			return "https://accounts.google.com/o/oauth2/v2/auth?"
 					+ "redirect_uri=" + redirect
-					+ "&response_type=token"
+					+ "&response_type=code"
 					+ "&client_id=" + encodeURIComponent(rightId)
 					+ "&scope=" + encodeURIComponent(mtp.gapi.scopes);
 		},
