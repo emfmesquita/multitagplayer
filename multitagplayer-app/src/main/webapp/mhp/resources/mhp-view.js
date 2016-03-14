@@ -27,10 +27,11 @@ if(typeof mhp == 'undefined') mhp = {};
 			var selected = $('select.premade-select').val();
 			if(!selected) return;
 
-			var entry = mhp.M.premades[selected.toLowerCase()];
-			var monster = {hpExp : entry.hpExp, name : entry.name};
+			var monsterNameLower = selected.toLowerCase();
+			var entry = mhp.M.premades[monsterNameLower];
+			var monster = {hpExp: entry.hpExp, name: entry.name, stats: entry.stats};
 			mhp._addMonsterToMemory(monster);
-			mhp._addMonster(monster);
+			mhp._addMonster(monster, monsterNameLower);
 		},
 		// remove um premade
 		removePremade : function(removeButton) {
@@ -43,15 +44,23 @@ if(typeof mhp == 'undefined') mhp = {};
 		// chamado no submit de adicionar monstro
 		_addMonsterSubmit : function(submitEvent){
 			if(submitEvent.isDefaultPrevented()) return;
+
 			var monster = {
 				hpExp : $(submitEvent.target).find(".max-hp-input").val(),
 				name : $(submitEvent.target).find(".name-input").val()
 			};
+
+			var monsterNameLower = monster.name.toLowerCase();
+			var entry = mhp.M.premades[monsterNameLower];
+			if(entry){
+				monster.stats = entry.stats;
+			}
+			
 			mhp._addMonsterToMemory(monster);
-			mhp._addMonster(monster);
+			mhp._addMonster(monster, monsterNameLower);
 		},
 		// metodo para adicionar um monstro novo
-		_addMonster : function(monster){
+		_addMonster : function(monster, monsterNameLower){
 			if(!monster.maxHP){
 				monster.maxHP = mhp._calcHP(monster.hpExp);
 				if(monster.maxHP < 1) monster.maxHP = 1;
@@ -63,6 +72,15 @@ if(typeof mhp == 'undefined') mhp = {};
 			monsterColumnClone.attr("monster-id", monster.id);
 			monsterColumnClone.find('.remove-hp-form').validator().on('submit', mhp._removeHPSubmit);
 			monsterColumnClone.find('.add-hp-form').validator().on('submit', mhp._addHPSubmit);
+
+			if(monster.stats){
+				var showStatsButton = monsterColumnClone.find(".monster-stats-button");
+				monsterColumnClone.find(".monster-stats-button").removeClass("hidden");
+			}
+
+			if(monsterNameLower){
+				monsterColumnClone.attr("monster-name-lower", monsterNameLower);
+			}
 
 			mhp._setHPValue(monsterColumnClone[0], monster);
 

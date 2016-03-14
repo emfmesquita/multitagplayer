@@ -9,6 +9,14 @@
 		<link href="resources/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="resources/bootstrap_select/css/bootstrap-select.min.css" rel="stylesheet" />
 
+		<!-- 5e Stat Block -->
+		<link rel="import" href="resources/statblock5e/top-stats.html">
+	    <link rel="import" href="resources/statblock5e/creature-heading.html">
+	    <link rel="import" href="resources/statblock5e/abilities-block.html">
+	    <link rel="import" href="resources/statblock5e/property-block.html">
+	    <link rel="import" href="resources/statblock5e/property-line.html">
+	    <link rel="import" href="resources/statblock5e/stat-block.html">
+
 		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 		<!--[if lt IE 9]>
@@ -62,6 +70,39 @@
 				</div>
 			</div>
 		</div>
+		
+		<div id="premade-xml-modal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">Premades XML Config</h4>
+					</div>
+					<div class="modal-body">
+						<form role="form" class="add-premade-xml-form">
+							<textarea class="form-control" rows="18" id="premadeXmlArea"></textarea>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" onclick="mhp_stats.updatePremadesXml()">Add Premades</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="stat-block-modal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div id="stat-block-container">
+						<stat-block>
+						</stat-block>
+					</div>
+				</div>
+			</div>
+		</div>
 
 		<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 			<div class="container-fluid">
@@ -72,6 +113,7 @@
 						</a>
 						<ul class="dropdown-menu" role="menu">
 							<li><a href="javascript:void(0);" data-toggle="modal" data-target="#premade-modal">Premades Config</a></li>
+							<li><a href="javascript:void(0);" data-toggle="modal" data-target="#premade-xml-modal">Premades XML Config</a></li>
 							<li class="divider"></li>
 							<li><a href="javascript:void(0);" onclick="mhp.removeAll();">Remove All</a></li>
 						</ul>
@@ -119,6 +161,9 @@
 					<div class="well monster-hp-panel">
 						<a class="close pull-right remove-monster-button" href="javascript:void(0)" onclick="mhp.removeMonster(this);" role="button">
 							<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+						</a>
+						<a class="pull-left monster-stats-button hidden" href="javascript:void(0)" onclick="mhp_stats.showMonsterStats(this);" role="button">
+							<span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
 						</a>
 						<h5 class="text-center monster-title">
 							<span class="monster-name-title"></span>
@@ -171,5 +216,6 @@
 		<script src="resources/validator/validator.min.js"></script>
 
 		<script src="resources/mhp-view.js"></script>
+		<script src="resources/mhp-stats.js"></script>
 	</body>
 </html>

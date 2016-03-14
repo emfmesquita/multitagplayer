@@ -99,3 +99,11 @@ form {
 .remove-premade-button {
 	float: none !important;
 }
+
+#stat-block-modal .modal-dialog {
+	width: 420px;
+}
+
+#stat-block-container * {
+	line-height:normal;
+}
