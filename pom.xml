@@ -15,11 +15,8 @@
 
 	<!-- Properties =========================================== -->
 	<properties>
-		<apache.commons-io.version>2.4</apache.commons-io.version>
-		<apache.httpclient.version>4.5.1</apache.httpclient.version>
 		<eclipse.jpa.version>2.5.1</eclipse.jpa.version>
 		<hsqldb.version>2.3.2</hsqldb.version>
-		<json.version>20151123</json.version>
 		<jsp.version>2.2.1</jsp.version>
 		<jstl.version>1.2</jstl.version>
 		<junit.version>4.11</junit.version>
@@ -28,6 +25,7 @@
 		<servlet.version>3.0.1</servlet.version>
 		<spring.version>4.0.5.RELEASE</spring.version>
 		<tomcat.version>7.0.53</tomcat.version>
+		<vraptor.version>4.0.0.Final</vraptor.version>
 	</properties>
 
 	<!-- Dependency Management ================================ -->
@@ -134,23 +132,6 @@
 				<groupId>org.apache.tomcat</groupId>
 				<artifactId>tomcat-jsp-api</artifactId>
 				<version>${tomcat.version}</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.apache.httpcomponents</groupId>
-				<artifactId>httpclient</artifactId>
-				<version>${apache.httpclient.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-io</groupId>
-				<artifactId>commons-io</artifactId>
-				<version>${apache.commons-io.version}</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.json</groupId>
-				<artifactId>json</artifactId>
-				<version>${json.version}</version>
 			</dependency>
 		
 			<!-- Test -->
