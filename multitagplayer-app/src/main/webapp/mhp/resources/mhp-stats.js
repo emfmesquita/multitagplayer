@@ -43,23 +43,27 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			"H": "Huge",
 			"G": "Gargantuan"
 		},
+		premadeXmlFile : null,
 		// chamado pelo botao de submit do form que adiciona um premade xml
 		updatePremadesXml : function(){
-			var xmlArea = $("#premadeXmlArea");
-			var xmlText = xmlArea.val();
-			if(!xmlText){
-				return;
-			}
+			if(!mhp_stats.premadeXmlFile) return;
+			
+			var reader = new FileReader();
 
-			var premadesDoc = $.parseXML(xmlText);
-			$("monster", premadesDoc).each(mhp_stats._parseCreature);
-			mhp._updatePremades();
-			xmlArea.val(null);
-			$('#premade-xml-modal').modal('hide');
+			reader.onload = (function() {
+				return function(e) {
+					var premadesDoc = $.parseXML(e.target.result);
+					$("monster", premadesDoc).each(mhp_stats._parseCreature);
+					mhp._updatePremades();
+					$("#premadeXmlFileInput").val(null);
+					$('#premade-xml-modal').modal('hide');
+				};
+			})(mhp_stats.premadeXmlFile);			
+			reader.readAsText(mhp_stats.premadeXmlFile);			
 		},
 		// chamado pelo botao de stats de cada criatura
 		showMonsterStats : function(button){
-			var monsterNameLower = button.closest(".hp-column").attributes["monster-name-lower"].value;
+			var monsterNameLower = $(button).closest(".hp-column").attr("monster-name-lower");
 			if(!monsterNameLower){
 				return;
 			}
@@ -214,4 +218,10 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			return abilitiesBlock;
 		}
 	}
+	
+
+	$("#premadeXmlFileInput").on("change", function(event) {
+		var files = event.target.files;
+		mhp_stats.premadeXmlFile = files.length == 0 ? null : files[0];
+	});
 } ());
