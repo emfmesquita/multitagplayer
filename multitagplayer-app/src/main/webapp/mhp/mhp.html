@@ -83,10 +83,17 @@
 					<div class="modal-body">
 						<form role="form" class="add-premade-xml-form">
 							<input type="file" id="premadeXmlFileInput"/>
+							
+							<div class="progress">
+								<div id="add-premade-xml-progress" class="progress-bar progress-bar-info" role="progressbar" style="width: 0%;">
+								</div>
+							</div>
 						</form>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-info" onclick="mhp_stats.updatePremadesXml()">Add Premades</button>
+						<button id="add-premade-xml-button" type="button" class="btn btn-info" onclick="mhp_stats.updatePremadesXml()">
+							<span class="hidden glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Add Premades
+						</button>
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 					</div>
 				</div>

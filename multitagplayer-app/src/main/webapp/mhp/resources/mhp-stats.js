@@ -43,6 +43,9 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			"H": "Huge",
 			"G": "Gargantuan"
 		},
+		_grimoireErrorMap : {
+			"detect-poison-and-disease" : "detect-poison-or-disease"
+		},
 		premadeXmlFile : null,
 		// chamado pelo botao de submit do form que adiciona um premade xml
 		updatePremadesXml : function(){
@@ -51,13 +54,7 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			var reader = new FileReader();
 
 			reader.onload = (function() {
-				return function(e) {
-					var premadesDoc = $.parseXML(e.target.result);
-					$("monster", premadesDoc).each(mhp_stats._parseCreature);
-					mhp._updatePremades();
-					$("#premadeXmlFileInput").val(null);
-					$('#premade-xml-modal').modal('hide');
-				};
+				return mhp_stats._onPremateXmlFileLoad;
 			})(mhp_stats.premadeXmlFile);			
 			reader.readAsText(mhp_stats.premadeXmlFile);			
 		},
@@ -76,10 +73,39 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			mhp_stats._updateStatsModal(creature.stats);
 			$("#stat-block-modal").modal("show");
 		},
+		_onPremateXmlFileLoad : function(event){
+			var premadesDoc = $.parseXML(event.target.result);
+			$("#add-premade-xml-button span").removeClass("hidden");
+			mhp.disableFormButtons();
+			
+			var creatureXmls = $("monster", premadesDoc).toArray();
+			var totalCount = creatureXmls.length;
+			var progress = $("#add-premade-xml-progress");
+			var process = function(){				
+				var percent = Math.floor(((totalCount - creatureXmls.length)/totalCount) * 100) + "%";
+				progress.css("width", percent);
+				
+				if(creatureXmls.length == 0){
+					setTimeout(mhp_stats._resetAddPremadeXmlModal, 500);
+					return;
+				}
+				mhp_stats._parseCreature(creatureXmls.shift());
+				setTimeout(process, 5);
+			}
+			process();
+		},
+		_resetAddPremadeXmlModal : function(){
+			$("#add-premade-xml-button span").addClass("hidden");
+			$("#premadeXmlFileInput").val(null);
+			$('#premade-xml-modal').modal('hide');
+			$("#add-premade-xml-progress").css("width", "0%");
+			mhp.enableFormButtons();				
+			mhp._updatePremades();
+		},
 		_getXmlText : function(cssExpression, xmlEl){
 			return $(cssExpression, xmlEl).text().trim();
 		},
-		_parseCreature : function(index, creatureXml){
+		_parseCreature : function(creatureXml){
 			var creature = {};
 			creature.name = mhp_stats._getXmlText("monster>name", creatureXml);
 			creature.size = mhp_stats._toSize[mhp_stats._getXmlText("monster>size", creatureXml)];
@@ -127,6 +153,14 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 				creature.cr = creature.cr + " (0 XP)";
 			} else{
 				creature.cr = creature.cr + " (" + mhp_stats._crToXp[creature.cr] + " XP)";
+			}
+			
+			var spells = mhp_stats._getXmlText("monster>spells", creatureXml);
+			if(spells){
+				creature.spells = [];
+				spells.split(",").forEach(function(spell){
+					creature.spells.push(spell.trim());
+				});
 			}
 
 			var spaceLessExp = hpExp.replace(/\s/g, '');
@@ -180,7 +214,7 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			mhp_stats._appendPropertyLine(top, "Challenge", stats.cr);
 			statBlock.append(top);
 
-			mhp_stats._appendTraits(statBlock, stats, "trait");
+			mhp_stats._appendTraits(statBlock, stats, "trait", null, stats.spells);
 			mhp_stats._appendTraits(statBlock, stats, "action", "Actions");
 			mhp_stats._appendTraits(statBlock, stats, "reaction", "Reactions");
 			mhp_stats._appendTraits(statBlock, stats, "legendary", "Legendary Actions");
@@ -188,23 +222,51 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 		_appendPropertyLine : function(node, key, value){
 			mhp_stats._appendProperty(node, key, value, "property-line");
 		},
-		_appendPropertyBlock : function(node, trait){
-			mhp_stats._appendProperty(node, trait.name, trait.text, "property-block");
+		_appendPropertyBlock : function(node, trait, spells){
+			mhp_stats._appendProperty(node, trait.name, trait.text, "property-block", spells);
 		},
-		_appendProperty : function(node, key, value, tag){
+		_appendProperty : function(node, key, value, tag, spells){
 			if(!value || value === "") return;
+			
+			value = mhp_stats._formatSpells(key, value, spells);
+						
 			var prop = $($.parseHTML("<" + tag + "></" + tag + ">"));
 			prop.append("<h4>" + key + "</h4>");
 			prop.append("<p> " + value + "</p>");
 			node.append(prop);
 		},
-		_appendTraits : function(node, stats, traitName, header){
+		_formatSpells : function(key, value, spells){
+			var newValue = value;
+			if(!spells || !value || spells.length == 0) return newValue;
+			if(key.search(/spellcasting/i) == -1) return newValue;
+			
+			spells.forEach(function(spell){
+				var regex = new RegExp("([^ \w][ ]*" + spell +"[ ]*[^ \w])|([^ \w][ ]*" + spell + "[ ]*$)", "i");
+				var regexIndex = newValue.search(regex);
+				if(regexIndex == -1) return;
+				var index = 0;
+				while(index < regexIndex || index == -1){
+					index = newValue.indexOf(spell, index == 0 ? 0 : index + 1);
+				}
+				if(index == -1) return;
+				
+				var init = newValue.substring(0, index);
+				var end = newValue.substring(index + spell.length, newValue.length);
+				var dashSpell = spell.toLowerCase().replace(/ /g, "-");
+				dashSpell = dashSpell.replace(/[^-\w]/g, "");
+				dashSpell = mhp_stats._grimoireErrorMap[dashSpell] || dashSpell;
+				var anchor = '<a href="http://ephe.github.io/grimoire/spells/' + dashSpell + '" target="_blank">' + spell + '</a>'; 
+				newValue = init + anchor + end;
+			});
+			return newValue;
+		},
+		_appendTraits : function(node, stats, traitName, header, spells){
 			if(stats[traitName].length == 0) return;
 			if(header){
 				node.append("<h3>" + header + "</h3>");
 			}
 			stats[traitName].forEach(function(trait){
-				mhp_stats._appendPropertyBlock(node, trait);
+				mhp_stats._appendPropertyBlock(node, trait, spells);
 			});
 		},
 		_buildAbilityScores : function(stats){

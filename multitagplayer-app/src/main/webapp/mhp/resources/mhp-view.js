@@ -41,6 +41,12 @@ if(typeof mhp == 'undefined') mhp = {};
 			delete mhp.M.premades[name];
 			mhp._updatePremades();
 		},
+		disableFormButtons : function(){
+			$("button.btn").prop("disabled", true);
+		},
+		enableFormButtons : function(){
+			$("button.btn").prop("disabled", false);
+		},
 		// chamado no submit de adicionar monstro
 		_addMonsterSubmit : function(submitEvent){
 			if(submitEvent.isDefaultPrevented()) return;
