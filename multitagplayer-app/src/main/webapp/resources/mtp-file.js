@@ -11,7 +11,8 @@ if(typeof mtp == 'undefined') mtp = {};
 		loadedFileName : null,
 		// o id do gdrive do arquivo de config carregado atualmente
 		loadedFileID : null,
-		_fileAPILoaded : false,
+		_fileAPILoaded : false,		
+		_nextMusicRequest : 0,
 		init : function(){
 			if(mtp.file._fileAPILoaded){
 				mtp.view.endLoading();
@@ -212,6 +213,20 @@ if(typeof mtp == 'undefined') mtp = {};
 				fileId: id
 			});
 
+			var now = new Date().getTime();
+			if(now > mtp.file._nextMusicRequest){
+				mtp.file._nextMusicRequest = now + 100;
+				mtp.file._makeMusicRequest(music, request, callback);
+			}
+			else{
+				var delta = mtp.file._nextMusicRequest - now;
+				mtp.file._nextMusicRequest = mtp.file._nextMusicRequest + 100;
+				setTimeout(function(){
+					mtp.file._makeMusicRequest(music, request, callback);
+				}, delta);
+			}
+		},
+		_makeMusicRequest : function(music, request, callback){
 			request.execute(function(file){
 				music.name = file.title;
 				music.link = file.webContentLink;
@@ -480,4 +495,3 @@ if(typeof mtp == 'undefined') mtp = {};
 		}
 	}
 } ());
-
