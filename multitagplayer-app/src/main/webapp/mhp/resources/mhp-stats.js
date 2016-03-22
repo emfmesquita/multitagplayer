@@ -73,6 +73,35 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			mhp_stats._updateStatsModal(creature.stats);
 			$("#stat-block-modal").modal("show");
 		},
+		attackRoll : function(element, attackRoll, damageRoll){
+			var el = $(element);
+			
+			var hasAR = attackRoll !== "undefined" && attackRoll !== "";
+			var hasDR = damageRoll !== "undefined" && damageRoll !== ""
+			
+			var content = "";
+			if(hasAR){
+				content += "<b>Attack Roll: </b>";
+				content += mhp._calcHP(attackRoll);
+			}
+			
+			if(hasAR && hasDR){
+				content += "&nbsp;&nbsp;"
+			}
+			
+			if(hasDR){
+				content += "<b>Damage Roll: </b>";
+				content += mhp._calcHP(damageRoll);
+			}
+			
+			if(content === ""){
+				return;
+			}
+			
+			var popOverEl = el.closest('[data-toggle="popover"]');
+			popOverEl.attr("data-content", content);
+			popOverEl.popover("show");
+		},
 		_onPremateXmlFileLoad : function(event){
 			var premadesDoc = $.parseXML(event.target.result);
 			$("#add-premade-xml-button span").removeClass("hidden");
@@ -184,10 +213,33 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			$(traitName + ">text", node).each(function(textIndex, textNode){
 				stat.text = stat.text + textNode.textContent.trim() + "<br/>";
 			});
+			
+			stat.attacks = [];
+			$(traitName + ">attack", node).each(function(attackIndex, attackNode){
+				mhp_stats._parseAttack(attackNode, stat.attacks);
+			});			
+			
 			if(stat.text.length > 0){
 				stat.text = stat.text.substring(0, stat.text.length - 5);
 			}
 			creature[traitName].push(stat);
+		},
+		_parseAttack : function(attackNode, attacksArray){
+			var attack = {};
+			var tokens = attackNode.textContent.trim().split("|");
+			attack.name = tokens[0];
+			
+			var bonus = tokens[1];
+			if(bonus && bonus !== ""){
+				attack.attackRoll = "1d20";
+				if(!bonus.startsWith("+") && !bonus.startsWith("-")){
+					attack.attackRoll += "+";
+				}				
+				attack.attackRoll += bonus;
+			}
+			
+			attack.damageRoll = tokens[2];
+			attacksArray.push(attack);
 		},
 		_updateStatsModal : function(stats){
 			var statBlock = $("#stat-block-modal stat-block");
@@ -218,22 +270,55 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			mhp_stats._appendTraits(statBlock, stats, "action", "Actions");
 			mhp_stats._appendTraits(statBlock, stats, "reaction", "Reactions");
 			mhp_stats._appendTraits(statBlock, stats, "legendary", "Legendary Actions");
+			
+			$('[data-toggle="popover"]').popover({
+				placement : "left",
+				trigger : "manual",
+				html : true
+			});
 		},
 		_appendPropertyLine : function(node, key, value){
 			mhp_stats._appendProperty(node, key, value, "property-line");
 		},
 		_appendPropertyBlock : function(node, trait, spells){
-			mhp_stats._appendProperty(node, trait.name, trait.text, "property-block", spells);
+			mhp_stats._appendProperty(node, trait.name, trait.text, "property-block", trait.attacks, spells);
 		},
-		_appendProperty : function(node, key, value, tag, spells){
+		_appendProperty : function(node, key, value, tag, attacks, spells){
 			if(!value || value === "") return;
 			
 			value = mhp_stats._formatSpells(key, value, spells);
 						
 			var prop = $($.parseHTML("<" + tag + "></" + tag + ">"));
-			prop.append("<h4>" + key + "</h4>");
+			prop.append(mhp_stats._formatPropertyHeader(key, attacks));
 			prop.append("<p> " + value + "</p>");
 			node.append(prop);
+		},
+		_formatPropertyHeader : function(key, attacks){			
+			if(!attacks || attacks.length == 0) return "<h4>" + key + "</h4>";
+			
+			var header = '<h4 data-toggle="popover" data-content="empty">';
+			if(attacks.length == 1){
+				header += mhp_stats._formatAttack(key, attacks[0]);
+			}
+			else{
+				header += key;
+				header += "(";
+				attacks.forEach(function(attack, index){
+					if(index >= 1) header += ", ";
+					header += mhp_stats._formatAttack(attack.name, attack);
+				});
+				header += ")";
+			}
+			
+			header += "</h4>";
+			return header;
+		},
+		_formatAttack : function(name, attack){
+			var attackText = '<a href="#" ';
+			attackText += 'onclick="mhp_stats.attackRoll(this, \'' + attack.attackRoll + '\', \'' + attack.damageRoll + '\');">';
+			attackText += name;
+			attackText += "</a>";
+			return attackText;
 		},
 		_formatSpells : function(key, value, spells){
 			var newValue = value;
