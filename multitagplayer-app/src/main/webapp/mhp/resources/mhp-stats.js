@@ -46,6 +46,7 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 		_grimoireErrorMap : {
 			"detect-poison-and-disease" : "detect-poison-or-disease"
 		},
+		_attackPopoverTemplateCache : null,
 		premadeXmlFile : null,
 		// chamado pelo botao de submit do form que adiciona um premade xml
 		updatePremadesXml : function(){
@@ -73,7 +74,7 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			mhp_stats._updateStatsModal(creature.stats);
 			$("#stat-block-modal").modal("show");
 		},
-		attackRoll : function(element, attackRoll, damageRoll){
+		attackRoll : function(element, name, attackRoll, damageRoll){
 			var el = $(element);
 			
 			var hasAR = attackRoll !== "undefined" && attackRoll !== "";
@@ -81,12 +82,19 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			
 			var content = "";
 			if(hasAR){
+				var ar1 = mhp._calcHP(attackRoll);
+				var ar2 = mhp._calcHP(attackRoll);				
 				content += "<b>Attack Roll: </b>";
-				content += mhp._calcHP(attackRoll);
+				content += ar1;				
+				content += ", ";
+				content += ar1 > ar2 ? ar1 : ar2;
+				content += "(Adv), ";
+				content += ar1 > ar2 ? ar2 : ar1;
+				content += "(Dis)";
 			}
 			
 			if(hasAR && hasDR){
-				content += "&nbsp;&nbsp;"
+				content += "<br/>"
 			}
 			
 			if(hasDR){
@@ -98,9 +106,45 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 				return;
 			}
 			
-			var popOverEl = el.closest('[data-toggle="popover"]');
-			popOverEl.attr("data-content", content);
-			popOverEl.popover("show");
+			var popoverEl = el.closest('[data-toggle="popover"]');
+			popoverEl.popover("destroy");
+			setTimeout(function(){
+				$(".popover").css("z-index", 1060);
+				popoverEl.attr("data-content", content);
+				popoverEl.attr("title", name);
+				popoverEl.popover({
+					placement : "left",
+					trigger : "manual",
+					html : true,
+					title : name,
+					template : mhp_stats._attackPopoverTemplate()
+				});				
+				setTimeout(function(){
+					var popoverId = popoverEl.attr("aria-describedby");
+					$("#" + popoverId).css("z-index", 1061);
+				}, 0);				
+				popoverEl.popover("show");
+			}, 200);
+		},
+		closeAttackPopover : function(element){
+			var popoverDiv = $(element).closest(".popover");
+			var popoverId = popoverDiv.attr("id");
+			$("[aria-describedby='" + popoverId + "']").popover("hide");
+		},
+		_focusAttackPopover : function(popoverDiv){
+			$(".popover").css("z-index", 1060);
+			$(popoverDiv).css("z-index", 1061);
+		},
+		_attackPopoverTemplate : function(){
+			if(mhp_stats._attackPopoverTemplateCache) return mhp_stats._attackPopoverTemplateCache;
+			var template = '<div class="popover" role="tooltip" onclick="mhp_stats._focusAttackPopover(this);"><div class="arrow"></div>';
+			template += '<a class="close pull-right close-attack-button" href="javascript:void(0)" onclick="mhp_stats.closeAttackPopover(this);" role="button">';
+			template += '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>';
+			template += '</a>';
+			template += '<h3 class="popover-title"></h3>';
+			template += '<div class="popover-content"></div></div>';
+			mhp_stats._attackPopoverTemplateCache = template;
+			return mhp_stats._attackPopoverTemplateCache;
 		},
 		_onPremateXmlFileLoad : function(event){
 			var premadesDoc = $.parseXML(event.target.result);
@@ -270,12 +314,6 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 			mhp_stats._appendTraits(statBlock, stats, "action", "Actions");
 			mhp_stats._appendTraits(statBlock, stats, "reaction", "Reactions");
 			mhp_stats._appendTraits(statBlock, stats, "legendary", "Legendary Actions");
-			
-			$('[data-toggle="popover"]').popover({
-				placement : "left",
-				trigger : "manual",
-				html : true
-			});
 		},
 		_appendPropertyLine : function(node, key, value){
 			mhp_stats._appendProperty(node, key, value, "property-line");
@@ -296,7 +334,7 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 		_formatPropertyHeader : function(key, attacks){			
 			if(!attacks || attacks.length == 0) return "<h4>" + key + "</h4>";
 			
-			var header = '<h4 data-toggle="popover" data-content="empty">';
+			var header = '<h4 data-toggle="popover" data-content="empty" title="empty">';
 			if(attacks.length == 1){
 				header += mhp_stats._formatAttack(key, attacks[0]);
 			}
@@ -315,7 +353,7 @@ if(typeof mhp_stats == 'undefined') mhp_stats = {};
 		},
 		_formatAttack : function(name, attack){
 			var attackText = '<a href="#" ';
-			attackText += 'onclick="mhp_stats.attackRoll(this, \'' + attack.attackRoll + '\', \'' + attack.damageRoll + '\');">';
+			attackText += 'onclick="mhp_stats.attackRoll(this, \'' + attack.name + '\', \'' + attack.attackRoll + '\', \'' + attack.damageRoll + '\');">';
 			attackText += name;
 			attackText += "</a>";
 			return attackText;
