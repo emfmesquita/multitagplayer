@@ -2,9 +2,9 @@ if(typeof mtp == 'undefined') mtp = {};
 (function() {
 	mtp.gapi = {
 		// The API developer key obtained from the Google Developers Console.
-		developerKey : 'AIzaSyB4OD8l3nKAOUlYX6mz8sisQTFKxLJfr0U',
+		developerKey : 'AIzaSyBdGhwHGGPjudzKOiIlbbWuOsatbYDsOBc',
 		clientId : '1005266131738-tdv38pudoj50a5jgmbr6khoo3f9fj6pv.apps.googleusercontent.com', // heroko
-		clientIdLocal : '1005266131738-3hcds8n24ubv16rmls7vlktd9q1hjj98.apps.googleusercontent.com', // local
+		clientIdLocal : '1005266131738-ila30a9vn0camq1k1v2mlvpagn2do5lf.apps.googleusercontent.com', // local
 		// Scope to use to access user's files.
 		scopes : ['https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive.readonly.metadata'].join(' '),
 		oauthToken : null,

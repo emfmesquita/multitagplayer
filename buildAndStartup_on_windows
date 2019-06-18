@@ -1,0 +1,7 @@
+# run each line at project root in powershell
+
+$env:DATABASE_URL = "postgres://multitagplayer:multitagplayer@localhost:5432/multitagplayer"
+
+mvn clean install -D maven.test.skip=true -P debug,embedded
+
+.\multitagplayer-app\target\bin\webapp.bat
