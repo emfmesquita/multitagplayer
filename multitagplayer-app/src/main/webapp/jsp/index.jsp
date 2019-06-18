@@ -69,7 +69,7 @@
 					<span class="glyphicon glyphicon-floppy-disk"></span> Save Changes
 				</button>
 				<button id="addMusicButton" type="button" class="btn btn-default navbar-btn navbar-right" style="margin-left:15px;" onclick="mtp.picker.openMusicPicker()" disabled="true">
-					<span class="glyphicon glyphicon-music"></span>	Add music
+					<span class="glyphicon glyphicon-music"></span>	Add song
 				</button>
 				<!-- <div class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
@@ -145,7 +145,7 @@
 					<div class="modal-content">
 					  	<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-							<h4 class="modal-title" id="loopRangeModalLabel">Music Loop Range</h4>
+							<h4 class="modal-title" id="loopRangeModalLabel">Song Loop Range</h4>
 						</div>
 						<div class="modal-body">
 							<input class="musicId" type="hidden" />
@@ -223,11 +223,11 @@
 									</tr>
 									<tr class="row">
 										<td class="col-xs-4">t</td>
-										<td class="col-xs-8">Add tags to music</td>
+										<td class="col-xs-8">Add tags to song</td>
 									</tr>
 									<tr class="row">
 										<td class="col-xs-4">r</td>
-										<td class="col-xs-8">Change the loop range of a music</td>
+										<td class="col-xs-8">Change the loop range of a song</td>
 									</tr>
 									<tr class="row">
 										<td class="col-xs-4">s</td>
@@ -235,7 +235,7 @@
 									</tr>
 									<tr class="row">
 										<td class="col-xs-4">a</td>
-										<td class="col-xs-8">Add music</td>
+										<td class="col-xs-8">Add song</td>
 									</tr>
 									<tr class="row">
 										<td class="col-xs-4">o</td>
