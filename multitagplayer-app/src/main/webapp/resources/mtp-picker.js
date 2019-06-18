@@ -32,7 +32,7 @@ if(typeof mtp == 'undefined') mtp = {};
 				addView(views[1]).
 				addView(views[2]).
 				addView(views[3]).
-				setTitle("Select musics").
+				setTitle("Select songs").
 				setOAuthToken(mtp.gapi.oauthToken).
 				setDeveloperKey(mtp.gapi.developerKey).
 				setCallback(mtp.picker._musicPickerCallback).

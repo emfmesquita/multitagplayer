@@ -35,10 +35,10 @@ public class IndexController {
     private void preLoad(ModelMap model){
     	// Pré-carrega as músicas
     	if(this.dao.list().size() == 0){
-    		System.out.println("Creating sample musics...");
+    		System.out.println("Creating sample songs...");
     		this.dao.createMusic("Music 1", "resources/music.mp3");
     		this.dao.createMusic("Music 2", "resources/music2.mp3");
-    		System.out.println("Sample musics created!");
+    		System.out.println("Sample songs created!");
     	}
     	
     	this.tags = new ArrayList<String>();
