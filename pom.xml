@@ -19,7 +19,7 @@
 		<hsqldb.version>2.3.2</hsqldb.version>
 		<jsp.version>2.2.1</jsp.version>
 		<jstl.version>1.2</jstl.version>
-		<junit.version>4.11</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<log4j.version>1.2.17</log4j.version>
 		<postgres.version>9.3-1101-jdbc41</postgres.version>
 		<servlet.version>3.0.1</servlet.version>
