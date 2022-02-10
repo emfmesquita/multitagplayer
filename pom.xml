@@ -21,7 +21,7 @@
 		<jstl.version>1.2</jstl.version>
 		<junit.version>4.11</junit.version>
 		<log4j.version>1.2.17</log4j.version>
-		<postgres.version>9.3-1101-jdbc41</postgres.version>
+		<postgres.version>42.2.25</postgres.version>
 		<servlet.version>3.0.1</servlet.version>
 		<spring.version>4.0.5.RELEASE</spring.version>
 		<tomcat.version>7.0.94</tomcat.version>
