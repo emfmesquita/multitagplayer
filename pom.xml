@@ -23,7 +23,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<postgres.version>9.3-1101-jdbc41</postgres.version>
 		<servlet.version>3.0.1</servlet.version>
-		<spring.version>4.0.5.RELEASE</spring.version>
+		<spring.version>5.2.20.RELEASE</spring.version>
 		<tomcat.version>7.0.94</tomcat.version>
 		<vraptor.version>4.0.0.Final</vraptor.version>
 	</properties>
